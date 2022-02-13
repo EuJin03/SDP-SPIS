@@ -5,7 +5,7 @@ import morgan from "morgan";
 import connectDB from "./config/db.js";
 
 config();
-connectDB();
+// connectDB();
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
