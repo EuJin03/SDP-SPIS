@@ -1,0 +1,31 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules
+node_modules/
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# product
+/frontend/build
+# when deployed to server, create another npm run build so we dont need to do git push
+
+# production
+/build
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+appendix
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
