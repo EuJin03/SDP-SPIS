@@ -38,7 +38,6 @@ const studentSchema = mongoose.Schema(
     },
     course: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "Course",
     },
     assignments: [
