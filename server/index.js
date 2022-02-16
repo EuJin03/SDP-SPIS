@@ -3,9 +3,12 @@ import { config } from "dotenv";
 import express from "express";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+
+import studentRoute from "./routes/studentRoute.js";
 
 config();
-// connectDB();
+connectDB();
 const app = express();
 
 if (process.env.NODE_ENV === "development") {
@@ -13,6 +16,8 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(express.json());
+
+app.use("/api/student", studentRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
@@ -25,6 +30,10 @@ if (process.env.NODE_ENV === "production") {
     res.send("API is running");
   });
 }
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
