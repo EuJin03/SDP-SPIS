@@ -69,6 +69,9 @@ const studentSchema = mongoose.Schema(
         },
       },
     ],
+    resetToken: {
+      type: String,
+    },
   },
   {
     timestamps: true,
