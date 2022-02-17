@@ -1,11 +1,13 @@
 import path from "path";
 import { config } from "dotenv";
+import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 import studentRoute from "./routes/studentRoute.js";
+import uploadRoute from "./routes/uploadRoute.js";
 
 config();
 connectDB();
@@ -15,9 +17,11 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/student", studentRoute);
+app.use("/api/uploads", uploadRoute);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/frontend/build")));
