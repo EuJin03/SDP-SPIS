@@ -6,7 +6,11 @@ import {
   generateForgotPasswordToken,
 } from "../utils/generateToken.js";
 import Student from "../models/Student.js";
-import { validateRegisterInput } from "../utils/validator.js";
+import {
+  validateCourse,
+  validatePassword,
+  validateRegisterInput,
+} from "../utils/validator.js";
 import mailgun from "mailgun-js";
 import jwt from "jsonwebtoken";
 
@@ -94,7 +98,8 @@ const registerStudent = asyncHandler(async (req, res) => {
     );
 
     if (!valid) {
-      res.status(400).json(errors);
+      res.status(400);
+      throw new Error(errors[Object.keys(errors)[0]]);
     }
 
     const student = await Student.create({
@@ -222,16 +227,56 @@ const resetPassword = asyncHandler(async (req, res) => {
 });
 
 // @desc Update student details
-// @route PUT /api/student/:id
+// @route PATCH /api/student/profile
 // @access Private route
 const updateStudent = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.params.id);
+  const student = await Student.findById(req.student._id);
 
   if (student) {
     student.fName = req.body.fName || student.fName;
     student.lName = req.body.lName || student.lName;
+    student.image = req.body.image || student.image;
     student.dob = req.body.dob || student.dob;
-    student.course = req.body.course || student.course;
+
+    if (req.body.password) {
+      const password = req.body.password,
+        confirmPassword = req.body.confirmPassword;
+
+      const vp = validatePassword(password, confirmPassword);
+      if (vp) {
+        res.status(400);
+        throw new Error(vp);
+      }
+
+      student.password = req.body.password;
+    }
+
+    if (req.body.course) {
+      const vc = validateCourse(req.body.course);
+      if (vc) {
+        res.status(400);
+        throw new Error(vc);
+      }
+
+      student.course = req.body.course;
+    }
+
+    const updatedStudent = await student.save();
+
+    res.json({
+      studentID: updatedStudent.studentID,
+      image: updatedStudent.image,
+      fname: updatedStudent.fName,
+      lname: updatedStudent.lName,
+      email: updatedStudent.email,
+      gender: updatedStudent.gender,
+      dob: updatedStudent.dob,
+      course: updatedStudent.course,
+      assignments: updatedStudent.assignments,
+    });
+  } else {
+    res.status(404);
+    throw new Error("Student not found");
   }
 });
 
@@ -245,4 +290,5 @@ export {
   registerStudent,
   forgotPassword,
   resetPassword,
+  updateStudent,
 };

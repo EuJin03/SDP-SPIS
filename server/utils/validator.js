@@ -1,4 +1,25 @@
 import Course from "../models/Course.js";
+// errors[Object.keys(errors)[0]]
+
+export const validatePassword = (password, confirmPassword) => {
+  if (password === "" || password.length < 8) {
+    return "Password must contain at least 8 characters";
+  } else if (password !== confirmPassword) {
+    return "Password do not match";
+  }
+
+  return false;
+};
+
+export const validateCourse = course => {
+  const courseExist = Course.exists({ id: course });
+
+  if (!courseExist) {
+    return "Course does not exist";
+  }
+
+  return false;
+};
 
 export const validateRegisterInput = (
   fName,
@@ -29,17 +50,15 @@ export const validateRegisterInput = (
   }
 
   // Password
-  if (password === "" || password.length < 8) {
-    errors.password = "Password must contain at least 8 characters";
-  } else if (password !== confirmPassword) {
-    errors.password = "Password do not match";
+  const vp = validatePassword(password, confirmPassword);
+  if (vp) {
+    errors.password = vp;
   }
 
   // Course
-  const courseExist = Course.exists({ id: course });
-
-  if (!courseExist) {
-    errors.course = "Course does not exist";
+  const vc = validateCourse(course);
+  if (vc) {
+    errors.course = vc;
   }
 
   return {
