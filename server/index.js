@@ -8,6 +8,8 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 import studentRoute from "./routes/studentRoute.js";
 import staffRoute from "./routes/staffRoute.js";
+import courseRoute from "./routes/courseRoute.js";
+import assignmentRoute from "./routes/assignmentRoute.js";
 import uploadRoute from "./routes/uploadRoute.js";
 
 config();
@@ -23,6 +25,8 @@ app.use(express.json());
 
 app.use("/api/student", studentRoute);
 app.use("/api/staff", staffRoute);
+app.use("/api/course", courseRoute);
+app.use("/api/assignment", assignmentRoute);
 app.use("/api/uploads", uploadRoute);
 
 if (process.env.NODE_ENV === "production") {

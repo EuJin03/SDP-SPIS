@@ -61,10 +61,6 @@ const studentSchema = mongoose.Schema(
           required: true,
           default: false,
         },
-        due: {
-          type: Date,
-          required: true,
-        },
         assignment: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,

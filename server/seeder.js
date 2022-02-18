@@ -26,7 +26,7 @@ const importData = async () => {
     await Student.insertMany(students);
     // await Course.insertMany(courses);
     // await Staff.insertMany(staffs);
-    await Assignment.insertMany(assignments);
+    // await Assignment.insertMany(assignments);
 
     console.log("Data Imported!");
     process.exit();
