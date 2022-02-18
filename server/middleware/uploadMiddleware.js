@@ -31,5 +31,5 @@ export const uploadFile = multer({
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-  limits: { fileSize: 5000000 },
+  limits: { fileSize: 3000000 },
 });

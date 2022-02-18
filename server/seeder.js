@@ -1,9 +1,16 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+
 import students from "./data/students.js";
 import courses from "./data/courses.js";
+import staffs from "./data/staffs.js";
+import assignments from "./data/assignments.js";
+
 import Student from "./models/Student.js";
 import Course from "./models/Course.js";
+import Staff from "./models/Staff.js";
+import Assignment from "./models/Assignment.js";
+
 import connectDB from "./config/db.js";
 
 dotenv.config();
@@ -14,6 +21,7 @@ const importData = async () => {
     await Student.deleteMany();
 
     await Student.insertMany(students);
+    await Assignment.insertMany(assignments);
 
     console.log("Data Imported!");
     process.exit();
@@ -27,6 +35,8 @@ const destroyData = async () => {
   try {
     await Student.deleteMany();
     await Course.deleteMany();
+    await Staff.deleteMany();
+    await Assignment.deleteMany();
 
     console.log("Data Destroyed!");
     process.exit();

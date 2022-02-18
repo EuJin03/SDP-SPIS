@@ -2,57 +2,65 @@ const courses = [
   {
     courseName: "Data Analysis",
     subjects: [
-      "Database Systems",
-      "Introduction to Data Analytics",
-      "Introduction to Artificial Intelligence",
+      { subjectName: "Database Systems" },
+      { subjectName: "Introduction to Data Analytics" },
+      { subjectName: "Introduction to Artificial Intelligence" },
     ],
   },
   {
     courseName: "English Language",
-    subjects: ["Linguistics", "Literature", "Rhetorics"],
+    subjects: [
+      { subjectName: "Linguistics" },
+      { subjectName: "Literature" },
+      { subjectName: "Rhetorics" },
+    ],
   },
   {
     courseName: "Mathematics",
     subjects: [
-      "Discrete mathematics",
-      "Additional mathematics",
-      "Basic Mathematics",
+      { subjectName: "Discrete mathematics" },
+      { subjectName: "Additional mathematics" },
+      { subjectName: "Basic Mathematics" },
     ],
   },
   {
     courseName: "Information Systems",
     subjects: [
-      "Introduction to Information Systems",
-      "Operating Systems",
-      "Computer System Architecture",
+      { subjectName: "Introduction to Information Systems" },
+      { subjectName: "Operating Systems" },
+      { subjectName: "Computer System Architecture" },
     ],
   },
   {
     courseName: "Software Development",
     subjects: [
-      "Introduction to Software Engineering",
-      "System Analysis and Design",
-      "Programming with Python",
+      { subjectName: "Introduction to Software Engineering" },
+      { subjectName: "System Analysis and Design" },
+      { subjectName: "Programming with Python" },
     ],
   },
   {
     courseName: "Cybersecurity",
-    subjects: ["Networks and Networking", "Kali Linux", "Ethical Hacking"],
+    subjects: [
+      { subjectName: "Networks and Networking" },
+      { subjectName: "Kali Linux" },
+      { subjectName: "Ethical Hacking" },
+    ],
   },
   {
     courseName: "MQA course",
     subjects: [
-      "Environment Situation in Malaysia",
-      "Malaysia History",
-      "Co-curricular Event",
+      { subjectName: "Environment Situation in Malaysia" },
+      { subjectName: "Malaysia History" },
+      { subjectName: "Co-curricular Event" },
     ],
   },
   {
     courseName: "Business & Entrepreneurship",
     subjects: [
-      "Fundamentals of Entrepreneurship",
-      "Managing Business",
-      "Behavioral Science and Marketing Analytics",
+      { subjectName: "Fundamentals of Entrepreneurship" },
+      { subjectName: "Managing Business" },
+      { subjectName: "Behavioral Science and Marketing Analytics" },
     ],
   },
 ];

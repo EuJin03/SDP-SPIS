@@ -105,8 +105,8 @@ const registerStudent = asyncHandler(async (req, res) => {
 
     const student = await Student.create({
       studentID: "TP" + validEmail.slice(2, 8),
-      fName: fName,
-      lName: lName,
+      fName: fName.charAt(0).toUpperCase() + fName.slice(1),
+      lName: lName.charAt(0).toUpperCase() + lName.slice(1),
       email: validEmail,
       password: password,
       dob: dob,
@@ -234,8 +234,12 @@ const updateStudent = asyncHandler(async (req, res) => {
   const student = await Student.findById(req.student._id);
 
   if (student) {
-    student.fName = req.body?.fName || student.fName;
-    student.lName = req.body?.lName || student.lName;
+    student.fName =
+      req.body?.fName.charAt(0).toUpperCase() + req.body?.fName.slice(1) ||
+      student.fName;
+    student.lName =
+      req.body?.lName.charAt(0).toUpperCase() + req.body?.lName.slice(1) ||
+      student.lName;
     student.image = req.body?.image || student.image;
     student.dob = req.body?.dob || student.dob;
 
