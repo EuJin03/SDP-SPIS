@@ -7,6 +7,7 @@ import {
 } from "../utils/generateToken.js";
 import Student from "../models/Student.js";
 import {
+  validateAssignment,
   validateCourse,
   validatePassword,
   validateRegisterInput,
@@ -251,7 +252,7 @@ const updateStudent = asyncHandler(async (req, res) => {
       student.password = req.body.password;
     }
 
-    if (req.body.course) {
+    if (req.body?.course) {
       const vc = validateCourse(req.body.course);
       if (vc) {
         res.status(400);
@@ -280,9 +281,45 @@ const updateStudent = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get students detail
-// @route GET /api/student/all
-// @access Public access
+// @desc Delete student
+// @route DELETE /api/student/:id
+// @access Private admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const student = await Student.findById(req.params.id);
+  if (student) {
+    await student.remove();
+    res.json({ message: "Student removed" });
+  } else {
+    res.status(404);
+    throw new Error("Student not found");
+  }
+});
+
+// @desc Get all students
+// @route GET /api/students
+// @access Private lecturer/admin
+const getStudents = asyncHandler(async (req, res) => {
+  const student = await Student.find({});
+  res.json(student);
+});
+
+// @desc Get student by ID
+// @route GET /api/student/:id
+// @access Private lecturer/admin
+const getStudentById = asyncHandler(async (req, res) => {
+  const student = await Student.findById(req.params.id).select("-password");
+
+  if (student) {
+    res.json(student);
+  } else {
+    res.status(404);
+    throw new Error("Student not Found");
+  }
+});
+
+// @desc Update student grades
+// @route PATCH /api/student/:id
+// @access Private lecturer
 
 export {
   authStudent,
@@ -291,4 +328,7 @@ export {
   forgotPassword,
   resetPassword,
   updateStudent,
+  deleteUser,
+  getStudents,
+  getStudentById,
 };

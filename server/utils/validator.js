@@ -1,4 +1,5 @@
 import Course from "../models/Course.js";
+import Assignment from "../models/Assignment.js";
 // errors[Object.keys(errors)[0]]
 
 export const validatePassword = (password, confirmPassword) => {
@@ -65,4 +66,14 @@ export const validateRegisterInput = (
     errors,
     valid: Object.keys(errors).length < 1,
   };
+};
+
+export const validateAssignment = asg => {
+  const assignmentExist = Assignment.exists({ id: asg });
+
+  if (!assignmentExist) {
+    return "Assignment does not exist";
+  }
+
+  return false;
 };
