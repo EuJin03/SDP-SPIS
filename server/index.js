@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 import studentRoute from "./routes/studentRoute.js";
+import staffRoute from "./routes/staffRoute.js";
 import uploadRoute from "./routes/uploadRoute.js";
 
 config();
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/student", studentRoute);
+app.use("/api/staff", staffRoute);
 app.use("/api/uploads", uploadRoute);
 
 if (process.env.NODE_ENV === "production") {

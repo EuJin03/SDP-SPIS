@@ -13,16 +13,32 @@ export const validatePassword = (password, confirmPassword) => {
 };
 
 export const validateCourse = course => {
-  const courseExist = Course.exists({ id: course });
+  if (course) {
+    const courseExist = Course.exists({ id: course });
 
-  if (!courseExist) {
-    return "Course does not exist";
+    if (!courseExist) {
+      return "Course does not exist";
+    }
   }
 
   return false;
 };
 
-export const validateRegisterInput = (
+export const validateArrayCourse = course => {
+  if (course) {
+    course.forEach(c => {
+      const courseExist = Course.exists({ id: c });
+
+      if (!courseExist) {
+        return "Course does not exist";
+      }
+    });
+  }
+
+  return false;
+};
+
+export const validateStudentRegisterInput = (
   fName,
   lName,
   email,
@@ -39,10 +55,10 @@ export const validateRegisterInput = (
   }
 
   // Email
-  const regEx = /^TP[0-9]+@[a-zA-Z]+.apu.edu.my$/;
+  const regEx = /^TP[0-9]+@mail.apu.edu.my$/;
   if (!email.match(regEx)) {
     errors.email =
-      "Email must be a valid email address from Asia Pacific University";
+      "Email must be a valid STUDENT email address from Asia Pacific University";
   }
 
   // Gender
@@ -76,4 +92,50 @@ export const validateAssignment = asg => {
   }
 
   return false;
+};
+
+export const validateStaffRegisterInput = (
+  fName,
+  lName,
+  email,
+  gender,
+  password,
+  confirmPassword,
+  course
+) => {
+  const errors = {};
+
+  // Name
+  if (fName.trim() === "" || lName.trim() === "") {
+    errors.name = "First name and Last name must not be blank";
+  }
+
+  // Email
+  const regEx = /^[a-zA-Z0-9._%+-]+@staffemail.apu.edu.my$/;
+  if (!email.match(regEx)) {
+    errors.email =
+      "Email must be a valid STAFF email address from Asia Pacific University";
+  }
+
+  // Gender
+  if (gender.trim() === "") {
+    errors.gender = "Gender must not be empty";
+  }
+
+  // Password
+  const vp = validatePassword(password, confirmPassword);
+  if (vp) {
+    errors.password = vp;
+  }
+
+  // Course
+  const vac = validateArrayCourse(course);
+  if (vac) {
+    errors.course = vac;
+  }
+
+  return {
+    errors,
+    valid: Object.keys(errors).length < 1,
+  };
 };

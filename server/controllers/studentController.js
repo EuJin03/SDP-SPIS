@@ -7,10 +7,9 @@ import {
 } from "../utils/generateToken.js";
 import Student from "../models/Student.js";
 import {
-  validateAssignment,
   validateCourse,
   validatePassword,
-  validateRegisterInput,
+  validateStudentRegisterInput,
 } from "../utils/validator.js";
 import mailgun from "mailgun-js";
 import jwt from "jsonwebtoken";
@@ -21,7 +20,7 @@ const mg = mailgun({
   domain: __domain,
 });
 
-// @desc Login user and get auth token
+// @desc Login student and get auth token
 // @route POST /api/students/login
 // @access Public route
 const authStudent = asyncHandler(async (req, res) => {
@@ -39,7 +38,7 @@ const authStudent = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc Get user profile
+// @desc Get student profile
 // @route GET /api/student/profile
 // @access Public route
 const getStudentProfile = asyncHandler(async (req, res) => {
@@ -88,7 +87,7 @@ const registerStudent = asyncHandler(async (req, res) => {
       throw new Error("Student already Exist");
     }
 
-    const { valid, errors } = validateRegisterInput(
+    const { valid, errors } = validateStudentRegisterInput(
       fName,
       lName,
       validEmail,
@@ -234,14 +233,15 @@ const updateStudent = asyncHandler(async (req, res) => {
   const student = await Student.findById(req.student._id);
 
   if (student) {
-    student.fName =
-      req.body?.fName.charAt(0).toUpperCase() + req.body?.fName.slice(1) ||
-      student.fName;
-    student.lName =
-      req.body?.lName.charAt(0).toUpperCase() + req.body?.lName.slice(1) ||
-      student.lName;
+    student.fName = req.body?.fName || student.fName;
+    student.lName = req.body?.lName || student.lName;
     student.image = req.body?.image || student.image;
     student.dob = req.body?.dob || student.dob;
+
+    student.fName =
+      student.fName.charAt(0).toUpperCase() + student.fName.slice(1);
+    student.lName =
+      student.lName.charAt(0).toUpperCase() + student.lName.slice(1);
 
     if (req.body?.password) {
       const password = req.body.password,

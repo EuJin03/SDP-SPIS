@@ -1,4 +1,5 @@
 import express from "express";
+import { deleteUser } from "../controllers/staffController.js";
 const router = express.Router();
 import {
   authStudent,
@@ -7,16 +8,25 @@ import {
   forgotPassword,
   resetPassword,
   updateStudent,
+  getStudentById,
 } from "../controllers/studentController.js";
-import { protect } from "../middleware/authMiddleware.js";
+import {
+  admin,
+  lecturer,
+  protectStudent,
+} from "../middleware/authMiddleware.js";
 
 router.route("/").post(registerStudent);
 router.post("/login", authStudent);
 router
   .route("/profile")
-  .get(protect, getStudentProfile)
-  .patch(protect, updateStudent);
+  .get(protectStudent, getStudentProfile)
+  .patch(protectStudent, updateStudent);
 router.route("/forgot-password").post(forgotPassword);
 router.patch("/reset-password/:token", resetPassword);
+router
+  .route("/:id")
+  .delete(protectStudent, admin, deleteUser)
+  .get(protectStudent, lecturer, getStudentById);
 
 export default router;
