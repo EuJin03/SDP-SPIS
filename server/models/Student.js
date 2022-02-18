@@ -53,6 +53,9 @@ const studentSchema = mongoose.Schema(
           min: 0,
           max: 100,
         },
+        asgFile: {
+          type: String,
+        },
         submission: {
           type: Boolean,
           required: true,

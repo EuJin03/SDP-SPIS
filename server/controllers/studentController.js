@@ -233,12 +233,12 @@ const updateStudent = asyncHandler(async (req, res) => {
   const student = await Student.findById(req.student._id);
 
   if (student) {
-    student.fName = req.body.fName || student.fName;
-    student.lName = req.body.lName || student.lName;
-    student.image = req.body.image || student.image;
-    student.dob = req.body.dob || student.dob;
+    student.fName = req.body?.fName || student.fName;
+    student.lName = req.body?.lName || student.lName;
+    student.image = req.body?.image || student.image;
+    student.dob = req.body?.dob || student.dob;
 
-    if (req.body.password) {
+    if (req.body?.password) {
       const password = req.body.password,
         confirmPassword = req.body.confirmPassword;
 
