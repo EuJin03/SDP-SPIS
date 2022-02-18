@@ -42,10 +42,6 @@ const studentSchema = mongoose.Schema(
     },
     assignments: [
       {
-        name: {
-          type: String,
-          required: true,
-        },
         grade: {
           type: Number,
           required: true,
@@ -53,7 +49,7 @@ const studentSchema = mongoose.Schema(
           min: 0,
           max: 100,
         },
-        asgFile: {
+        submissionFile: {
           type: String,
         },
         submission: {
