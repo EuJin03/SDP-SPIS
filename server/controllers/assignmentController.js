@@ -17,18 +17,42 @@ const viewTask = asyncHandler(async (req, res) => {
     throw new Error("Assignments not found");
   }
 
-  res.json(task);
+  let updatedTask = [];
+  const pushCourseName = async task => {
+    for (let i = 0; i < task.length; i++) {
+      const course = await Course.findById(task[i].course);
+      const merged = Object.assign(
+        {
+          courseName: course.courseName,
+          subjectName: course.subjects.filter(
+            s => s._id.toString() === task[i].subject.toString()
+          )[0].subjectName,
+        },
+        task[i]._doc
+      );
+      updatedTask.push(merged);
+    }
+  };
+
+  await pushCourseName(task);
+
+  res.json(updatedTask);
 });
 
 // @desc Create an assignment
 // @route POST /api/assignment/create-task
 // @access Private (lecturer)
+// const createAssignment = asyncHandler(async () => {
+
+// })
 
 // @desc Update an assignment
 // @route PATCH /api/assignment/update-task/:id
 // @access Private (lecturer)
 
-// @desc
+// @desc Delete an assignment
+// @route DELETE /api/assignment/:id
+// @access Private (Lecturer)
 
 // @desc Assign task to student
 // @route PATCH /api/assignment/assign-task/:id
@@ -78,9 +102,9 @@ const assignTask = asyncHandler(async (req, res) => {
   res.json("Task assigned to all students within the course successfully.");
 });
 
-// @desc
-// @route
-// @access
+// @desc Grade students paper
+// @route /api/assignment/grade-task?student=xxx&paper=xxx
+// @access Private (Lecturer)
 
 // Student
 // -------------------------------------------------------------------
@@ -89,23 +113,32 @@ const assignTask = asyncHandler(async (req, res) => {
 // @access Private (student only)
 const viewStudentAssignment = asyncHandler(async (req, res) => {
   const student = await Student.findById(req.student._id);
-  const task = await Assignment.findById(id);
-  const course = await Course.findById(task.course);
-
-  if (!course) {
-    res.status(400);
-    throw new Error("Course or Subject not found");
-  }
-
-  const subject = course.subjects.filter(
-    c => c.id === task.subject.toString()
-  )[0];
 
   if (!student) {
     res.status(400);
     throw new Error("Student not found");
   }
-  res.json(student.assignments);
+
+  const studentAssignment = student.assignments;
+
+  let updatedStudentAssignment = [];
+  const pushAssignmentDetails = async studentAssignment => {
+    for (let i = 0; i < studentAssignment.length; i++) {
+      const assignment = await Assignment.findById(studentAssignment[i]);
+    }
+  };
+
+  pushAssignmentDetails(studentAssignment);
+
+  res.status(200).json(updatedStudentAssignment);
 });
+
+// @desc View single assignment
+// @route GET /api/assignment/view-task/:id
+// @access Private (student only)
+
+// @desc Submit assignment
+// @route PATCH /api/assignment/submit-task/:id
+// @access Private (student only)
 
 export { viewStudentAssignment, viewTask, assignTask };
