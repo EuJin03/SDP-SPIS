@@ -247,7 +247,7 @@ const assignTask = asyncHandler(async (req, res) => {
 });
 
 // @desc Display students submission
-// @route GET /api/assignment/grade-task?assignmentId=xxx
+// @route GET /api/assignment/grade-paper?assignmentId=xxx
 // @access Private (lecturer only)
 const viewPaper = asyncHandler(async (req, res) => {
   const { assignmentId } = req.query;
@@ -292,9 +292,40 @@ const viewPaper = asyncHandler(async (req, res) => {
 });
 
 // @desc Grade students paper
-// @route PATCH /api/assignment/grade-task?studentID=xxx&task=xxx
+// @route PATCH /api/assignment/grade-paper?studentID=xxx&assignmentId=xxx
 // @access Private (Lecturer only)
-const gradePaper = asyncHandler(async (req, res) => {});
+const gradePaper = asyncHandler(async (req, res) => {
+  const { studentID, assignmentId } = req.query;
+  const { grade, comments } = req.body;
+
+  if (!studentID || !assignmentId) {
+    res.status(400);
+    throw new Error("StudentID or task is not provided");
+  }
+
+  if (!grade || !comments) {
+    res.status(400);
+    throw new Error("Invalid Input");
+  }
+
+  const student = await Student.findOne({ studentID: studentID });
+
+  if (!student) {
+    res.status(400);
+    throw new Error("Student does not exist, invalid studentID");
+  }
+
+  const gradeTask = student.assignments.filter(
+    assignment => assignment._id.toString() === assignmentId.toString()
+  );
+
+  // mark the assignment
+  gradeTask[0].grade = grade;
+  gradeTask[0].comments = comments;
+
+  const updatedStudent = await student.save();
+  res.json(updatedStudent);
+});
 
 // Student
 // -------------------------------------------------------------------

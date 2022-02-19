@@ -10,12 +10,7 @@ import {
   viewStudentTask,
   viewTask,
 } from "../controllers/assignmentController.js";
-import {
-  admin,
-  lecturer,
-  protectStudent,
-  protectStaff,
-} from "../middleware/authMiddleware.js";
+import { protectStudent, protectStaff } from "../middleware/authMiddleware.js";
 
 // student access only
 router.route("/view-task").get(protectStudent, viewStudentTask);
@@ -29,6 +24,6 @@ router.route("/:assignmentId").patch(protectStaff, deleteTask);
 router
   .route("/grade-paper")
   .get(protectStaff, viewPaper)
-  .patch(protectStaff, gradePaper);
+  .post(protectStaff, gradePaper);
 
 export default router;

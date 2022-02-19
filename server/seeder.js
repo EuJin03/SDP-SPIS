@@ -21,12 +21,12 @@ const importData = async () => {
     await Student.deleteMany();
     // await Course.deleteMany();
     // await Staff.deleteMany();
-    await Assignment.deleteMany();
+    // await Assignment.deleteMany();
 
     await Student.insertMany(students);
     // await Course.insertMany(courses);
     // await Staff.insertMany(staffs);
-    await Assignment.insertMany(assignments);
+    // await Assignment.insertMany(assignments);
 
     console.log("Data Imported!");
     process.exit();

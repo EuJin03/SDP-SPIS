@@ -52,7 +52,6 @@ const studentSchema = mongoose.Schema(
         },
         submissionFile: {
           type: String,
-          required: true,
           default: "",
         },
         submission: {
@@ -62,7 +61,6 @@ const studentSchema = mongoose.Schema(
         },
         comments: {
           type: String,
-          required: true,
           default: "",
         },
         assignment: {
