@@ -254,14 +254,41 @@ const viewPaper = asyncHandler(async (req, res) => {
 
   const students = await Student.find({
     "assignments.assignment": assignmentId,
-  }).select("-password");
+    "assignments.submission": true,
+  }).select("-password -dob -gender");
 
   if (!students) {
     res.status(400);
     throw new Error("Student records does not exist");
   }
 
-  res.json(students);
+  // only assignment match asgId (array)
+  let singleAssignment = [];
+  students.forEach(student => {
+    for (let i = 0; i < student.assignments.length; i++) {
+      if (student.assignments[i].assignment.toString() === assignmentId) {
+        singleAssignment.push(student.assignments[i]);
+      }
+    }
+
+    student.assignments = singleAssignment;
+    singleAssignment = [];
+  });
+
+  // parse topicName and topicURL
+  const assignment = await Assignment.findById(assignmentId);
+
+  if (!assignment) {
+    res.status(400);
+    throw new Error("Assignment does not exist");
+  }
+
+  res.json({
+    topicName: assignment.topicName,
+    topicURL: assignment.topicURL,
+    due: new Date(assignment.due), //.toString().slice(0, 15)
+    students,
+  });
 });
 
 // @desc Grade students paper

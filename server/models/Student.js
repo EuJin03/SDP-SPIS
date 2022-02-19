@@ -52,11 +52,18 @@ const studentSchema = mongoose.Schema(
         },
         submissionFile: {
           type: String,
+          required: true,
+          default: "",
         },
         submission: {
           type: Boolean,
           required: true,
           default: false,
+        },
+        comments: {
+          type: String,
+          required: true,
+          default: "",
         },
         assignment: {
           type: mongoose.Schema.Types.ObjectId,
