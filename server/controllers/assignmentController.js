@@ -3,6 +3,7 @@ import Course from "../models/Course.js";
 import Staff from "../models/Staff.js";
 import Student from "../models/Student.js";
 import Assignment from "../models/Assignment.js";
+import { validateURL } from "../utils/validator.js";
 
 // Lecturer
 // ------------------------------------------------------
@@ -48,6 +49,14 @@ const createAssignment = asyncHandler(async (req, res) => {
   const { _id } = req.staff;
   const { course, subject, topicName, topicURL, due } = req.body;
 
+  // validate URL
+  const { valid, errors } = validateURL(topicURL);
+
+  if (!valid) {
+    res.status(400);
+    throw new Error(errors[Object.keys(errors)[0]]);
+  }
+
   // validate course and subject ids
   const courseDetails = await Course.findById(course);
 
@@ -59,7 +68,7 @@ const createAssignment = asyncHandler(async (req, res) => {
   const subjectValid = courseDetails.subjects.filter(
     s => s._id.toString() === subject.toString()
   );
-  console.log(subjectValid);
+
   if (subjectValid.length === 0) {
     res.status(400);
     throw new Error("Subject does not exist");
@@ -79,9 +88,57 @@ const createAssignment = asyncHandler(async (req, res) => {
 });
 
 // @desc Update an assignment
-// @route PATCH /api/assignment/update-task/:id
+// @route PATCH /api/assignment/update-task/:assignmentId
 // @access Private (lecturer)
-const updateAssignment = asyncHandler(async (req, res) => {});
+const updateAssignment = asyncHandler(async (req, res) => {
+  const { _id } = req.staff;
+  const { assignmentId } = req.params;
+  const { course, subject, topicName, topicURL, due } = req.body;
+
+  // validate URL
+  const validate = validateURL(topicURL);
+
+  if (!validate.valid) {
+    res.status(400);
+    throw new Error(validate.message);
+  }
+
+  // validate course and subject ids
+  const courseDetails = await Course.findById(course);
+
+  if (!courseDetails) {
+    res.status(400);
+    throw new Error("Course does not exist");
+  }
+
+  const subjectValid = courseDetails.subjects.filter(
+    s => s._id.toString() === subject.toString()
+  );
+
+  if (subjectValid.length === 0) {
+    res.status(400);
+    throw new Error("Subject does not exist");
+  }
+
+  const assignment = await Assignment.findById(assignmentId);
+
+  if (assignment) {
+    if (assignment.uploadedBy.toString() === _id.toString()) {
+      (assignment.uploadedBy = _id),
+        (assignment.course = course),
+        (assignment.subject = subject),
+        (assignment.topicName = topicName),
+        (assignment.topicURL = topicURL),
+        (assignment.due = due);
+
+      const updatedAssignment = await assignment.save();
+      res.json(updatedAssignment);
+    }
+  } else {
+    res.status(404);
+    throw new Error("Assignment not found");
+  }
+});
 
 // @desc Delete an assignment
 // @route PATCH /api/assignment/:assignmentId
@@ -136,8 +193,8 @@ const deleteAssignment = asyncHandler(async (req, res) => {
 // @route PATCH /api/assignment/assign-task/:id
 // @access Private (lecturer only)
 const assignTask = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const task = await Assignment.findById(id);
+  const { assignmentId } = req.params;
+  const task = await Assignment.findById(assignmentId);
 
   if (!task) {
     res.status(400);
@@ -161,7 +218,7 @@ const assignTask = asyncHandler(async (req, res) => {
 
           if (
             !updateStudent.assignments.find(
-              asg => asg.assignment.toString() === id.toString()
+              asg => asg.assignment.toString() === assignmentId.toString()
             )
           ) {
             updateStudent.assignments.push({
@@ -256,5 +313,6 @@ export {
   viewTask,
   assignTask,
   createAssignment,
+  updateAssignment,
   deleteAssignment,
 };

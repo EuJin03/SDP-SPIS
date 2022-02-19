@@ -139,3 +139,18 @@ export const validateStaffRegisterInput = (
     valid: Object.keys(errors).length < 1,
   };
 };
+
+export const validateURL = url => {
+  const regEx =
+    /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
+  if (!url.match(regEx)) {
+    return {
+      valid: false,
+      message: "Not a valid or secure URL",
+    };
+  }
+
+  return {
+    valid: true,
+  };
+};
