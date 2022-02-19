@@ -51,7 +51,7 @@ const authStudent = asyncHandler(async (req, res) => {
 // @route GET /api/student/profile
 // @access Public route
 const getStudentProfile = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.student._id);
+  const student = await Student.findById(req.student._id).select("-password");
 
   if (student) {
     res.json({
@@ -155,7 +155,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     throw new Error("Invalid input");
   }
 
-  const student = await Student.findOne({ email });
+  const student = await Student.findOne({ email }).select("-password");
 
   if (!student) {
     res.status(401);
@@ -218,7 +218,9 @@ const resetPassword = asyncHandler(async (req, res) => {
       throw new Error("Not authorised, token failed");
     }
 
-    const student = await Student.findOne({ resetToken: token });
+    const student = await Student.findOne({ resetToken: token }).select(
+      "-password"
+    );
 
     if (!student) {
       res.status(404);
@@ -298,7 +300,7 @@ const updateStudent = asyncHandler(async (req, res) => {
 // @route DELETE /api/student/:id
 // @access Private admin
 const deleteUser = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.params.id);
+  const student = await Student.findById(req.params.id).select("-password");
   if (student) {
     await student.remove();
     res.json({ message: "Student removed" });
@@ -312,7 +314,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @route GET /api/students
 // @access Private lecturer/admin
 const getStudents = asyncHandler(async (req, res) => {
-  const student = await Student.find({});
+  const student = await Student.find({}).select("-password");
   res.json(student);
 });
 
@@ -329,10 +331,6 @@ const getStudentById = asyncHandler(async (req, res) => {
     throw new Error("Student not Found");
   }
 });
-
-// @desc Update student grades
-// @route PATCH /api/student/:id
-// @access Private lecturer
 
 export {
   authStudent,

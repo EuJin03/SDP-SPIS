@@ -49,7 +49,7 @@ const authStaff = asyncHandler(async (req, res) => {
 // @route GET /api/staff/profile
 // @access Public route
 const getStaffProfile = asyncHandler(async (req, res) => {
-  const staff = await Staff.findById(req.staff._id);
+  const staff = await Staff.findById(req.staff._id).select("-password");
 
   if (staff) {
     res.json({
@@ -83,7 +83,7 @@ const registerStaff = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (email) {
-    const userExists = await Staff.findOne({ email });
+    const userExists = await Staff.findOne({ email }).select("-password");
 
     if (userExists) {
       res.status(400);
@@ -146,7 +146,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     throw new Error("Invalid input");
   }
 
-  const staff = await Staff.findOne({ email });
+  const staff = await Staff.findOne({ email }).select("-password");
 
   if (!staff) {
     res.status(401);
