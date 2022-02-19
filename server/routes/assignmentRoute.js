@@ -2,10 +2,12 @@ import express from "express";
 const router = express.Router();
 import {
   assignTask,
-  createAssignment,
-  deleteAssignment,
-  updateAssignment,
-  viewStudentAssignment,
+  createTask,
+  deleteTask,
+  gradePaper,
+  updateTask,
+  viewPaper,
+  viewStudentTask,
   viewTask,
 } from "../controllers/assignmentController.js";
 import {
@@ -16,15 +18,17 @@ import {
 } from "../middleware/authMiddleware.js";
 
 // student access only
-router.route("/view-task").get(protectStudent, viewStudentAssignment);
+router.route("/view-task").get(protectStudent, viewStudentTask);
 
 // lecturer access only
 router.route("/uploaded-task").get(protectStaff, viewTask);
-router.route("/create-task").post(protectStaff, createAssignment);
+router.route("/create-task").post(protectStaff, createTask);
 router.route("/assign-task/:assignmentId").patch(protectStaff, assignTask);
+router.route("/update-task/:assignmentId").patch(protectStaff, updateTask);
+router.route("/:assignmentId").patch(protectStaff, deleteTask);
 router
-  .route("/update-task/:assignmentId")
-  .patch(protectStaff, updateAssignment);
-router.route("/:assignmentId").patch(protectStaff, deleteAssignment);
+  .route("/grade-paper")
+  .get(protectStaff, viewPaper)
+  .patch(protectStaff, gradePaper);
 
 export default router;

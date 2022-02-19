@@ -45,7 +45,7 @@ const viewTask = asyncHandler(async (req, res) => {
 // @desc Create an assignment
 // @route POST /api/assignment/create-task
 // @access Private (lecturer)
-const createAssignment = asyncHandler(async (req, res) => {
+const createTask = asyncHandler(async (req, res) => {
   const { _id } = req.staff;
   const { course, subject, topicName, topicURL, due } = req.body;
 
@@ -90,7 +90,7 @@ const createAssignment = asyncHandler(async (req, res) => {
 // @desc Update an assignment
 // @route PATCH /api/assignment/update-task/:assignmentId
 // @access Private (lecturer)
-const updateAssignment = asyncHandler(async (req, res) => {
+const updateTask = asyncHandler(async (req, res) => {
   const { _id } = req.staff;
   const { assignmentId } = req.params;
   const { course, subject, topicName, topicURL, due } = req.body;
@@ -143,7 +143,7 @@ const updateAssignment = asyncHandler(async (req, res) => {
 // @desc Delete an assignment
 // @route PATCH /api/assignment/:assignmentId
 // @access Private (Lecturer)
-const deleteAssignment = asyncHandler(async (req, res) => {
+const deleteTask = asyncHandler(async (req, res) => {
   const { _id } = req.staff;
   const { assignmentId } = req.params;
 
@@ -152,7 +152,9 @@ const deleteAssignment = asyncHandler(async (req, res) => {
   let removedAssignment = [];
   const updateStudent = async students => {
     for (let i = 0; i < students.length; i++) {
-      removedAssignment = await Student.findById(students[i]._id);
+      removedAssignment = await Student.findById(students[i]._id).select(
+        "-password"
+      );
 
       removedAssignment.assignments = removedAssignment.assignments.filter(
         asg => asg.assignment.toString() !== assignmentId.toString()
@@ -169,7 +171,7 @@ const deleteAssignment = asyncHandler(async (req, res) => {
       // remove from all student
       const students = await Student.find({
         course: assignment.course,
-      });
+      }).select("-password");
 
       if (!students) {
         res.status(404);
@@ -202,7 +204,7 @@ const assignTask = asyncHandler(async (req, res) => {
   }
 
   if (new Date(task.due).toISOString() > new Date(Date.now()).toISOString()) {
-    const students = await Student.find({});
+    const students = await Student.find({}).select("-password");
 
     if (!students) {
       res.status(404);
@@ -214,7 +216,9 @@ const assignTask = asyncHandler(async (req, res) => {
         if (students[i].course.toString() === task.course.toString()) {
           const studentIndex = students[i]._id;
 
-          updateStudent = await Student.findById(studentIndex);
+          updateStudent = await Student.findById(studentIndex).select(
+            "-password"
+          );
 
           if (
             !updateStudent.assignments.find(
@@ -237,17 +241,36 @@ const assignTask = asyncHandler(async (req, res) => {
   res.json("Task assigned to all students within the course successfully.");
 });
 
+// @desc Display students submission
+// @route GET /api/assignment/grade-task?assignmentId=xxx
+// @access Private (lecturer only)
+const viewPaper = asyncHandler(async (req, res) => {
+  const { assignmentId } = req.query;
+
+  const students = await Student.find({
+    "assignments.assignment": assignmentId,
+  }).select("-password");
+
+  if (!students) {
+    res.status(400);
+    throw new Error("Student records does not exist");
+  }
+
+  res.json(students);
+});
+
 // @desc Grade students paper
-// @route /api/assignment/grade-task?student=xxx&paper=xxx
-// @access Private (Lecturer)
+// @route PATCH /api/assignment/grade-task?studentID=xxx&task=xxx
+// @access Private (Lecturer only)
+const gradePaper = asyncHandler(async (req, res) => {});
 
 // Student
 // -------------------------------------------------------------------
 // @desc View all assignment (student)
 // @route GET /api/assignment
 // @access Private (student only)
-const viewStudentAssignment = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.student._id);
+const viewStudentTask = asyncHandler(async (req, res) => {
+  const student = await Student.findById(req.student._id).select("-password");
 
   if (!student) {
     res.status(400);
@@ -309,10 +332,12 @@ const viewStudentAssignment = asyncHandler(async (req, res) => {
 // @access Private (student only)
 
 export {
-  viewStudentAssignment,
   viewTask,
   assignTask,
-  createAssignment,
-  updateAssignment,
-  deleteAssignment,
+  createTask,
+  updateTask,
+  deleteTask,
+  viewPaper,
+  gradePaper,
+  viewStudentTask,
 };

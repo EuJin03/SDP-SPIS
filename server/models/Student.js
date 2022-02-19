@@ -6,6 +6,7 @@ const studentSchema = mongoose.Schema(
     studentID: {
       type: String,
       required: true,
+      unique: true,
     },
     image: {
       type: String,
