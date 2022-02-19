@@ -203,6 +203,8 @@ const assignTask = asyncHandler(async (req, res) => {
     throw new Error("Assignments not found");
   }
 
+  let studentCounter = task.studentAssigned;
+
   if (new Date(task.due).toISOString() > new Date(Date.now()).toISOString()) {
     const students = await Student.find({}).select("-password");
 
@@ -228,6 +230,7 @@ const assignTask = asyncHandler(async (req, res) => {
             updateStudent.assignments.push({
               assignment: task._id,
             });
+            studentCounter = studentCounter + 1;
           }
 
           await updateStudent.save();
@@ -238,6 +241,8 @@ const assignTask = asyncHandler(async (req, res) => {
     await pushAssignment(students);
   }
 
+  task.studentAssigned = studentCounter;
+  await task.save();
   res.json("Task assigned to all students within the course successfully.");
 });
 

@@ -29,6 +29,11 @@ const assignmentSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    studentAssigned: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
   },
   {
     timestamps: true,
