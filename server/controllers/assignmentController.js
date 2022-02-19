@@ -10,7 +10,9 @@ import Assignment from "../models/Assignment.js";
 // @route GET /api/assignment/uploaded-task
 // @access Private (lecturer only)
 const viewTask = asyncHandler(async (req, res) => {
-  const task = await Assignment.find({ uploadedBy: req.staff._id });
+  const { _id } = req.staff;
+
+  const task = await Assignment.find({ uploadedBy: _id });
 
   if (!task) {
     res.status(400);
@@ -42,17 +44,93 @@ const viewTask = asyncHandler(async (req, res) => {
 // @desc Create an assignment
 // @route POST /api/assignment/create-task
 // @access Private (lecturer)
-// const createAssignment = asyncHandler(async () => {
+const createAssignment = asyncHandler(async (req, res) => {
+  const { _id } = req.staff;
+  const { course, subject, topicName, topicURL, due } = req.body;
 
-// })
+  // validate course and subject ids
+  const courseDetails = await Course.findById(course);
+
+  if (!courseDetails) {
+    res.status(400);
+    throw new Error("Course does not exist");
+  }
+
+  const subjectValid = courseDetails.subjects.filter(
+    s => s._id.toString() === subject.toString()
+  );
+  console.log(subjectValid);
+  if (subjectValid.length === 0) {
+    res.status(400);
+    throw new Error("Subject does not exist");
+  }
+
+  const assignment = new Assignment({
+    uploadedBy: _id,
+    course: course,
+    subject: subject,
+    topicName: topicName,
+    topicURL: topicURL,
+    due: due,
+  });
+
+  const createdAssignment = await assignment.save();
+  res.status(201).json(createdAssignment);
+});
 
 // @desc Update an assignment
 // @route PATCH /api/assignment/update-task/:id
 // @access Private (lecturer)
+const updateAssignment = asyncHandler(async (req, res) => {});
 
 // @desc Delete an assignment
-// @route DELETE /api/assignment/:id
+// @route PATCH /api/assignment/:assignmentId
 // @access Private (Lecturer)
+const deleteAssignment = asyncHandler(async (req, res) => {
+  const { _id } = req.staff;
+  const { assignmentId } = req.params;
+
+  const assignment = await Assignment.findById(assignmentId);
+
+  let removedAssignment = [];
+  const updateStudent = async students => {
+    for (let i = 0; i < students.length; i++) {
+      removedAssignment = await Student.findById(students[i]._id);
+
+      removedAssignment.assignments = removedAssignment.assignments.filter(
+        asg => asg.assignment.toString() !== assignmentId.toString()
+      );
+
+      await removedAssignment.save();
+    }
+  };
+
+  if (assignment) {
+    if (assignment.uploadedBy.toString() === _id.toString()) {
+      await assignment.remove();
+
+      // remove from all student
+      const students = await Student.find({
+        course: assignment.course,
+      });
+
+      if (!students) {
+        res.status(404);
+        throw new Error("No student found");
+      }
+
+      await updateStudent(students);
+
+      res.json({ message: "Assignment has been removed" });
+    } else {
+      res.status(400);
+      throw new Error("Unauthorized request, please try again later");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Assignment not found");
+  }
+});
 
 // @desc Assign task to student
 // @route PATCH /api/assignment/assign-task/:id
@@ -122,15 +200,47 @@ const viewStudentAssignment = asyncHandler(async (req, res) => {
   const studentAssignment = student.assignments;
 
   let updatedStudentAssignment = [];
-  const pushAssignmentDetails = async studentAssignment => {
-    for (let i = 0; i < studentAssignment.length; i++) {
-      const assignment = await Assignment.findById(studentAssignment[i]);
+  const pushAssignmentDetails = async asg => {
+    for (let i = 0; i < asg.length; i++) {
+      const assignment = await Assignment.findById(asg[i].assignment);
+      const merged = Object.assign(
+        {
+          course: assignment.course,
+          subject: assignment.subject,
+          topicName: assignment.topicName,
+          topicURL: assignment.topicURL,
+          due: assignment.due,
+        },
+        asg[i]._doc
+      );
+      updatedStudentAssignment.push(merged);
     }
   };
 
-  pushAssignmentDetails(studentAssignment);
+  await pushAssignmentDetails(studentAssignment);
 
-  res.status(200).json(updatedStudentAssignment);
+  let updatedStudentAssignmentDetails = [];
+  const pushCourseDetails = async asg => {
+    for (let i = 0; i < asg.length; i++) {
+      const course = await Course.findById(asg[i].course);
+
+      const merged = Object.assign(
+        {
+          courseName: course.courseName,
+          subjectName: course.subjects.filter(
+            s => s._id.toString() === asg[i].subject.toString()
+          )[0].subjectName,
+        },
+        asg[i]
+      );
+
+      updatedStudentAssignmentDetails.push(merged);
+    }
+  };
+
+  await pushCourseDetails(updatedStudentAssignment);
+
+  res.status(200).json(updatedStudentAssignmentDetails);
 });
 
 // @desc View single assignment
@@ -141,4 +251,10 @@ const viewStudentAssignment = asyncHandler(async (req, res) => {
 // @route PATCH /api/assignment/submit-task/:id
 // @access Private (student only)
 
-export { viewStudentAssignment, viewTask, assignTask };
+export {
+  viewStudentAssignment,
+  viewTask,
+  assignTask,
+  createAssignment,
+  deleteAssignment,
+};
