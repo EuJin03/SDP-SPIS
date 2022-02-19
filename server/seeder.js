@@ -39,7 +39,7 @@ const importData = async () => {
 const destroyData = async () => {
   try {
     await Student.deleteMany();
-    await Course.deleteMany();
+    // await Course.deleteMany();
     await Staff.deleteMany();
     await Assignment.deleteMany();
 

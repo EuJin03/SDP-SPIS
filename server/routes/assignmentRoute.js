@@ -5,8 +5,10 @@ import {
   createTask,
   deleteTask,
   gradePaper,
+  submitAssignment,
   updateTask,
   viewPaper,
+  viewSingleStudentTask,
   viewStudentTask,
   viewTask,
 } from "../controllers/assignmentController.js";
@@ -14,6 +16,12 @@ import { protectStudent, protectStaff } from "../middleware/authMiddleware.js";
 
 // student access only
 router.route("/view-task").get(protectStudent, viewStudentTask);
+router
+  .route("/view-task/:submissionId")
+  .get(protectStudent, viewSingleStudentTask);
+router
+  .route("/submit-task/:submissionId")
+  .post(protectStudent, submitAssignment);
 
 // lecturer access only
 router.route("/uploaded-task").get(protectStaff, viewTask);

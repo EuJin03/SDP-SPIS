@@ -1,6 +1,5 @@
 import asyncHandler from "express-async-handler";
 import Course from "../models/Course.js";
-import Staff from "../models/Staff.js";
 import Student from "../models/Student.js";
 import Assignment from "../models/Assignment.js";
 import { validateURL } from "../utils/validator.js";
@@ -399,11 +398,78 @@ const viewStudentTask = asyncHandler(async (req, res) => {
 });
 
 // @desc View single assignment
-// @route GET /api/assignment/view-task/:id
+// @route GET /api/assignment/view-task/:submissionId
 // @access Private (student only)
+const viewSingleStudentTask = asyncHandler(async (req, res) => {
+  const { _id } = req.student;
+  const { submissionId } = req.params;
+
+  const student = await Student.findById(_id);
+
+  if (!student) {
+    res.status(400);
+    throw new Error("Student not found");
+  }
+
+  let singleAssignment = [];
+  for (let i = 0; i < student.assignments.length; i++) {
+    const submissionDetails = student.assignments[i];
+    if (submissionDetails._id.toString() === submissionId.toString()) {
+      singleAssignment.push(submissionDetails);
+    }
+  }
+
+  res.json(singleAssignment);
+});
 
 // @desc Submit assignment
-// @route PATCH /api/assignment/submit-task/:id
+// @route PATCH /api/assignment/submit-task/:submissionId
+// @access Private (student only)
+const submitAssignment = asyncHandler(async (req, res) => {
+  const { _id } = req.student;
+  const { submissionId } = req.params;
+  const { submissionFile } = req.body;
+
+  const student = await Student.findById(_id);
+
+  if (!student) {
+    res.status(400);
+    throw new Error("Student not found");
+  }
+
+  if (!submissionId) {
+    res.status(400);
+    throw new Error("Submission ID does not exist");
+  }
+
+  const validate = validateURL(submissionFile);
+
+  if (!submissionFile || !validate.valid) {
+    res.status(400);
+    throw new Error(validate.message);
+  }
+
+  const submit = student.assignments.filter(
+    assignment => assignment._id.toString() === submissionId.toString()
+  );
+
+  // submit the file
+  if (!submit[0].submission) {
+    submit[0].submissionFile = submissionFile;
+    submit[0].submission = true;
+  } else {
+    res.status(400);
+    throw new Error(
+      "Assignment has been submitted, no changes can be attempted!"
+    );
+  }
+
+  const updatedStudent = await student.save();
+  res.json(updatedStudent);
+});
+
+// @desc view grades
+// @route GET /api/assignment/view-grades
 // @access Private (student only)
 
 export {
@@ -415,4 +481,6 @@ export {
   viewPaper,
   gradePaper,
   viewStudentTask,
+  viewSingleStudentTask,
+  submitAssignment,
 };
