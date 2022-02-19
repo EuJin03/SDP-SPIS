@@ -283,12 +283,24 @@ const viewPaper = asyncHandler(async (req, res) => {
     throw new Error("Assignment does not exist");
   }
 
-  res.json({
-    topicName: assignment.topicName,
-    topicURL: assignment.topicURL,
-    due: new Date(assignment.due), //.toString().slice(0, 15)
-    students,
-  });
+  if (
+    new Date(assignment.due).toISOString() > new Date(Date.now()).toISOString()
+  ) {
+    res.json({
+      topicName: assignment.topicName,
+      topicURL: assignment.topicURL,
+      due: new Date(assignment.due), //.toString().slice(0, 15)
+      students,
+    });
+  } else {
+    res.json({
+      topicName: assignment.topicName,
+      topicURL: assignment.topicURL,
+      due: new Date(assignment.due),
+      message:
+        "Assignment submission due date has passed, all actions on student grades have been halted!",
+    });
+  }
 });
 
 // @desc Grade students paper
