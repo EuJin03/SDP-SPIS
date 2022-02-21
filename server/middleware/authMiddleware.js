@@ -70,13 +70,3 @@ export const admin = (req, res, next) => {
     throw new Error("Not authorized as an admin");
   }
 };
-
-// Lecturer auth (staff)
-export const lecturer = (req, res, next) => {
-  if (req.staff) {
-    next();
-  } else {
-    res.status(401);
-    throw new Error("Not authorized as a staff");
-  }
-};

@@ -23,7 +23,7 @@ const importData = async () => {
     // await Staff.deleteMany();
     // await Assignment.deleteMany();
 
-    await Student.insertMany(students);
+    // await Student.insertMany(students);
     // await Course.insertMany(courses);
     // await Staff.insertMany(staffs);
     // await Assignment.insertMany(assignments);

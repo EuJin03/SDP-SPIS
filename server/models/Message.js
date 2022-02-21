@@ -1,5 +1,3 @@
-// do not use arrow function
-
 import mongoose from "mongoose";
 
 const msgSchema = new mongoose.Schema({

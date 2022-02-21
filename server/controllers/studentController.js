@@ -199,7 +199,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
 // @route PATCH /api/student/reset-password/:token
 // @access Private route
 const resetPassword = asyncHandler(async (req, res) => {
-  const { token } = req.params.token;
+  const { token } = req.params;
   const { password, confirmPassword } = req.body;
 
   if (password !== confirmPassword) {
@@ -218,9 +218,7 @@ const resetPassword = asyncHandler(async (req, res) => {
       throw new Error("Not authorised, token failed");
     }
 
-    const student = await Student.findOne({ resetToken: token }).select(
-      "-password"
-    );
+    const student = await Student.findOne({ resetToken: token });
 
     if (!student) {
       res.status(404);

@@ -453,15 +453,17 @@ const submitAssignment = asyncHandler(async (req, res) => {
     assignment => assignment._id.toString() === submissionId.toString()
   );
 
-  // submit the file
-  if (!submit[0].submission) {
-    submit[0].submissionFile = submissionFile;
-    submit[0].submission = true;
-  } else {
-    res.status(400);
-    throw new Error(
-      "Assignment has been submitted, no changes can be attempted!"
-    );
+  if (submit && submit[0].length !== 0) {
+    // submit the file
+    if (!submit[0].submission) {
+      submit[0].submissionFile = submissionFile;
+      submit[0].submission = true;
+    } else {
+      res.status(400);
+      throw new Error(
+        "Assignment has been submitted, no changes can be attempted!"
+      );
+    }
   }
 
   const updatedStudent = await student.save();

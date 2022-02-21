@@ -34,4 +34,8 @@ const createCourse = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Edit course & subjects
+// @route PATCH /api/course/:id
+// @route Private (admin)
+
 export { getCourse };

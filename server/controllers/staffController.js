@@ -13,6 +13,7 @@ import {
 } from "../utils/validator.js";
 import mailgun from "mailgun-js";
 import jwt from "jsonwebtoken";
+import Student from "../models/Student.js";
 
 const __domain = process.env.DOMAIN;
 const mg = mailgun({
