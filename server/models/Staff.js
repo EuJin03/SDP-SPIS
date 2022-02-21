@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
+import { __salt } from "../constant.js";
 
 const staffSchema = mongoose.Schema({
   image: {
@@ -57,7 +58,7 @@ staffSchema.pre("save", async function (next) {
     next();
   }
 
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(__salt);
   this.password = await bcrypt.hash(this.password, salt);
 });
 

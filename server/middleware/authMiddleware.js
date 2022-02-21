@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import Student from "../models/Student.js";
 import Staff from "../models/Staff.js";
+import { __jwt_secret } from "../constant.js";
 
 // Student auth
 export const protectStudent = asyncHandler(async (req, res, next) => {
@@ -14,7 +15,7 @@ export const protectStudent = asyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
 
-      const { id } = jwt.verify(token, process.env.JWT_SECRET); //decoded
+      const { id } = jwt.verify(token, __jwt_secret); //decoded
 
       req.student = await Student.findById(id).select("-password"); //important
 
@@ -43,7 +44,7 @@ export const protectStaff = asyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
 
-      const { id } = jwt.verify(token, process.env.JWT_SECRET); //decoded
+      const { id } = jwt.verify(token, __jwt_secret); //decoded
 
       req.staff = await Staff.findById(id).select("-password"); //important
 

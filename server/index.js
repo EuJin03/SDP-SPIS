@@ -12,11 +12,13 @@ import courseRoute from "./routes/courseRoute.js";
 import assignmentRoute from "./routes/assignmentRoute.js";
 import uploadRoute from "./routes/uploadRoute.js";
 
+import { __node_env, __port } from "./constant.js";
+
 config();
 connectDB();
 const app = express();
 
-if (process.env.NODE_ENV === "development") {
+if (__node_env === "development") {
   app.use(morgan("dev"));
 }
 
@@ -29,7 +31,7 @@ app.use("/api/course", courseRoute);
 app.use("/api/assignment", assignmentRoute);
 app.use("/api/uploads", uploadRoute);
 
-if (process.env.NODE_ENV === "production") {
+if (__node_env === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
   app.get("*", (req, res) =>
@@ -44,9 +46,9 @@ if (process.env.NODE_ENV === "production") {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+const PORT = __port || 5000;
 
 app.listen(
   PORT,
-  console.log(`Server is running in ${process.env.NODE_ENV} mode on ${PORT}`)
+  console.log(`Server is running in ${__node_env} mode on ${PORT}`)
 );

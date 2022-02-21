@@ -1,5 +1,3 @@
-import { config } from "dotenv";
-config();
 import asyncHandler from "express-async-handler";
 import {
   generateToken,
@@ -13,10 +11,16 @@ import {
 } from "../utils/validator.js";
 import mailgun from "mailgun-js";
 import jwt from "jsonwebtoken";
+import {
+  __jwt_secret,
+  __mailgun_api_key,
+  __mailgun_domain,
+  __url,
+} from "../constant.js";
 
-const __domain = process.env.DOMAIN;
+const __domain = __mailgun_domain;
 const mg = mailgun({
-  apiKey: process.env.MAILGUN_API_KEY,
+  apiKey: __mailgun_api_key,
   domain: __domain,
 });
 
@@ -170,7 +174,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
       to: email,
       subject: "Reset Password Link",
       html: `<h2>Please click on given link to reset your password</h2>
-                <p><a href="${process.env.URL}/api/student/reset-password/${token}">Reset Password</a></p>
+                <p><a href="${__url}/api/student/reset-password/${token}">Reset Password</a></p>
                 <hr>
                 <p><b>The link will expire in 30m!</b></p>
               `,
@@ -212,7 +216,7 @@ const resetPassword = asyncHandler(async (req, res) => {
     throw new Error("Not authorised, no token");
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, async (err, data) => {
+  jwt.verify(token, __jwt_secret, async (err, data) => {
     if (err) {
       res.status("401");
       throw new Error("Not authorised, token failed");
