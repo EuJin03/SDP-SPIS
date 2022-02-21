@@ -4,6 +4,19 @@
 
 This program is built for the UCDF2005ICT(DI) SDP assignment. This system that is being built will focus on helping students to improve their grades by showing what topics in a specific subject that they're weak at. Due to several limitations, not all features that are mentioned will be implemented fully. This student monitoring program created using MERN stack
 
+## Getting started with the project
+
+### `./server/constant.js` folder
+
+1. Assign all values required in the `.env` file as mentioned above
+
+### `npm data:import`
+
+2. Import `Course` into database to retrieve course `_id` before seeding other entities.
+
+### `npm run start` or `npm run server`
+
+3. Run `node/nodemon index.js` command in bash terminal to run in development mode.
 
 ## Flow of System
 
@@ -39,22 +52,12 @@ The flow for Lecturers will be similar to Students. Just that some functionaliti
       1. Lecturers will use this tab to respond or initiate conversations with their students.
       2. Layout is similar to WhatsApp.
 
-
-## Under Construction
-
 ## Features to be implement
 
-1. Lecturer able to keep track on number of students that have received the assigned task.
-2. Lecturer able to view grading history.
+1. Lecturer able to keep track on number of students that have received the assigned task. /
+2. Lecturer able to view grading history. /
 
 ## Limitations
 
 1. 1000/mnth email api request within 5 authorised account (mailgun)
 2. 1 gb file storage (cloudinary)
-
-
-## Questions
-
-1. Should students assignments be formatted when course is changed? No need, like what you said
-2. Should i include submission date? Yes, if you haven't add
-3. Should i allow student to resubmit assignment? No
