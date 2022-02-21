@@ -82,8 +82,8 @@ const createTask = asyncHandler(async (req, res) => {
     due: due,
   });
 
-  const createdAssignment = await assignment.save();
-  res.status(201).json(createdAssignment);
+  await assignment.save();
+  res.status(201).json(`${topicName} has been created successfully`);
 });
 
 // @desc Update an assignment
@@ -254,7 +254,7 @@ const viewPaper = asyncHandler(async (req, res) => {
   const students = await Student.find({
     "assignments.assignment": assignmentId,
     "assignments.submission": true,
-  }).select("-password -dob -gender");
+  }).select("-password -dob -gender -_id");
 
   if (!students) {
     res.status(400);
@@ -319,7 +319,9 @@ const gradePaper = asyncHandler(async (req, res) => {
     throw new Error("Invalid Input");
   }
 
-  const student = await Student.findOne({ studentID: studentID });
+  const student = await Student.findOne({ studentID: studentID }).select(
+    "-password -dob -gender"
+  );
 
   if (!student) {
     res.status(400);
@@ -341,7 +343,7 @@ const gradePaper = asyncHandler(async (req, res) => {
 // Student
 // -------------------------------------------------------------------
 // @desc View all assignment (student)
-// @route GET /api/assignment
+// @route GET /api/assignment/view-task
 // @access Private (student only)
 const viewStudentTask = asyncHandler(async (req, res) => {
   const student = await Student.findById(req.student._id).select("-password");
@@ -430,7 +432,7 @@ const submitAssignment = asyncHandler(async (req, res) => {
   const { submissionId } = req.params;
   const { submissionFile } = req.body;
 
-  const student = await Student.findById(_id);
+  const student = await Student.findById(_id).select("-_id -password");
 
   if (!student) {
     res.status(400);

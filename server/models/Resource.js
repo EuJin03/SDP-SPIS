@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 
 const resourceSchema = mongoose.Schema(
   {
+    uploadedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Staff",
+    },
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
@@ -10,12 +14,20 @@ const resourceSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Subject",
     },
+    topicName: {
+      type: String,
+      required: true,
+    },
+    topicURL: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const Course = mongoose.model("Course", courseSchema);
+const Resource = mongoose.model("Resource", resourceSchema);
 
-export default Course;
+export default Resource;

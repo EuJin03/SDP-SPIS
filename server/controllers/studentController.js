@@ -301,38 +301,38 @@ const updateStudent = asyncHandler(async (req, res) => {
 // @desc Delete student
 // @route DELETE /api/student/:id
 // @access Private admin
-const deleteUser = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.params.id).select("-password");
-  if (student) {
-    await student.remove();
-    res.json({ message: "Student removed" });
-  } else {
-    res.status(404);
-    throw new Error("Student not found");
-  }
-});
+// const deleteUser = asyncHandler(async (req, res) => {
+//   const student = await Student.findById(req.params.id).select("-password");
+//   if (student) {
+//     await student.remove();
+//     res.json({ message: "Student removed" });
+//   } else {
+//     res.status(404);
+//     throw new Error("Student not found");
+//   }
+// });
 
 // @desc Get all students
 // @route GET /api/students
 // @access Private lecturer/admin
-const getStudents = asyncHandler(async (req, res) => {
-  const student = await Student.find({}).select("-password");
-  res.json(student);
-});
+// const getStudents = asyncHandler(async (req, res) => {
+//   const student = await Student.find({}).select("-password");
+//   res.json(student);
+// });
 
 // @desc Get student by ID
 // @route GET /api/student/:id
 // @access Private lecturer/admin
-const getStudentById = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.params.id).select("-password");
+// const getStudentById = asyncHandler(async (req, res) => {
+//   const student = await Student.findById(req.params.id).select("-password");
 
-  if (student) {
-    res.json(student);
-  } else {
-    res.status(404);
-    throw new Error("Student not Found");
-  }
-});
+//   if (student) {
+//     res.json(student);
+//   } else {
+//     res.status(404);
+//     throw new Error("Student not Found");
+//   }
+// });
 
 export {
   authStudent,
@@ -341,7 +341,7 @@ export {
   forgotPassword,
   resetPassword,
   updateStudent,
-  deleteUser,
-  getStudents,
-  getStudentById,
+  // deleteUser,
+  // getStudents,
+  // getStudentById,
 };

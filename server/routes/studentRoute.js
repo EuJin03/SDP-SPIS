@@ -8,7 +8,6 @@ import {
   forgotPassword,
   resetPassword,
   updateStudent,
-  getStudentById,
 } from "../controllers/studentController.js";
 import { admin, protectStudent } from "../middleware/authMiddleware.js";
 
@@ -20,9 +19,9 @@ router
   .patch(protectStudent, updateStudent);
 router.route("/forgot-password").post(forgotPassword);
 router.patch("/reset-password/:token", resetPassword);
-router
-  .route("/:id")
-  .delete(protectStudent, admin, deleteUser)
-  .get(protectStudent, getStudentById);
+// router
+//   .route("/:id")
+//   .delete(protectStudent, admin, deleteUser)
+//   .get(protectStudent, getStudentById);
 
 export default router;
