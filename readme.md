@@ -6,17 +6,17 @@ This program is built for the UCDF2005ICT(DI) SDP assignment. This system that i
 
 ## Getting started with the project
 
-#### `./server/constant.js` folder
+1. #### `./server/constant.js` folder
 
-1. Assign all values required in the `.env` file as mentioned above
+- Assign all values required in the `.env` file as mentioned above
 
-#### `npm data:import`
+2. #### `npm data:import`
 
-2. Import `Course` into database to retrieve course `_id` before seeding other entities.
+- Import `Course` into database to retrieve course `_id` before seeding other entities.
 
-#### `npm run start` or `npm run server`
+3. #### `npm run start` or `npm run server`
 
-3. Run `node/nodemon index.js` command in bash terminal to run in development mode.
+- Run `node/nodemon index.js` command in bash terminal to run in development mode.
 
 ## Flow of System
 
