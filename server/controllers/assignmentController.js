@@ -470,10 +470,6 @@ const submitAssignment = asyncHandler(async (req, res) => {
   res.json(updatedStudent);
 });
 
-// @desc view grades
-// @route GET /api/assignment/view-grades
-// @access Private (student only)
-
 export {
   viewTask,
   assignTask,

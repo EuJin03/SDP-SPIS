@@ -10,7 +10,7 @@ This program is built for the UCDF2005ICT(DI) SDP assignment. This system that i
 
 - Assign all values required in the `.env` file as mentioned above
 
-2. #### `npm data:import`
+2. #### `npm run data:import`
 
 - Import `Course` into database to retrieve course `_id` before seeding other entities.
 
@@ -54,8 +54,9 @@ The flow for Lecturers will be similar to Students. Just that some functionaliti
 
 ## Features to be implement
 
-1. Lecturer able to keep track on number of students that have received the assigned task. /
-2. Lecturer able to view grading history. /
+1. ~~Lecturer able to keep track on number of students that have received the assigned task.~~
+2. ~~Lecturer able to view grading history.~~
+3. Auto terminate student accounts to stop receiving new assignments
 
 ## Limitations
 
