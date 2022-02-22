@@ -217,22 +217,24 @@ const assignTask = asyncHandler(async (req, res) => {
         if (students[i].course.toString() === task.course.toString()) {
           const studentIndex = students[i]._id;
 
-          updateStudent = await Student.findById(studentIndex).select(
-            "-password"
-          );
+          if (students[i]?.isActive) {
+            updateStudent = await Student.findById(studentIndex).select(
+              "-password"
+            );
 
-          if (
-            !updateStudent.assignments.find(
-              asg => asg.assignment.toString() === assignmentId.toString()
-            )
-          ) {
-            updateStudent.assignments.push({
-              assignment: task._id,
-            });
-            studentCounter = studentCounter + 1;
+            if (
+              !updateStudent.assignments.find(
+                asg => asg.assignment.toString() === assignmentId.toString()
+              )
+            ) {
+              updateStudent.assignments.push({
+                assignment: task._id,
+              });
+              studentCounter = studentCounter + 1;
+            }
+
+            await updateStudent.save();
           }
-
-          await updateStudent.save();
         }
       }
     };
