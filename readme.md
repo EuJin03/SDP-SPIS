@@ -63,3 +63,4 @@ The flow for Lecturers will be similar to Students. Just that some functionaliti
 
 1. 1000/mnth email api request within 5 authorised account (mailgun)
 2. 1 gb file storage (cloudinary)
+3. Media query not considered. Only desktop layout due to time restrictions.

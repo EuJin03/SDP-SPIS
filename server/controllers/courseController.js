@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import Assignment from "../models/Assignment.js";
 import Course from "../models/Course.js";
 
 // @desc Get all course details
@@ -6,11 +7,34 @@ import Course from "../models/Course.js";
 // @access Public route
 const getCourse = asyncHandler(async (req, res) => {
   const course = await Course.find({});
+
   if (!course) {
     res.status(404);
     throw new Error("Courses do not exist.");
   }
-  res.json(course);
+
+  const assignments = await Assignment.find({});
+
+  const subjectArr = [];
+  assignments.forEach(assignment => {
+    subjectArr.push({
+      subjectId: assignment.subject.toString(),
+      topicName: assignment.topicName,
+    });
+  });
+
+  const reducedSubjectArr = subjectArr.reduce((r, { subjectId, topicName }) => {
+    r[subjectId] = r[subjectId] || { subjectId, topicName: [] };
+    r[subjectId].topicName.push(topicName);
+    return r;
+  }, {});
+
+  console.log();
+
+  res.json({
+    topicArrayList: Object.values(reducedSubjectArr),
+    courseList: course,
+  });
 });
 
 // @desc Create new course
