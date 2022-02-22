@@ -29,8 +29,6 @@ const getCourse = asyncHandler(async (req, res) => {
     return r;
   }, {});
 
-  console.log();
-
   res.json({
     topicArrayList: Object.values(reducedSubjectArr),
     courseList: course,
@@ -41,25 +39,70 @@ const getCourse = asyncHandler(async (req, res) => {
 // @route POST /api/course
 // @access Private admin
 const createCourse = asyncHandler(async (req, res) => {
+  const { courseName } = req.body;
+
   const courses = await Course.find({});
+
   if (!courses) {
     res.status(404);
     throw new Error("Courses do not exist.");
   }
 
-  const { courseName } = req.body;
+  if (
+    courses.find(
+      course =>
+        course.courseName.toLowerCase().replace(/\s/g, "") ===
+        courseName.toLowerCase().replace(/\s/g, "")
+    )
+  ) {
+    res.status(401);
+    throw new Error("Course already existed");
+  }
 
-  courses.forEach(course => {
-    if (course.courseName.toLowerCase() !== courseName.toLowerCase()) {
-    } else {
-      res.status(401);
-      throw new Error("Course already existed!");
-    }
+  const course = new Course({
+    courseName: courseName,
   });
+
+  const createdCourse = await course.save();
+  res.status(201).json(createdCourse);
 });
 
 // @desc Edit course & subjects
 // @route PATCH /api/course/:id
 // @route Private (admin)
+const updateCourse = asyncHandler(async (req, res) => {
+  const { id } = req.params;
 
-export { getCourse };
+  const course = await Course.findById(id);
+
+  if (course) {
+    course.courseName = req.body.courseName || course.courseName;
+
+    if (req.body?.subjectName) {
+      const validate = course.subjects.find(
+        subject =>
+          subject.subjectName.toLowerCase().replace(/\s/g, "") ===
+          req.body.subjectName.toLowerCase().replace(/\s/g, "")
+      );
+
+      if (!validate) {
+        const subject = {
+          subjectName: req.body.subjectName,
+        };
+
+        course.subjects.push(subject);
+      } else {
+        res.status(401);
+        throw new Error("Subject already existed");
+      }
+    }
+
+    const updatedCourse = await course.save();
+    res.json(updatedCourse);
+  } else {
+    res.status(401);
+    throw new Error("Course does not exist");
+  }
+});
+
+export { getCourse, createCourse, updateCourse };
