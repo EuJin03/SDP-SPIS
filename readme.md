@@ -57,6 +57,7 @@ The flow for Lecturers will be similar to Students. Just that some functionaliti
 1. ~~Lecturer able to keep track on number of students that have received the assigned task.~~
 2. ~~Lecturer able to view grading history.~~
 3. Auto terminate student accounts to stop receiving new assignments
+4. ~~Student able to deactivate account.~~
 
 ## Limitations
 
