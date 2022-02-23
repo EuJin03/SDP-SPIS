@@ -348,14 +348,7 @@ const gradePaper = asyncHandler(async (req, res) => {
 // @route GET /api/assignment/view-task
 // @access Private (student only)
 const viewStudentTask = asyncHandler(async (req, res) => {
-  const student = await Student.findById(req.student._id).select("-password");
-
-  if (!student) {
-    res.status(400);
-    throw new Error("Student not found");
-  }
-
-  const studentAssignment = student.assignments;
+  const studentAssignment = req.student.assignments;
 
   let updatedStudentAssignment = [];
   const pushAssignmentDetails = async asg => {
@@ -405,10 +398,9 @@ const viewStudentTask = asyncHandler(async (req, res) => {
 // @route GET /api/assignment/view-task/:submissionId
 // @access Private (student only)
 const viewSingleStudentTask = asyncHandler(async (req, res) => {
-  const { _id } = req.student;
   const { submissionId } = req.params;
 
-  const student = await Student.findById(_id);
+  const student = req.student;
 
   if (!student) {
     res.status(400);
@@ -430,11 +422,10 @@ const viewSingleStudentTask = asyncHandler(async (req, res) => {
 // @route PATCH /api/assignment/submit-task/:submissionId
 // @access Private (student only)
 const submitAssignment = asyncHandler(async (req, res) => {
-  const { _id } = req.student;
   const { submissionId } = req.params;
   const { submissionFile } = req.body;
 
-  const student = await Student.findById(_id).select("-_id -password");
+  const student = req.student;
 
   if (!student) {
     res.status(400);
