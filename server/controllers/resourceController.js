@@ -183,6 +183,18 @@ const editResource = asyncHandler(async (req, res) => {
 // @desc Delete resource
 // @route DELETE /api/resource?resourceId=xxx
 // @access Private (lecturer)
-const deleteResource = asyncHandler(async (req, res) => {});
+const deleteResource = asyncHandler(async (req, res) => {
+  const { resourceId } = req.query;
+
+  const resource = await Resource.findById(resourceId);
+
+  if (resource) {
+    await resource.remove();
+    res.json({ message: "Resource has been removed successfully" });
+  } else {
+    res.status(404);
+    throw new Error("Resource not found");
+  }
+});
 
 export { getResources, createResource, editResource, deleteResource };
