@@ -133,7 +133,7 @@ const createResource = asyncHandler(async (req, res) => {
 // @access Private (lecturer)
 const editResource = asyncHandler(async (req, res) => {
   const { _id } = req.staff;
-  const { resourceId } = req.params;
+  const { resourceId } = req.query;
   const { course, subject, topicName, topicURL } = req.body;
 
   // validate URL
@@ -181,7 +181,7 @@ const editResource = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete resource
-// @route DELETE /api/resource?courseId=xxx
+// @route DELETE /api/resource?resourceId=xxx
 // @access Private (lecturer)
 const deleteResource = asyncHandler(async (req, res) => {});
 
