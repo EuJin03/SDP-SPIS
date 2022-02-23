@@ -1,6 +1,8 @@
 import asyncHandler from "express-async-handler";
 import Course from "../models/Course.js";
 import Resource from "../models/Resource.js";
+import Staff from "../models/Staff.js";
+import { validateURL } from "../utils/validator.js";
 
 // @desc View resources
 // @route GET /api/resource?courseId=xxx
@@ -20,7 +22,7 @@ const getResources = asyncHandler(async (req, res) => {
     throw new Error("Resources not found");
   }
 
-  let updatedResources = [];
+  let updatedCourse = [];
   const pushCourseName = async resources => {
     const course = await Course.findById(courseId);
 
@@ -28,17 +30,6 @@ const getResources = asyncHandler(async (req, res) => {
       res.status(401);
       throw new Error("Course not found");
     }
-
-    // for (let i = 0; i < resources.length; i++) {
-    //   const mergeCourse = Object.assign(
-    //     {
-    //       courseName: course.courseName,
-    //     },
-    //     resources[i]._doc
-    //   );
-
-    //   updatedResources.push(mergeCourse);
-    // }
 
     for (let i = 0; i < resources.length; i++) {
       let mergeCourse = Object.assign(
@@ -60,7 +51,7 @@ const getResources = asyncHandler(async (req, res) => {
             mergeCourse
           );
 
-          updatedResources.push(merged);
+          updatedCourse.push(merged);
         }
       }
     }
@@ -68,18 +59,126 @@ const getResources = asyncHandler(async (req, res) => {
 
   await pushCourseName(resources);
 
+  let updatedResources = [];
+  const updated = async resources => {
+    for (let i = 0; i < resources.length; i++) {
+      const staff = await Staff.findById(resources[i].uploadedBy);
+
+      if (staff) {
+        const merged = Object.assign(
+          {
+            staffName: staff.lName + " " + staff.fName,
+          },
+          resources[i]
+        );
+
+        updatedResources.push(merged);
+      } else {
+        updatedResources.push(resources[i]);
+      }
+    }
+  };
+
+  await updated(updatedCourse);
+
   res.json(updatedResources);
 });
 
 // @desc Create new resource
-// @route POST /api/resource/
+// @route POST /api/resource
 // @access Private (lecturer)
-const createResource = asyncHandler(async (req, res) => {});
+const createResource = asyncHandler(async (req, res) => {
+  const { _id } = req.staff;
+  const { course, subject, topicName, topicURL } = req.body;
+
+  // validate URL
+  const { valid, errors } = validateURL(topicURL);
+
+  if (!valid) {
+    res.status(400);
+    throw new Error(errors[Object.keys(errors)[0]]);
+  }
+
+  // validate course and subject ids
+  const courseDetails = await Course.findById(course);
+
+  if (!courseDetails) {
+    res.status(400);
+    throw new Error("Course does not exist");
+  }
+
+  const subjectValid = courseDetails.subjects.filter(
+    s => s._id.toString() === subject.toString()
+  );
+
+  if (subjectValid.length === 0) {
+    res.status(400);
+    throw new Error("Subject does not exist");
+  }
+
+  const resource = new Resource({
+    uploadedBy: _id,
+    course: course,
+    subject: subject,
+    topicName: topicName,
+    topicURL: topicURL,
+  });
+
+  await resource.save();
+  res.status(201).json(`${topicName} has been created successfully`);
+});
 
 // @desc Edit resource
-// @route PATCH /api/resource?courseId=xxx
+// @route PATCH /api/resource?resourceId=xxx
 // @access Private (lecturer)
-const editResource = asyncHandler(async (req, res) => {});
+const editResource = asyncHandler(async (req, res) => {
+  const { _id } = req.staff;
+  const { resourceId } = req.params;
+  const { course, subject, topicName, topicURL } = req.body;
+
+  // validate URL
+  const validate = validateURL(topicURL);
+
+  if (!validate.valid) {
+    res.status(400);
+    throw new Error(validate.message);
+  }
+
+  // validate course and subject ids
+  const courseDetails = await Course.findById(course);
+
+  if (!courseDetails) {
+    res.status(400);
+    throw new Error("Course does not exist");
+  }
+
+  const subjectValid = courseDetails.subjects.filter(
+    s => s._id.toString() === subject.toString()
+  );
+
+  if (subjectValid.length === 0) {
+    res.status(400);
+    throw new Error("Subject does not exist");
+  }
+
+  const resource = await Resource.findById(resourceId);
+
+  if (resource) {
+    if (resource.uploadedBy.toString() === _id.toString()) {
+      (resource.uploadedBy = _id),
+        (resource.course = course),
+        (resource.subject = subject),
+        (resource.topicName = topicName),
+        (resource.topicURL = topicURL);
+
+      const updatedResource = await resource.save();
+      res.json(updatedResource);
+    }
+  } else {
+    res.status(404);
+    throw new Error("Resource not found");
+  }
+});
 
 // @desc Delete resource
 // @route DELETE /api/resource?courseId=xxx
