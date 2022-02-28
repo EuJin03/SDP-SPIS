@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./dashboard.css">
+    <script src="https://kit.fontawesome.com/000bc13f31.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <!-- Header: Logo/System Name -->
+        <div class="header__logo">
+            <div class="header__logo header__logo--medium">Student Performance Improvement System</div>
+        </div>
+
+        <!-- Header: Navigation bar -->
+        <div class="header__nav">
+            <a class="header__nav__item">Assignment</a>
+            <a class="header__nav__item">Resources</a>
+            <a class="header__nav__item" href="./dashboard.html">Dashboard</a>
+            <a class="header__nav__item">Messages</a>
+        </div>
+    </div>
+
+    <!-- Main body: User information -->
+    <div class="user-info">
+        
+        <!-- User Avatar -->
+        <div class="user-info__avatar">
+            <i class="fa-solid fa-user-tie fa-inverse"></i>
+        </div>
+        
+        <!-- Text beside User Avatar -->
+        <div class="user-info__text">
+            <!-- Username -->
+            <div class="user-info__username">Username</div>
+            <!-- Staff information (ID and Position) -->
+            <div class="user-info__staff-info">
+                <span class="user-info__staff-info--staff-id">Staff ID |</span>  
+                <span class="user-info__staff-info--position">Position</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="main__courses">
+            <div class="courses__title">Courses</div>
+            <div class="courses__links">
+                <a class="courses__link">Data Analysis</a>
+                <a class="courses__link">Cybersecurity</a>
+                <a class="courses__link">Information Systems</a>
+            </div>
+        </div>
+        <div class="main__assignments">
+            <div class="assignments__title">Assignments</div>
+            <div class="assignments__links">
+                <a class="assignments__link">Machine Learning Assignment</a>
+                <a class="assignments__link">Penetration Testing Assignment</a>
+                <a class="assignments__link">Intro to Data Analytics Assignment</a>
+                <a class="assignments__link">Database Design Assignment</a>
+                <a class="assignments__link">Operating Systems Assignment</a>
+                <a class="assignments__link">Information Security Assignment</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
