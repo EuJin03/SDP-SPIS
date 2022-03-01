@@ -62,8 +62,8 @@ a {
 .header__nav__item:active {
     font-weight: 500;
     color: #FFD369;
-
 }
+
 /* User info styles */
 
 .user-info {
@@ -137,3 +137,13 @@ a {
     height: 350px;
     overflow: auto;
 }
+
+.courses__link:visited {
+    color: #eee;
+}
+
+.courses__link:hover {
+    color: #FFD369;
+    font-weight: 550;
+}
+
