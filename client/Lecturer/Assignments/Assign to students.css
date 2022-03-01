@@ -16,10 +16,6 @@ a {
     color: #eee;
 }
 
-a:visited {
-    color: #eee;
-}
-
 /* Header styles */
 
 .header {
@@ -61,24 +57,56 @@ a:visited {
     font-weight: 500;
 }
 
-/* Assignments Styles */
+/* Button Styles */
 
-.assignments__header {
-    color: #eee;
-    font-size: 60px;
-    font-weight: 600;
-    text-decoration: underline;
+.btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 48px;
+}
+
+.btn__container {
+    width: 200px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #FFD369;
+    padding: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn__text {
+    font-size: 24px;
+    color: #393E46;
+    text-decoration: none;
+}
+
+/* Student Styles */
+
+.students__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin: 24px 91px;
     /* position: sticky;
     top: 128px; */
 }
 
-.assignments__list {
+.header__assignments {
+    color: #eee;
+    font-size: 60px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.students__list {
     height: 700px;
     overflow: auto;
 }
 
-.assignments__item {
+.students__item {
     background-color: #393E46;
     margin: 24px 91px;
     display: flex;
@@ -93,12 +121,12 @@ a:visited {
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
 
-.assignments__name {
+.students__name {
     font-size: 24px;
     font-weight: 400;
 }
 
-.assignments__actions {
+.students__actions {
     display: flex;
     flex-wrap: nowrap;
     gap: 16px;
@@ -107,4 +135,8 @@ a:visited {
 .actions__items:hover {
     color: #FFD369;
     font-weight: bold;
+}
+
+.actions__items {
+    transform: scale(1.5);
 }

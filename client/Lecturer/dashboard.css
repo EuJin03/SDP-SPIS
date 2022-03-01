@@ -22,6 +22,8 @@ a {
     align-items: center;
     background-color: #393E46;
     height: 102px;
+    position: sticky;
+    top: 0;
 }
 
 .header__logo {
@@ -48,20 +50,9 @@ a {
     padding: 35px 42px;
 }
 
-.header__nav__item:visited {
-    font-weight: bold;
-    color: #FFD369;
-}
-
 .header__nav__item:hover {
-    background-color: #FFD369;
-    color: black;
-    font-weight: 500;
-}
-
-.header__nav__item:active {
-    font-weight: 500;
     color: #FFD369;
+    font-weight: 500;
 }
 
 /* User info styles */
@@ -127,6 +118,10 @@ a {
     text-decoration: underline;
 }
 
+.assignments__title a:visited {
+    color: #eee;
+}
+
 .courses__links, .assignments__links {
     flex: 1 1 auto;
     display:flex;
@@ -138,11 +133,11 @@ a {
     overflow: auto;
 }
 
-.courses__link:visited {
+.courses__link:visited, .assignments__link:visited {
     color: #eee;
 }
 
-.courses__link:hover {
+.courses__link:hover, .assignments__link:hover {
     color: #FFD369;
     font-weight: 550;
 }
