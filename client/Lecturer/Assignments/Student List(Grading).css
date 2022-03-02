@@ -16,10 +16,6 @@ a {
     color: #eee;
 }
 
-a:visited {
-    color: #eee;
-}
-
 /* Header styles */
 
 .header {
@@ -72,31 +68,47 @@ a:visited {
     right: 10px;
 }
 
-/* Assignments Styles */
+/* Students Styles */
 
-.assignments__header {
+.header__assignments {
     color: #eee;
-    font-size: 60px;
+    font-size: 48px;
     font-weight: 600;
     text-decoration: underline;
-    margin: 24px 91px;
-    /* position: sticky;
-    top: 128px; */
+    margin: 24px;
 }
 
-.assignments__list {
-    height: 700px;
-    overflow: auto;
-}
-
-.assignments__item {
-    background-color: #393E46;
-    margin: 24px 91px;
+.students__header, .students__item {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    color: #eee;
+    background-color: #393E46;
+    margin: 24px;
     padding: 16px;
+    font-size: 24px;
+    font-weight: 450;
     border-radius: 15px;
+}
+
+.header__actions, .students__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 125px;
+}
+
+.header__grades {
+    padding-right: 100px; /* To make the Grade header line up with the actual grades */
+}
+
+.students__header {
+    text-decoration: underline;
+}
+
+.students__list {
+    height: 600px;
+    overflow: auto;
 }
 
 ::-webkit-scrollbar {
@@ -104,18 +116,7 @@ a:visited {
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
 
-.assignments__name {
-    font-size: 24px;
-    font-weight: 400;
-}
-
-.assignments__actions {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 16px;
-}
-
-.actions__items:hover {
+.actions__grade:hover {
     color: #FFD369;
-    font-weight: bold;
+    font-weight: 600;
 }

@@ -1,0 +1,122 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: #eee;
+}
+
+a {
+    text-decoration: none;
+    color: #eee;
+}
+
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* Grading box styles */
+.grading {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 24px;
+    height: 500px;
+    width: 800px;
+    border-radius: 25px;
+
+    /* Centering the message to the middle of the page */
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #393E46;
+}
+
+.grading__section, .comments__section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    padding-top: 24px;
+    padding-left: 24px;
+}
+
+.section__title {
+    color: #FFD369;
+    font-size: 36px;
+}
+
+.section__text, .comments__text {
+    width: 715px;
+    height: 40px;
+    background-color: #eee;
+    border-radius: 10px;
+}
+
+.comments__text {
+    height: 120px;
+}
+
+::placeholder {
+    padding: 8px;
+    font-size: 16px;
+    color: #393E46;
+}
+
+.grading__btn {
+    background-color: #FFD369;
+    color: #393E46;
+    padding: 16px;
+    border-radius: 50px;
+    margin: 16px;
+    width: 150px;
+    font-size: 24px;
+    align-self: center;
+}

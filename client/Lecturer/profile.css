@@ -86,65 +86,49 @@ a {
     font-size: 24px;
 }
 
-/* Main body styles */
-.main {
-    color: white;
+/* Profile styles */
+
+.profile {
+    width: 1000px;
+    height: 650px;
+    background-color: #393E46;
+    border-radius: 15px;
+
+    /* Centering the message to the middle of the page */
+    margin: auto;
+    position: absolute;
+    top: 62.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profile__group {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 32px;
+    justify-content: space-between;
+    width: 800px;
 }
 
-.main__courses, .main__assignments {
+.profile__group--inner {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: 24px;
-    padding: 25px;
-    height: 500px;
-    width: 350px;
-    border: 2px solid #eee;
-}
-
-.main__courses {
-    background-color: #4D3F47;
-}
-
-.main__assignments {
-    background-color: #2F343E;
-}
-
-::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
-}
-
-.courses__title, .assignments__title {
-    font-size: 48px;
-    text-decoration: underline;
-}
-
-.assignments__title a:visited {
-    color: #eee;
-}
-
-.courses__links, .assignments__links {
-    flex: 1 1 auto;
-    display:flex;
-    flex-direction: column;
-    justify-content: flex-start;
     gap: 16px;
-    font-size: 24px;
-    height: 350px;
-    overflow: auto;
+    margin: 16px;
+    padding: 16px;
 }
 
-.courses__link:visited, .assignments__link:visited {
-    color: #eee;
-}
-
-.courses__link:hover, .assignments__link:hover {
+.group__title {
+    font-size: 28px;
     color: #FFD369;
-    font-weight: 550;
+    font-weight: 450;
 }
 
+.group__txt, .list__item {
+    font-size: 24px;
+    color: #eee;
+    font-weight: 300;
+}
+
+.group__gender {
+    padding-right: 228px;
+}

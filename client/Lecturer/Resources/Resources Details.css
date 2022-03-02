@@ -72,31 +72,37 @@ a:visited {
     right: 10px;
 }
 
-/* Assignments Styles */
+/* Subjects Styles */
+.subjects__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    width: auto;
+    margin: 24px;
+}
 
-.assignments__header {
+.header__btn {
+    padding: 24px;
+}
+
+.header__assignments {
     color: #eee;
     font-size: 60px;
     font-weight: 600;
     text-decoration: underline;
-    margin: 24px 91px;
-    /* position: sticky;
-    top: 128px; */
+    margin: 24px;
 }
 
-.assignments__list {
-    height: 700px;
-    overflow: auto;
-}
-
-.assignments__item {
-    background-color: #393E46;
-    margin: 24px 91px;
+.subjects__list {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
-    border-radius: 15px;
+    gap: 24px;
+    margin: 24px;
+    height: 650px;
+    overflow: auto;
 }
 
 ::-webkit-scrollbar {
@@ -104,18 +110,16 @@ a:visited {
     background: transparent;  /* Optional: just make scrollbar invisible */
 }
 
-.assignments__name {
-    font-size: 24px;
-    font-weight: 400;
-}
-
-.assignments__actions {
+.subjects__item {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    width: 1200px;
+    background-color: #393E46;
+    padding: 24px;
+    border-radius: 25px;
 }
 
-.actions__items:hover {
-    color: #FFD369;
-    font-weight: bold;
+.subjects__name {
+    font-size: 24px; 
 }

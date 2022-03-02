@@ -72,50 +72,47 @@ a:visited {
     right: 10px;
 }
 
-/* Assignments Styles */
-
-.assignments__header {
+/* Resources styles */
+.resources__title {
     color: #eee;
     font-size: 60px;
     font-weight: 600;
     text-decoration: underline;
-    margin: 24px 91px;
-    /* position: sticky;
-    top: 128px; */
+    margin: 24px;
 }
 
-.assignments__list {
-    height: 700px;
-    overflow: auto;
-}
-
-.assignments__item {
-    background-color: #393E46;
-    margin: 24px 91px;
+.resources__course {
     display: flex;
+    justify-content: space-around;
+    align-content: center;
+    margin: 96px 36px;
+    padding: 48px;
+    gap: 36x;
+    color: #eee;
+    background-color: #393E46;
+    border-radius: 25px;
+}
+
+.course__item {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding: 16px;
-    border-radius: 15px;
 }
 
-::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
+.course__image {
+    width: 250px;
+    height: auto;
 }
 
-.assignments__name {
-    font-size: 24px;
-    font-weight: 400;
+.course__name {
+    font-size: 36px;
+    text-align: center;
+    inline-size: 250px;
+    word-wrap: break-word;
 }
 
-.assignments__actions {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 16px;
-}
-
-.actions__items:hover {
+.course__name:hover {
     color: #FFD369;
-    font-weight: bold;
+    text-decoration: underline;
 }

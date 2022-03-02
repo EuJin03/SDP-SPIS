@@ -13,7 +13,6 @@ body {
 
 a {
     text-decoration: none;
-    color: #eee;
 }
 
 /* Header styles */
@@ -57,32 +56,6 @@ a {
     font-weight: 500;
 }
 
-/* Button Styles */
-
-.btn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 48px;
-}
-
-.btn__container {
-    width: 200px;
-    height: 50px;
-    border-radius: 25px;
-    background-color: #FFD369;
-    padding: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn__text {
-    font-size: 24px;
-    color: #393E46;
-    text-decoration: none;
-}
-
 /* Return button styles */
 .return__button {
     position: relative;
@@ -94,15 +67,15 @@ a {
     right: 10px;
 }
 
-/* Student Styles */
+/* Resource Header styles */
 
-.students__header {
+.resource__header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin: 24px 91px;
-    /* position: sticky;
-    top: 128px; */
+    justify-content: space-between;
+    width: auto;
+    margin: 24px;
+    padding: 16px;
 }
 
 .header__assignments {
@@ -112,42 +85,70 @@ a {
     text-decoration: underline;
 }
 
-.students__list {
-    height: 700px;
-    overflow: auto;
-}
-
-.students__item {
-    background-color: #393E46;
-    margin: 24px 91px;
+.btn__container {
+    background-color: #FFD369;
+    border-radius: 50px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    border-radius: 15px;
+    justify-content: center;
+    width: 128px;
 }
 
-::-webkit-scrollbar {
-    width: 0;  /* Remove scrollbar space */
-    background: transparent;  /* Optional: just make scrollbar invisible */
-}
-
-.students__name {
+.btn__text {
+    color: #393E46;
     font-size: 24px;
-    font-weight: 400;
+    padding: 16px;
 }
 
-.students__actions {
+.btn__text:hover {
+    font-weight: bolder;
+}
+
+/* Resource box styles */
+
+.resource__new {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 16px;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 36px;
+    background-color: #393E46;
+    padding: 16px;
+    height: 600px;
+    width: 800px;
+    border-radius: 15px;
+
+    /* Centering the message to the middle of the page */
+    margin: 24px;
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.actions__items:hover {
+.name__section, .file__section, .description__section {
+    padding: 8px;
+}
+
+.section__title {
     color: #FFD369;
-    font-weight: bold;
+    font-size: 36px;
+    padding-bottom: 8px;
 }
 
-.actions__items {
-    transform: scale(1.5);
+.section__text, .comments__text {
+    width: 715px;
+    height: 40px;
+    background-color: #eee;
+    border-radius: 10px;
+}
+
+.comments__text {
+    height: 120px;
+}
+
+::placeholder {
+    padding: 8px;
+    font-size: 16px;
+    color: #393E46;
 }
