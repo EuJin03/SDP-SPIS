@@ -26,12 +26,12 @@ if (__node_env === "development") {
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/student", studentRoute);
-app.use("/api/staff", staffRoute);
-app.use("/api/course", courseRoute);
-app.use("/api/assignment", assignmentRoute);
-app.use("/api/resource", resourceRoute);
-app.use("/api/uploads", uploadRoute);
+app.use("/student", studentRoute);
+app.use("/staff", staffRoute);
+app.use("/course", courseRoute);
+app.use("/assignment", assignmentRoute);
+app.use("/resource", resourceRoute);
+app.use("/uploads", uploadRoute);
 
 if (__node_env === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
