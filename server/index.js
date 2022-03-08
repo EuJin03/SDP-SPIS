@@ -5,6 +5,7 @@ import express from "express";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import { createProxyMiddleware } from "http-proxy-middleware";
 
 import studentRoute from "./routes/studentRoute.js";
 import staffRoute from "./routes/staffRoute.js";
@@ -13,7 +14,7 @@ import assignmentRoute from "./routes/assignmentRoute.js";
 import resourceRoute from "./routes/resourceRoute.js";
 import uploadRoute from "./routes/uploadRoute.js";
 
-import { __node_env, __port } from "./constant.js";
+import { __node_env, __port, __url } from "./constant.js";
 
 config();
 connectDB();
@@ -21,6 +22,14 @@ const app = express();
 
 if (__node_env === "development") {
   app.use(morgan("dev"));
+
+  app.use(
+    "/api",
+    createProxyMiddleware({
+      target: __url,
+      changeOrigin: true,
+    })
+  );
 }
 
 app.use(cors());
