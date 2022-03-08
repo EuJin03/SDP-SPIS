@@ -14,7 +14,7 @@ import assignmentRoute from "./routes/assignmentRoute.js";
 import resourceRoute from "./routes/resourceRoute.js";
 import uploadRoute from "./routes/uploadRoute.js";
 
-import { __node_env, __port, __url } from "./constant.js";
+import { __node_env, __port, __proxy } from "./constant.js";
 
 config();
 connectDB();
@@ -22,11 +22,10 @@ const app = express();
 
 if (__node_env === "development") {
   app.use(morgan("dev"));
-
   app.use(
     "/api",
     createProxyMiddleware({
-      target: __url,
+      target: __proxy,
       changeOrigin: true,
     })
   );
