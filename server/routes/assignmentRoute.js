@@ -28,7 +28,7 @@ router.route("/uploaded-task").get(protectStaff, viewTask);
 router.route("/create-task").post(protectStaff, createTask);
 router.route("/assign-task/:assignmentId").patch(protectStaff, assignTask);
 router.route("/update-task/:assignmentId").patch(protectStaff, updateTask);
-router.route("/:assignmentId").patch(protectStaff, deleteTask);
+router.route("/:assignmentId").delete(protectStaff, deleteTask);
 router
   .route("/grade-paper")
   .get(protectStaff, viewPaper)

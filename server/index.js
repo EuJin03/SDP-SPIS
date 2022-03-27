@@ -5,7 +5,6 @@ import express from "express";
 import morgan from "morgan";
 import connectDB from "./config/db.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
-import { createProxyMiddleware } from "http-proxy-middleware";
 
 import studentRoute from "./routes/studentRoute.js";
 import staffRoute from "./routes/staffRoute.js";
@@ -22,24 +21,17 @@ const app = express();
 
 if (__node_env === "development") {
   app.use(morgan("dev"));
-  app.use(
-    "/api",
-    createProxyMiddleware({
-      target: __proxy,
-      changeOrigin: true,
-    })
-  );
 }
 
 app.use(cors());
 app.use(express.json());
 
-app.use("/student", studentRoute);
-app.use("/staff", staffRoute);
-app.use("/course", courseRoute);
-app.use("/assignment", assignmentRoute);
-app.use("/resource", resourceRoute);
-app.use("/uploads", uploadRoute);
+app.use("/api/v1/student", studentRoute);
+app.use("/api/v1/staff", staffRoute);
+app.use("/api/v1/course", courseRoute);
+app.use("/api/v1/assignment", assignmentRoute);
+app.use("/api/v1/resource", resourceRoute);
+app.use("/api/v1/uploads", uploadRoute);
 
 if (__node_env === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
