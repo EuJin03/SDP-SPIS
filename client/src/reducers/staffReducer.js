@@ -20,7 +20,7 @@ import {
   STAFF_RESET_PASSWORD_REQUEST,
   STAFF_RESET_PASSWORD_SUCCESS,
   STAFF_RESET_PASSWORD_FAIL,
-} from "../constants/STAFFConstant";
+} from "../constants/staffConstant";
 
 export const staffRegisterReducer = (state = {}, action) => {
   switch (action.type) {
@@ -81,7 +81,7 @@ export const staffUpdateProfileReducer = (state = {}, action) => {
 };
 
 // forget
-export const staffForgotPassword = (state = {}, action) => {
+export const staffForgotPasswordReducer = (state = {}, action) => {
   switch (action.type) {
     case STAFF_FORGOT_PASSWORD_REQUEST:
       return { loading: true };
@@ -94,7 +94,7 @@ export const staffForgotPassword = (state = {}, action) => {
   }
 };
 // reset
-export const staffResetPassword = (state = {}, action) => {
+export const staffResetPasswordReducer = (state = {}, action) => {
   switch (action.type) {
     case STAFF_RESET_PASSWORD_REQUEST:
       return { loading: true };

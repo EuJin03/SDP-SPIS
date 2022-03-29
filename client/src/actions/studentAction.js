@@ -22,7 +22,7 @@ import {
   STUDENT_RESET_PASSWORD_FAIL,
 } from "../constants/studentConstant";
 
-export const studentLogin = (email, password) => async dispatch => {
+export const studentLogin = (studentID, password) => async dispatch => {
   try {
     dispatch({
       type: STUDENT_LOGIN_REQUEST,
@@ -31,12 +31,13 @@ export const studentLogin = (email, password) => async dispatch => {
     const config = {
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
       },
     };
 
     const { data } = await axios.post(
       `/api/v1/student/login`,
-      { email, password },
+      { studentID, password },
       config
     );
 

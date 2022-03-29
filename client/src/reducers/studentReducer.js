@@ -81,7 +81,7 @@ export const studentUpdateProfileReducer = (state = {}, action) => {
 };
 
 // forget
-export const studentForgotPassword = (state = {}, action) => {
+export const studentForgotPasswordReducer = (state = {}, action) => {
   switch (action.type) {
     case STUDENT_FORGOT_PASSWORD_REQUEST:
       return { loading: true };
@@ -94,7 +94,7 @@ export const studentForgotPassword = (state = {}, action) => {
   }
 };
 // reset
-export const studentResetPassword = (state = {}, action) => {
+export const studentResetPasswordReducer = (state = {}, action) => {
   switch (action.type) {
     case STUDENT_RESET_PASSWORD_REQUEST:
       return { loading: true };
