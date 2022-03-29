@@ -84,6 +84,61 @@ const getResources = asyncHandler(async (req, res) => {
   res.json(updatedResources);
 });
 
+// @desc View resource details
+// @route GET /api/resource/:resourceId
+// @access Public route
+const getResourceDetails = asyncHandler(async (req, res) => {
+  const { resourceId } = req.params;
+
+  const resource = await Resource.findById(resourceId);
+
+  if (!resource) {
+    res.status(401);
+    throw new Error("Resources not found");
+  }
+
+  let updatedResource = [];
+  const pushCourseName = async resource => {
+    const course = await Course.findById(resource.course);
+    const merged = Object.assign(
+      {
+        courseName: course.courseName,
+        subjectName: course.subjects.filter(
+          s => s._id.toString() === resource.subject.toString()
+        )[0].subjectName,
+      },
+      resource._doc
+    );
+    updatedResource.push(merged);
+  };
+
+  await pushCourseName(resource);
+
+  let updatedResourceDetails = [];
+  const updated = async resource => {
+    for (let i = 0; i < resource.length; i++) {
+      const staff = await Staff.findById(resource[i].uploadedBy);
+
+      if (staff) {
+        const merged = Object.assign(
+          {
+            staffName: staff.lName + " " + staff.fName,
+          },
+          resource[i]
+        );
+
+        updatedResourceDetails.push(merged);
+      } else {
+        updatedResourceDetails.push(resource[i]);
+      }
+    }
+  };
+
+  await updated(updatedResource);
+
+  res.json(updatedResourceDetails[0]);
+}); 
+
 // @desc Create new resource
 // @route POST /api/resource
 // @access Private (lecturer)
@@ -197,4 +252,10 @@ const deleteResource = asyncHandler(async (req, res) => {
   }
 });
 
-export { getResources, createResource, editResource, deleteResource };
+export {
+  getResources,
+  getResourceDetails,
+  createResource,
+  editResource,
+  deleteResource,
+};

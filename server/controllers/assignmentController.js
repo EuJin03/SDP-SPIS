@@ -16,7 +16,7 @@ const viewTask = asyncHandler(async (req, res) => {
 
   if (!task) {
     res.status(400);
-    throw new Error("Assignments not found");
+    throw new Error("Tasks not found");
   }
 
   let updatedTask = [];
@@ -39,6 +39,39 @@ const viewTask = asyncHandler(async (req, res) => {
   await pushCourseName(task);
 
   res.json(updatedTask);
+});
+
+// @desc Lecturer view single task uploaded
+// @route GET /api/assignment/uploaded-task/:taskID
+// @access Private (lecturer only)
+const viewSingleTask = asyncHandler(async (req, res) => {
+  const { taskId } = req.params;
+
+  const task = await Assignment.findById(taskId);
+
+  if (!task) {
+    res.status(400);
+    throw new Error("Task not found");
+  }
+
+  let updatedTask = [];
+  const pushCourseName = async task => {
+    const course = await Course.findById(task.course);
+    const merged = Object.assign(
+      {
+        courseName: course.courseName,
+        subjectName: course.subjects.filter(
+          s => s._id.toString() === task.subject.toString()
+        )[0].subjectName,
+      },
+      task._doc
+    );
+    updatedTask.push(merged);
+  };
+
+  await pushCourseName(task);
+
+  res.json(updatedTask[0]);
 });
 
 // @desc Create an assignment
@@ -244,7 +277,7 @@ const assignTask = asyncHandler(async (req, res) => {
 
   task.studentAssigned = studentCounter;
   await task.save();
-  res.json("Task assigned to all students within the course successfully.");
+  res.json({ studentAssigned: task.studentAssigned });
 });
 
 // @desc Display students submission
@@ -333,6 +366,11 @@ const gradePaper = asyncHandler(async (req, res) => {
   const gradeTask = student.assignments.filter(
     assignment => assignment._id.toString() === assignmentId.toString()
   );
+
+  if (!gradeTask || gradeTask.length === 0) {
+    res.status(404);
+    throw new Error("Task not found");
+  }
 
   // mark the assignment
   gradeTask[0].grade = grade;
@@ -467,6 +505,7 @@ const submitAssignment = asyncHandler(async (req, res) => {
 
 export {
   viewTask,
+  viewSingleTask,
   assignTask,
   createTask,
   updateTask,

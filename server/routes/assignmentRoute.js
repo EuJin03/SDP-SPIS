@@ -9,6 +9,7 @@ import {
   updateTask,
   viewPaper,
   viewSingleStudentTask,
+  viewSingleTask,
   viewStudentTask,
   viewTask,
 } from "../controllers/assignmentController.js";
@@ -25,6 +26,7 @@ router
 
 // lecturer access only
 router.route("/uploaded-task").get(protectStaff, viewTask);
+router.route("/uploaded-task/:taskId").get(protectStaff, viewSingleTask);
 router.route("/create-task").post(protectStaff, createTask);
 router.route("/assign-task/:assignmentId").patch(protectStaff, assignTask);
 router.route("/update-task/:assignmentId").patch(protectStaff, updateTask);
