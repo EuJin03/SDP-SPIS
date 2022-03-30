@@ -3,7 +3,6 @@ import {
   STAFF_LOGIN_SUCCESS,
   STAFF_LOGIN_FAIL,
   STAFF_DETAILS_RESET,
-  STAFF_LOGOUT,
   STAFF_DETAILS_REQUEST,
   STAFF_DETAILS_SUCCESS,
   STAFF_DETAILS_FAIL,
@@ -21,6 +20,7 @@ import {
   STAFF_RESET_PASSWORD_SUCCESS,
   STAFF_RESET_PASSWORD_FAIL,
 } from "../constants/staffConstant";
+import { USER_LOGOUT } from "../constants/studentConstant";
 
 export const staffRegisterReducer = (state = {}, action) => {
   switch (action.type) {
@@ -45,7 +45,7 @@ export const staffLoginReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case STAFF_DETAILS_RESET:
       return { user: {} };
-    case STAFF_LOGOUT:
+    case USER_LOGOUT:
       return {};
     default:
       return state;

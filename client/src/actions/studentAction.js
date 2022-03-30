@@ -7,7 +7,6 @@ import {
   STUDENT_LOGIN_FAIL,
   STUDENT_LOGIN_REQUEST,
   STUDENT_LOGIN_SUCCESS,
-  STUDENT_LOGOUT,
   STUDENT_REGISTER_FAIL,
   STUDENT_REGISTER_REQUEST,
   STUDENT_REGISTER_SUCCESS,
@@ -20,6 +19,7 @@ import {
   STUDENT_RESET_PASSWORD_REQUEST,
   STUDENT_RESET_PASSWORD_SUCCESS,
   STUDENT_RESET_PASSWORD_FAIL,
+  USER_LOGOUT,
 } from "../constants/studentConstant";
 
 export const studentLogin = (studentID, password) => async dispatch => {
@@ -102,7 +102,7 @@ export const studentRegister =
 
 export const logout = () => dispatch => {
   localStorage.removeItem("userInfo");
-  dispatch({ type: STUDENT_LOGOUT });
+  dispatch({ type: USER_LOGOUT });
   dispatch({ type: STUDENT_DETAILS_RESET });
 };
 

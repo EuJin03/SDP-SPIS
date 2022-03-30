@@ -3,11 +3,9 @@ import {
   STAFF_DETAILS_FAIL,
   STAFF_DETAILS_REQUEST,
   STAFF_DETAILS_SUCCESS,
-  STAFF_DETAILS_RESET,
   STAFF_LOGIN_FAIL,
   STAFF_LOGIN_REQUEST,
   STAFF_LOGIN_SUCCESS,
-  STAFF_LOGOUT,
   STAFF_REGISTER_FAIL,
   STAFF_REGISTER_REQUEST,
   STAFF_REGISTER_SUCCESS,
@@ -98,12 +96,6 @@ export const staffRegister =
       });
     }
   };
-
-export const logout = () => dispatch => {
-  localStorage.removeItem("userInfo");
-  dispatch({ type: STAFF_LOGOUT });
-  dispatch({ type: STAFF_DETAILS_RESET });
-};
 
 export const getStaffDetails = async (dispatch, getState) => {
   try {

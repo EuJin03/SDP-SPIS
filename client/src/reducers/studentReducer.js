@@ -3,7 +3,7 @@ import {
   STUDENT_LOGIN_SUCCESS,
   STUDENT_LOGIN_FAIL,
   STUDENT_DETAILS_RESET,
-  STUDENT_LOGOUT,
+  USER_LOGOUT,
   STUDENT_DETAILS_REQUEST,
   STUDENT_DETAILS_SUCCESS,
   STUDENT_DETAILS_FAIL,
@@ -45,7 +45,7 @@ export const studentLoginReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case STUDENT_DETAILS_RESET:
       return { user: {} };
-    case STUDENT_LOGOUT:
+    case USER_LOGOUT:
       return {};
     default:
       return state;
