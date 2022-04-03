@@ -1,29 +1,29 @@
 import axios from "axios";
 import {
-  STAFF_DETAILS_FAIL,
-  STAFF_DETAILS_REQUEST,
-  STAFF_DETAILS_SUCCESS,
-  STAFF_LOGIN_FAIL,
-  STAFF_LOGIN_REQUEST,
-  STAFF_LOGIN_SUCCESS,
-  STAFF_REGISTER_FAIL,
-  STAFF_REGISTER_REQUEST,
-  STAFF_REGISTER_SUCCESS,
-  STAFF_UPDATE_PROFILE_FAIL,
-  STAFF_UPDATE_PROFILE_REQUEST,
-  STAFF_UPDATE_PROFILE_SUCCESS,
-  STAFF_FORGOT_PASSWORD_REQUEST,
-  STAFF_FORGOT_PASSWORD_SUCCESS,
-  STAFF_FORGOT_PASSWORD_FAIL,
-  STAFF_RESET_PASSWORD_REQUEST,
-  STAFF_RESET_PASSWORD_SUCCESS,
-  STAFF_RESET_PASSWORD_FAIL,
-} from "../constants/staffConstant";
+  USER_DETAILS_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_REGISTER_FAIL,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
+  USER_UPDATE_PROFILE_FAIL,
+  USER_UPDATE_PROFILE_REQUEST,
+  USER_UPDATE_PROFILE_SUCCESS,
+  USER_FORGOT_PASSWORD_REQUEST,
+  USER_FORGOT_PASSWORD_SUCCESS,
+  USER_FORGOT_PASSWORD_FAIL,
+  USER_RESET_PASSWORD_REQUEST,
+  USER_RESET_PASSWORD_SUCCESS,
+  USER_RESET_PASSWORD_FAIL,
+  USER_LOGIN_FAIL,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+} from "../constants/userConstant";
 
 export const staffLogin = (email, password) => async dispatch => {
   try {
     dispatch({
-      type: STAFF_LOGIN_REQUEST,
+      type: USER_LOGIN_REQUEST,
     });
 
     const config = {
@@ -39,14 +39,14 @@ export const staffLogin = (email, password) => async dispatch => {
     );
 
     dispatch({
-      type: STAFF_LOGIN_SUCCESS,
+      type: USER_LOGIN_SUCCESS,
       payload: data,
     });
 
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (err) {
     dispatch({
-      type: STAFF_LOGIN_FAIL,
+      type: USER_LOGIN_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message
@@ -60,7 +60,7 @@ export const staffRegister =
   async dispatch => {
     try {
       dispatch({
-        type: STAFF_REGISTER_REQUEST,
+        type: USER_REGISTER_REQUEST,
       });
 
       const config = {
@@ -76,19 +76,14 @@ export const staffRegister =
       );
 
       dispatch({
-        type: STAFF_REGISTER_SUCCESS,
-        payload: data,
-      });
-
-      dispatch({
-        type: STAFF_LOGIN_SUCCESS,
+        type: USER_REGISTER_SUCCESS,
         payload: data,
       });
 
       localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (err) {
       dispatch({
-        type: STAFF_REGISTER_FAIL,
+        type: USER_REGISTER_FAIL,
         payload:
           err.response && err.response.data.message
             ? err.response.data.message
@@ -97,10 +92,10 @@ export const staffRegister =
     }
   };
 
-export const getStaffDetails = async (dispatch, getState) => {
+export const getStaffDetails = () => async (dispatch, getState) => {
   try {
     dispatch({
-      type: STAFF_DETAILS_REQUEST,
+      type: USER_DETAILS_REQUEST,
     });
 
     const {
@@ -117,12 +112,12 @@ export const getStaffDetails = async (dispatch, getState) => {
     const { data } = await axios.get(`/api/v1/staff/profile`, config);
 
     dispatch({
-      type: STAFF_DETAILS_SUCCESS,
+      type: USER_DETAILS_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: STAFF_DETAILS_FAIL,
+      type: USER_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -134,7 +129,7 @@ export const getStaffDetails = async (dispatch, getState) => {
 export const updateStaffProfile = staff => async (dispatch, getState) => {
   try {
     dispatch({
-      type: STAFF_UPDATE_PROFILE_REQUEST,
+      type: USER_UPDATE_PROFILE_REQUEST,
     });
 
     const {
@@ -151,12 +146,12 @@ export const updateStaffProfile = staff => async (dispatch, getState) => {
     const { data } = await axios.patch(`/api/v1/staff/profile`, staff, config);
 
     dispatch({
-      type: STAFF_UPDATE_PROFILE_SUCCESS,
+      type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data,
     });
   } catch (err) {
     dispatch({
-      type: STAFF_UPDATE_PROFILE_FAIL,
+      type: USER_UPDATE_PROFILE_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message
@@ -168,7 +163,7 @@ export const updateStaffProfile = staff => async (dispatch, getState) => {
 export const staffForgotPassword = email => async dispatch => {
   try {
     dispatch({
-      type: STAFF_FORGOT_PASSWORD_REQUEST,
+      type: USER_FORGOT_PASSWORD_REQUEST,
     });
     const config = {
       headers: {
@@ -178,12 +173,13 @@ export const staffForgotPassword = email => async dispatch => {
 
     const { data } = await axios.post("/api/v1/staff/forgot-password", config);
     dispatch({
-      type: STAFF_FORGOT_PASSWORD_SUCCESS,
+      type: USER_FORGOT_PASSWORD_SUCCESS,
+      email,
       payload: data,
     });
   } catch (err) {
     dispatch({
-      type: STAFF_FORGOT_PASSWORD_FAIL,
+      type: USER_FORGOT_PASSWORD_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message
@@ -196,7 +192,7 @@ export const staffResetPassword =
   (token, password, confirmPassword) => async dispatch => {
     try {
       dispatch({
-        type: STAFF_RESET_PASSWORD_REQUEST,
+        type: USER_RESET_PASSWORD_REQUEST,
       });
       const config = {
         headers: {
@@ -211,12 +207,12 @@ export const staffResetPassword =
       );
 
       dispatch({
-        type: STAFF_RESET_PASSWORD_SUCCESS,
+        type: USER_RESET_PASSWORD_SUCCESS,
         payload: data,
       });
     } catch (err) {
       dispatch({
-        type: STAFF_RESET_PASSWORD_FAIL,
+        type: USER_RESET_PASSWORD_FAIL,
         payload:
           err.response && err.response.data.message
             ? err.response.data.message

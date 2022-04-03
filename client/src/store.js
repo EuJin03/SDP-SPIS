@@ -2,22 +2,6 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import {
-  studentDetailsReducer,
-  studentForgotPasswordReducer,
-  studentLoginReducer,
-  studentRegisterReducer,
-  studentResetPasswordReducer,
-  studentUpdateProfileReducer,
-} from "./reducers/studentReducer";
-import {
-  staffDetailsReducer,
-  staffForgotPasswordReducer,
-  staffLoginReducer,
-  staffRegisterReducer,
-  staffResetPasswordReducer,
-  staffUpdateProfileReducer,
-} from "./reducers/staffReducer";
-import {
   assignmentDetailsReducer,
   assignmentSubmitReducer,
   assignmentViewReducer,
@@ -46,15 +30,22 @@ import {
   fileUploadReducer,
   imageUploadReducer,
 } from "./reducers/uploadReducer";
+import {
+  userDetailsReducer,
+  userForgotPasswordReducer,
+  userLoginReducer,
+  userRegisterReducer,
+  userResetPasswordReducer,
+  userUpdateProfileReducer,
+} from "./reducers/userReducer";
 
 const reducer = combineReducers({
-  userLogin: studentLoginReducer || staffLoginReducer,
-  userDetails: studentDetailsReducer || staffDetailsReducer,
-  userRegister: studentRegisterReducer || staffRegisterReducer,
-  userUpdateProfile: studentUpdateProfileReducer || staffUpdateProfileReducer,
-  userForgotPassword:
-    studentForgotPasswordReducer || staffForgotPasswordReducer,
-  userResetPassword: studentResetPasswordReducer || staffResetPasswordReducer,
+  userLogin: userLoginReducer,
+  userDetails: userDetailsReducer,
+  userRegister: userRegisterReducer,
+  userUpdateProfile: userUpdateProfileReducer,
+  userForgotPassword: userForgotPasswordReducer,
+  userResetPassword: userResetPasswordReducer,
   taskList: taskListReducer,
   taskDetails: taskDetailsReducer,
   taskCreate: taskCreateReducer,

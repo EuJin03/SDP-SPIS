@@ -1,31 +1,31 @@
 import axios from "axios";
 import {
-  STUDENT_DETAILS_FAIL,
-  STUDENT_DETAILS_REQUEST,
-  STUDENT_DETAILS_SUCCESS,
-  STUDENT_DETAILS_RESET,
-  STUDENT_LOGIN_FAIL,
-  STUDENT_LOGIN_REQUEST,
-  STUDENT_LOGIN_SUCCESS,
-  STUDENT_REGISTER_FAIL,
-  STUDENT_REGISTER_REQUEST,
-  STUDENT_REGISTER_SUCCESS,
-  STUDENT_UPDATE_PROFILE_FAIL,
-  STUDENT_UPDATE_PROFILE_REQUEST,
-  STUDENT_UPDATE_PROFILE_SUCCESS,
-  STUDENT_FORGOT_PASSWORD_REQUEST,
-  STUDENT_FORGOT_PASSWORD_SUCCESS,
-  STUDENT_FORGOT_PASSWORD_FAIL,
-  STUDENT_RESET_PASSWORD_REQUEST,
-  STUDENT_RESET_PASSWORD_SUCCESS,
-  STUDENT_RESET_PASSWORD_FAIL,
+  USER_LOGIN_FAIL,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+  USER_DETAILS_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_RESET,
+  USER_REGISTER_FAIL,
+  USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS,
+  USER_UPDATE_PROFILE_FAIL,
+  USER_UPDATE_PROFILE_REQUEST,
+  USER_UPDATE_PROFILE_SUCCESS,
+  USER_FORGOT_PASSWORD_REQUEST,
+  USER_FORGOT_PASSWORD_SUCCESS,
+  USER_FORGOT_PASSWORD_FAIL,
+  USER_RESET_PASSWORD_REQUEST,
+  USER_RESET_PASSWORD_SUCCESS,
+  USER_RESET_PASSWORD_FAIL,
   USER_LOGOUT,
-} from "../constants/studentConstant";
+} from "../constants/userConstant";
 
 export const studentLogin = (studentID, password) => async dispatch => {
   try {
     dispatch({
-      type: STUDENT_LOGIN_REQUEST,
+      type: USER_LOGIN_REQUEST,
     });
 
     const config = {
@@ -42,14 +42,14 @@ export const studentLogin = (studentID, password) => async dispatch => {
     );
 
     dispatch({
-      type: STUDENT_LOGIN_SUCCESS,
+      type: USER_LOGIN_SUCCESS,
       payload: data,
     });
 
     localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (err) {
     dispatch({
-      type: STUDENT_LOGIN_FAIL,
+      type: USER_LOGIN_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message
@@ -59,11 +59,11 @@ export const studentLogin = (studentID, password) => async dispatch => {
 };
 
 export const studentRegister =
-  (studentID, image, fname, lname, email, gender, dob, course) =>
+  (fname, lname, email, password, confirmPassword, gender, dob, course) =>
   async dispatch => {
     try {
       dispatch({
-        type: STUDENT_REGISTER_REQUEST,
+        type: USER_REGISTER_REQUEST,
       });
 
       const config = {
@@ -74,24 +74,28 @@ export const studentRegister =
 
       const { data } = await axios.post(
         "/api/v1/student",
-        { studentID, image, fname, lname, email, gender, dob, course },
+        {
+          fName: fname,
+          lName: lname,
+          email,
+          password,
+          confirmPassword,
+          gender,
+          dob,
+          course,
+        },
         config
       );
 
       dispatch({
-        type: STUDENT_REGISTER_SUCCESS,
-        payload: data,
-      });
-
-      dispatch({
-        type: STUDENT_LOGIN_SUCCESS,
+        type: USER_REGISTER_SUCCESS,
         payload: data,
       });
 
       localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (err) {
       dispatch({
-        type: STUDENT_REGISTER_FAIL,
+        type: USER_REGISTER_FAIL,
         payload:
           err.response && err.response.data.message
             ? err.response.data.message
@@ -103,13 +107,13 @@ export const studentRegister =
 export const logout = () => dispatch => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
-  dispatch({ type: STUDENT_DETAILS_RESET });
+  dispatch({ type: USER_DETAILS_RESET });
 };
 
-export const getStudentDetails = async (dispatch, getState) => {
+export const getStudentDetails = () => async (dispatch, getState) => {
   try {
     dispatch({
-      type: STUDENT_DETAILS_REQUEST,
+      type: USER_DETAILS_REQUEST,
     });
 
     const {
@@ -126,12 +130,12 @@ export const getStudentDetails = async (dispatch, getState) => {
     const { data } = await axios.get(`/api/v1/student/profile`, config);
 
     dispatch({
-      type: STUDENT_DETAILS_SUCCESS,
+      type: USER_DETAILS_SUCCESS,
       payload: data,
     });
   } catch (error) {
     dispatch({
-      type: STUDENT_DETAILS_FAIL,
+      type: USER_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -143,7 +147,7 @@ export const getStudentDetails = async (dispatch, getState) => {
 export const updateStudentProfile = student => async (dispatch, getState) => {
   try {
     dispatch({
-      type: STUDENT_UPDATE_PROFILE_REQUEST,
+      type: USER_UPDATE_PROFILE_REQUEST,
     });
 
     const {
@@ -164,12 +168,12 @@ export const updateStudentProfile = student => async (dispatch, getState) => {
     );
 
     dispatch({
-      type: STUDENT_UPDATE_PROFILE_SUCCESS,
+      type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data,
     });
   } catch (err) {
     dispatch({
-      type: STUDENT_UPDATE_PROFILE_FAIL,
+      type: USER_UPDATE_PROFILE_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message
@@ -178,10 +182,10 @@ export const updateStudentProfile = student => async (dispatch, getState) => {
   }
 };
 
-export const studentForgotPassword = email => async dispatch => {
+export const studentForgotPassword = id => async dispatch => {
   try {
     dispatch({
-      type: STUDENT_FORGOT_PASSWORD_REQUEST,
+      type: USER_FORGOT_PASSWORD_REQUEST,
     });
     const config = {
       headers: {
@@ -191,15 +195,16 @@ export const studentForgotPassword = email => async dispatch => {
 
     const { data } = await axios.post(
       "/api/v1/student/forgot-password",
+      id,
       config
     );
     dispatch({
-      type: STUDENT_FORGOT_PASSWORD_SUCCESS,
+      type: USER_FORGOT_PASSWORD_SUCCESS,
       payload: data,
     });
   } catch (err) {
     dispatch({
-      type: STUDENT_FORGOT_PASSWORD_FAIL,
+      type: USER_FORGOT_PASSWORD_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message
@@ -212,7 +217,7 @@ export const studentResetPassword =
   (token, password, confirmPassword) => async dispatch => {
     try {
       dispatch({
-        type: STUDENT_RESET_PASSWORD_REQUEST,
+        type: USER_RESET_PASSWORD_REQUEST,
       });
       const config = {
         headers: {
@@ -227,12 +232,12 @@ export const studentResetPassword =
       );
 
       dispatch({
-        type: STUDENT_RESET_PASSWORD_SUCCESS,
+        type: USER_RESET_PASSWORD_SUCCESS,
         payload: data,
       });
     } catch (err) {
       dispatch({
-        type: STUDENT_RESET_PASSWORD_FAIL,
+        type: USER_RESET_PASSWORD_FAIL,
         payload:
           err.response && err.response.data.message
             ? err.response.data.message
