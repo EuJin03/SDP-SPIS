@@ -3,6 +3,7 @@ import {
   Button,
   Divider,
   Group,
+  LoadingOverlay,
   MultiSelect,
   NativeSelect,
   Paper,
@@ -14,7 +15,16 @@ import {
 } from "@mantine/core";
 import { upperFirst } from "@mantine/hooks";
 import React, { useState } from "react";
-import { Cake, Check, Lock, Man, User, Woman, X } from "tabler-icons-react";
+import {
+  Cake,
+  Check,
+  Hash,
+  Lock,
+  Man,
+  User,
+  Woman,
+  X,
+} from "tabler-icons-react";
 import { DatePicker } from "@mantine/dates";
 
 const PasswordRequirement = ({ meets, label }) => {
@@ -49,7 +59,7 @@ function getStrength(password) {
   return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 }
 
-export const AccountDetails = ({ type, setType, form }) => {
+export const AccountDetails = ({ type, setType, form, error }) => {
   const [popoverOpened, setPopoverOpened] = useState(false);
   const checks = requirements.map((requirement, index) => (
     <PasswordRequirement
@@ -85,7 +95,10 @@ export const AccountDetails = ({ type, setType, form }) => {
             radius="sm"
             onClick={() => {
               setType("student");
+              form.setFieldValue("email", "");
               form.setFieldValue("password", "");
+              form.setFieldValue("confirmPassword", "");
+              form.setFieldValue("course", "");
             }}
           >
             Student
@@ -99,6 +112,7 @@ export const AccountDetails = ({ type, setType, form }) => {
               form.setFieldValue("password", "");
               form.setFieldValue("confirmPassword", "");
               form.setFieldValue("email", "");
+              form.setFieldValue("course", []);
             }}
           >
             Staff
@@ -125,6 +139,14 @@ export const AccountDetails = ({ type, setType, form }) => {
             onChange={event =>
               form.setFieldValue("email", event.currentTarget.value)
             }
+            {...form.getInputProps("email")}
+            error={
+              error?.includes("email") || error?.includes("Empty")
+                ? "Must be a valid APU authorized email"
+                : error?.includes("Exist")
+                ? "Email has already been registered"
+                : null
+            }
           />
           <Popover
             opened={popoverOpened}
@@ -147,6 +169,8 @@ export const AccountDetails = ({ type, setType, form }) => {
                 onChange={event =>
                   form.setFieldValue("password", event.currentTarget.value)
                 }
+                {...form.getInputProps("password")}
+                error={error?.includes("Password must contain") ? error : null}
               />
             }
           >
@@ -171,6 +195,8 @@ export const AccountDetails = ({ type, setType, form }) => {
             onChange={event =>
               form.setFieldValue("confirmPassword", event.currentTarget.value)
             }
+            {...form.getInputProps("confirmPassword")}
+            error={error?.includes("Password do not match") ? error : null}
           />
         </Group>
       </Paper>
@@ -178,8 +204,7 @@ export const AccountDetails = ({ type, setType, form }) => {
   );
 };
 
-export const PersonalDetails = ({ form }) => {
-  const [date, setDate] = useState(["Male", "Female"]);
+export const PersonalDetails = ({ form, error }) => {
   return (
     <Paper
       radius="md"
@@ -207,6 +232,8 @@ export const PersonalDetails = ({ form }) => {
           onChange={event =>
             form.setFieldValue("fname", event.currentTarget.value)
           }
+          {...form.getInputProps("fname")}
+          error={error?.includes("name") ? "Must not be blank" : null}
         />
         <TextInput
           required
@@ -217,6 +244,8 @@ export const PersonalDetails = ({ form }) => {
           onChange={event =>
             form.setFieldValue("lname", event.currentTarget.value)
           }
+          {...form.getInputProps("lname")}
+          error={error?.includes("name") ? "Must not be blank" : null}
         />
         <NativeSelect
           data={["Male", "Female"]}
@@ -233,7 +262,9 @@ export const PersonalDetails = ({ form }) => {
           onChange={event =>
             form.setFieldValue("gender", event.currentTarget.value)
           }
+          {...form.getInputProps("gender")}
           required
+          error={error?.includes("Gender") ? "Select your sex" : null}
         />
 
         <DatePicker
@@ -242,40 +273,61 @@ export const PersonalDetails = ({ form }) => {
           required
           placeholder="Select your birthday"
           value={form.values.dob}
-          onChange={event =>
-            form.setFieldValue("dob", event.currentTarget.value)
-          }
+          onChange={e => form.setFieldValue("dob", e)}
+          {...form.getInputProps("dob")}
+          error={!form.values.dob ? "Select your birthday" : null}
         />
       </Group>
     </Paper>
   );
 };
 
-export const RegisterForm = ({ form }) => {
+export const RegisterForm = ({ type, form, courses, loading }) => {
+  const data = courses.courseList.map(v => ({
+    value: v._id,
+    label: v.courseName,
+  }));
   return (
-    <>
-      <Paper
-        radius="md"
-        mb="xl"
-        p="xl"
-        withBorder
-        style={{
-          height: "520px",
-          width: "600px",
-          boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-        }}
-      >
-        <Text size="xl" weight={500}>
-          Welcome to SPIS, sign up as
-        </Text>
-
-        <Divider
-          label={`Sign Up as `}
-          labelPosition="center"
-          my="lg"
-          style={{ margin: "40px 0" }}
+    <Paper
+      radius="md"
+      mb="xl"
+      p="xl"
+      withBorder
+      style={{
+        height: "520px",
+        width: "600px",
+        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+        position: "relative",
+      }}
+    >
+      {loading && <LoadingOverlay visible={true} />}
+      <Text size="xl" weight={500}>
+        Select the course that you enrolled
+      </Text>
+      <Divider labelPosition="center" my="xl" />
+      {type === "student" ? (
+        <NativeSelect
+          data={data}
+          icon={<Hash size={14} />}
+          placeholder="Select your course"
+          label="Course"
+          value={form.values.course}
+          onChange={() => form.setFieldValue("course")}
+          {...form.getInputProps("course")}
+          required
         />
-      </Paper>
-    </>
+      ) : (
+        <MultiSelect
+          data={data}
+          icon={<Hash size={14} />}
+          placeholder="Select your course"
+          label="Course"
+          value={form.values.course}
+          onChange={() => form.setFieldValue("course")}
+          {...form.getInputProps("course")}
+          required
+        />
+      )}
+    </Paper>
   );
 };

@@ -56,7 +56,7 @@ export const staffLogin = (email, password) => async dispatch => {
 };
 
 export const staffRegister =
-  (staffID, image, fname, lname, email, gender, dob, course) =>
+  (fname, lname, email, password, confirmPassword, gender, dob, course) =>
   async dispatch => {
     try {
       dispatch({
@@ -71,7 +71,16 @@ export const staffRegister =
 
       const { data } = await axios.post(
         "/api/v1/staff",
-        { staffID, image, fname, lname, email, gender, dob, course },
+        {
+          fName: fname,
+          lName: lname,
+          email,
+          password,
+          confirmPassword,
+          gender,
+          dob,
+          course,
+        },
         config
       );
 

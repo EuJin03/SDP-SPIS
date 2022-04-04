@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudentDetails } from "../actions/studentAction";
-import Login from "./Login";
 import { getStaffDetails } from "../actions/staffAction";
 import styled from "styled-components";
 import { LoadingOverlay } from "@mantine/core";
@@ -15,13 +14,16 @@ const Dashboard = () => {
   const userDetails = useSelector(state => state.userDetails);
   const { loading, error, user } = userDetails;
 
+  const userRegister = useSelector(state => state.userRegister);
+  const { userInfo: regInfo } = userRegister;
+
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!userInfo && !regInfo) {
       navigate("/login", { replace: true });
     }
 
@@ -30,14 +32,13 @@ const Dashboard = () => {
         ? dispatch(getStudentDetails())
         : dispatch(getStaffDetails());
     }
-
     error &&
       showNotification({
         title: error,
         message: "Could not load user details!",
         color: "red",
       });
-  }, [dispatch, userInfo, user, navigate, error]);
+  }, [dispatch, userInfo, user, navigate, error, regInfo]);
 
   return (
     <>

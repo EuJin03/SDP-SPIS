@@ -174,7 +174,7 @@ const Login = props => {
           <Group position="apart" mt="xl">
             <Anchor
               component={Link}
-              to="/register"
+              to={redirect ? `/register?redirect=${redirect}` : `/register`}
               tabIndex={1}
               type="button"
               sx={theme => ({

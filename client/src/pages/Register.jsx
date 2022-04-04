@@ -2,9 +2,16 @@ import { Button, Group, Stepper } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { MailOpened, ShieldCheck, UserCheck } from "tabler-icons-react";
+import {
+  CircleX,
+  MailOpened,
+  ShieldCheck,
+  UserCheck,
+} from "tabler-icons-react";
+import { courseListAction } from "../actions/courseAction";
+import { staffRegister } from "../actions/staffAction";
 import { studentRegister } from "../actions/studentAction";
 import {
   AccountDetails,
@@ -12,7 +19,7 @@ import {
   RegisterForm,
 } from "../components/RegisterForm";
 
-const Register = props => {
+const Register = () => {
   const [type, setType] = useState("student");
   const [active, setActive] = useState(0);
   const nextStep = e => {
@@ -33,50 +40,67 @@ const Register = props => {
       confirmPassword: "",
       dob: new Date(),
       gender: "",
-      course: "620efc959828b44e6e912d86",
-    },
-    validate: {
-      studentID: value => /^TP[0-9]{6}/.test(value),
-      email: value => /apu.edu.my$/.test(value),
-      password: value => value.length >= 6,
+      course: type === "student" ? "" : [],
     },
   });
 
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
+
+  const userRegister = useSelector(state => state.userRegister);
+  const { error, loading, userInfo: regInfo } = userRegister;
 
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
-  const userRegister = useSelector(state => state.userRegister);
-  const { error, userInfo: test } = userRegister;
+  const courseList = useSelector(state => state.courseList);
+  const { error: courseErr, courses } = courseList;
+
+  const redirect = location.search ? location.search.split("=")[1] : "/";
 
   useEffect(() => {
-    if (userInfo) navigate("/", { replace: true });
-  });
+    if (regInfo || userInfo) {
+      navigate("/");
+      window.location.reload();
+    }
+  }, [navigate, userInfo, redirect, location, regInfo]);
 
   useEffect(() => {
-    console.log(error);
-  }, [error]);
+    if (courses?.length === 0) dispatch(courseListAction());
+  }, [courses, courseErr, dispatch]);
+
   return (
     <Container>
       <form
         id="register"
-        onSubmit={form.onSubmit(
-          values => console.log(values)
-          // dispatch(
-          //   studentRegister(
-          //     values.fname,
-          //     values.lname,
-          //     values.email,
-          //     values.password,
-          //     values.confirmPassword,
-          //     values.gender,
-          //     values.dob,
-          //     values.course
-          //   )
-          // )
-        )}
+        onSubmit={form.onSubmit(values => {
+          type === "student"
+            ? dispatch(
+                studentRegister(
+                  values.fname,
+                  values.lname,
+                  values.email,
+                  values.password,
+                  values.confirmPassword,
+                  values.gender,
+                  values.dob.toISOString(),
+                  values.course
+                )
+              )
+            : dispatch(
+                staffRegister(
+                  values.fname,
+                  values.lname,
+                  values.email,
+                  values.password,
+                  values.confirmPassword,
+                  values.gender,
+                  values.dob.toISOString(),
+                  values.course
+                )
+              );
+        })}
       >
         <Stepper active={active} onStepClick={setActive} breakpoint="sm">
           <Stepper.Step
@@ -84,17 +108,50 @@ const Register = props => {
             mb="lg"
             label="First step"
             description="Create an account"
+            color={
+              error?.includes("email") ||
+              error?.includes("Password") ||
+              error?.includes("Exist")
+                ? "red"
+                : null
+            }
+            completedIcon={
+              error?.includes("email") ||
+              error?.includes("Password") ||
+              error?.includes("Exist") ? (
+                <CircleX />
+              ) : null
+            }
           >
-            <AccountDetails type={type} setType={setType} form={form} />
+            <AccountDetails
+              type={type}
+              setType={setType}
+              form={form}
+              error={error}
+            />
           </Stepper.Step>
           <Stepper.Step
             icon={<UserCheck size={18} />}
             mb="lg"
             label="Second step"
             description="Personal Details"
+            color={
+              error?.includes("name") ||
+              error?.includes("Gender") ||
+              !form.values.dob
+                ? "red"
+                : null
+            }
+            completedIcon={
+              error?.includes("name") ||
+              error?.includes("Gender") ||
+              !form.values.dob ? (
+                <CircleX />
+              ) : null
+            }
           >
             {" "}
-            <PersonalDetails form={form} />
+            <PersonalDetails form={form} error={error} />
           </Stepper.Step>
           <Stepper.Step
             icon={<ShieldCheck size={18} />}
@@ -102,7 +159,12 @@ const Register = props => {
             label="Final step"
             description="Select Course"
           >
-            <RegisterForm form={form} />
+            <RegisterForm
+              form={form}
+              type={type}
+              courses={courses}
+              loading={loading}
+            />
           </Stepper.Step>
         </Stepper>
       </form>
@@ -134,6 +196,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 export default Register;
