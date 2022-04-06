@@ -1,19 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getStudentDetails } from "../actions/studentAction";
-import { getStaffDetails } from "../actions/staffAction";
 import styled from "styled-components";
-import { LoadingOverlay } from "@mantine/core";
 import { Logout } from "tabler-icons-react";
-import { showNotification } from "@mantine/notifications";
+import { viewCourseNameAction } from "../actions/courseAction";
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-
-  const userDetails = useSelector(state => state.userDetails);
-  const { loading, error, user } = userDetails;
-
   const userRegister = useSelector(state => state.userRegister);
   const { userInfo: regInfo } = userRegister;
 
@@ -21,29 +13,26 @@ const Dashboard = () => {
   const { userInfo } = userLogin;
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userInfo?.studentID) {
+      dispatch(viewCourseNameAction([userInfo.course]));
+    }
+    if (userInfo && !userInfo?.studentID) {
+      dispatch(viewCourseNameAction(userInfo.course));
+    }
+  }, [dispatch, userInfo]);
 
   useEffect(() => {
     if (!userInfo && !regInfo) {
       navigate("/login", { replace: true });
     }
-
-    if (!user) {
-      userInfo?.studentID
-        ? dispatch(getStudentDetails())
-        : dispatch(getStaffDetails());
-    }
-    error &&
-      showNotification({
-        title: error,
-        message: "Could not load user details!",
-        color: "red",
-      });
-  }, [dispatch, userInfo, user, navigate, error, regInfo]);
+  }, [userInfo, navigate, regInfo]);
 
   return (
     <>
       <Wrapper>
-        {loading && <LoadingOverlay visible={true} />}
         <ProfileContainer>
           <h1>I am dashboard</h1>
           <Logout />
@@ -73,3 +62,24 @@ const ProfileContainer = styled.div`
   border-radius: 13px;
   background-color: purple;
 `;
+
+//  const dispatch = useDispatch();
+
+//  const userDetails = useSelector(state => state.userDetails);
+//  const { loading, error, user } = userDetails;
+//  useEffect(() => {
+//    if (!user)
+//      userInfo?.studentID
+//        ? dispatch(getStudentDetails())
+//        : dispatch(getStaffDetails());
+
+//    error &&
+//      showNotification({
+//        title: error,
+//        message: "Could not load user details!",
+//        color: "red",
+//      });
+//  }, [user, dispatch, userInfo, error]);
+//  {
+//    loading && <LoadingOverlay visible={true} />;
+//  }

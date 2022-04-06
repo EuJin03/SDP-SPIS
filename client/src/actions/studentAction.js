@@ -1,4 +1,5 @@
 import axios from "axios";
+import { VIEW_COURSENAME_RESET } from "../constants/courseConstant";
 import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -106,8 +107,10 @@ export const studentRegister =
 
 export const logout = () => dispatch => {
   localStorage.removeItem("userInfo");
+  localStorage.removeItem("courseInfo");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
+  dispatch({ type: VIEW_COURSENAME_RESET });
 };
 
 export const getStudentDetails = () => async (dispatch, getState) => {

@@ -24,6 +24,7 @@ import {
   courseCreateReducer,
   courseDetailsReducer,
   courseListReducer,
+  courseNameReducer,
   courseUpdateReducer,
 } from "./reducers/courseReducer";
 import {
@@ -65,6 +66,7 @@ const reducer = combineReducers({
   courseDetails: courseDetailsReducer,
   courseCreate: courseCreateReducer,
   courseUpdate: courseUpdateReducer,
+  courseNames: courseNameReducer,
   imageUpload: imageUploadReducer,
   fileUpload: fileUploadReducer,
 });
@@ -73,8 +75,13 @@ const userInfoFromStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
+const courseInfoFromStorage = localStorage.getItem("courseInfo")
+  ? JSON.parse(localStorage.getItem("courseInfo"))
+  : null;
+
 const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
+  courseNames: { courseInfo: courseInfoFromStorage },
 };
 
 const middleware = [thunk];

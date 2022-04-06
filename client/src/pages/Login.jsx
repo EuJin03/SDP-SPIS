@@ -12,7 +12,6 @@ import {
   Divider,
   Anchor,
   LoadingOverlay,
-  Space,
 } from "@mantine/core";
 import styled from "styled-components";
 

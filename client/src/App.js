@@ -8,10 +8,12 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Error from "./pages/Error";
 import Assignment from "./pages/Assignment";
-
-import "./App.css";
+import Resource from "./pages/Resource";
+import Course from "./pages/Course";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+
+import "./App.css";
 
 const App = () => {
   return (
@@ -23,8 +25,11 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/user-profile" element={<Profile />} />
-            <Route path="/assignments" element={<Assignment />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/assignments" element={<Assignment />} />
+            <Route path="/resources" element={<Resource />} />
+            <Route path="/courses" element={<Course />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<Error />} />
           </Routes>

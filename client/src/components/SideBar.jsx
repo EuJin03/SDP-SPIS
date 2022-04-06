@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Navbar,
@@ -17,7 +17,7 @@ import {
   Logout,
 } from "tabler-icons-react";
 import UserButton from "./UserButton";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from "../actions/studentAction";
 
 const studentData = [
@@ -128,11 +128,33 @@ const useStyles = createStyles(theme => ({
 
 const SideBar = () => {
   const dispatch = useDispatch();
+  const location = useLocation().pathname;
+
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
-  const [activeLink, setActiveLink] = useState("Dashboard");
+  const path =
+    location === "/"
+      ? "Dashboard"
+      : location.substring(1, 2).toUpperCase() + location.substring(2);
+
+  const [activeLink, setActiveLink] = useState(path);
   const { classes, cx } = useStyles();
+
+  const navigate = useNavigate();
+  if (
+    !userInfo ||
+    location.includes("register") ||
+    location.includes("login") ||
+    location.includes("error") ||
+    location.includes("forgot")
+  )
+    return null;
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
 
   const links = (userInfo && userInfo.isAdmin ? adminData : studentData).map(
     link => (
@@ -152,20 +174,6 @@ const SideBar = () => {
       </Text>
     )
   );
-
-  const location = useLocation().pathname;
-  if (
-    !userInfo ||
-    location.includes("register") ||
-    location.includes("login") ||
-    location.includes("error") ||
-    location.includes("forgot")
-  )
-    return null;
-
-  const logoutHandler = () => {
-    dispatch(logout());
-  };
 
   return (
     <Navbar

@@ -17,13 +17,13 @@ import {
   DELETE_RESOURCE_FAIL,
 } from "../constants/resourceConstant";
 
-export const resourceListAction = () => async dispatch => {
+export const resourceListAction = course => async dispatch => {
   try {
     dispatch({
       type: VIEW_RESOURCE_REQUEST,
     });
 
-    const { data } = await axios.get(`/api/v1/resource`);
+    const { data } = await axios.get(`/api/v1/resource?courseId=${course}`);
 
     dispatch({
       type: VIEW_RESOURCE_SUCCESS,

@@ -12,6 +12,9 @@ import {
   UPDATE_COURSE_FAIL,
   UPDATE_COURSE_REQUEST,
   UPDATE_COURSE_SUCCESS,
+  VIEW_COURSENAME_REQUEST,
+  VIEW_COURSENAME_SUCCESS,
+  VIEW_COURSENAME_FAIL,
 } from "../constants/courseConstant";
 
 export const courseListAction = () => async dispatch => {
@@ -132,3 +135,38 @@ export const courseUpdateAction =
       });
     }
   };
+
+export const viewCourseNameAction = courses => async dispatch => {
+  try {
+    dispatch({
+      type: VIEW_COURSENAME_REQUEST,
+    });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/course/find`,
+      { courses: courses },
+      config
+    );
+
+    dispatch({
+      type: VIEW_COURSENAME_SUCCESS,
+      payload: data,
+    });
+
+    localStorage.setItem("courseInfo", JSON.stringify(data));
+  } catch (err) {
+    dispatch({
+      type: VIEW_COURSENAME_FAIL,
+      payload:
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.response,
+    });
+  }
+};

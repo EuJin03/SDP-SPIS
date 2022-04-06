@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Box,
   Button,
   Divider,
@@ -26,6 +27,7 @@ import {
   X,
 } from "tabler-icons-react";
 import { DatePicker } from "@mantine/dates";
+import { Link } from "react-router-dom";
 
 const PasswordRequirement = ({ meets, label }) => {
   return (
@@ -125,7 +127,7 @@ export const AccountDetails = ({ type, setType, form, error }) => {
           mt="lg"
           style={{ margin: "40px 0" }}
         />
-        <Group direction="column" grow>
+        <Group direction="column" grow mt="-md">
           <TextInput
             required
             label="Email"
@@ -198,6 +200,25 @@ export const AccountDetails = ({ type, setType, form, error }) => {
             {...form.getInputProps("confirmPassword")}
             error={error?.includes("Password do not match") ? error : null}
           />
+        </Group>
+        <Group position="right">
+          <Anchor
+            component={Link}
+            to={`/login`}
+            tabIndex={1}
+            type="button"
+            sx={theme => ({
+              paddingTop: 18,
+              color:
+                theme.colors[theme.primaryColor][
+                  theme.colorScheme === "dark" ? 4 : 6
+                ],
+              fontWeight: 500,
+              fontSize: theme.fontSizes.xs,
+            })}
+          >
+            Already have an Account? Login
+          </Anchor>
         </Group>
       </Paper>
     </>

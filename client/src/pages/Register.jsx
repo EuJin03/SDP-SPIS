@@ -1,14 +1,15 @@
-import { Button, Group, Stepper } from "@mantine/core";
+import { Anchor, Button, Group, Stepper } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   CircleX,
   MailOpened,
   ShieldCheck,
   UserCheck,
+  X,
 } from "tabler-icons-react";
 import { courseListAction } from "../actions/courseAction";
 import { staffRegister } from "../actions/staffAction";
@@ -18,6 +19,7 @@ import {
   PersonalDetails,
   RegisterForm,
 } from "../components/RegisterForm";
+import { showNotification } from "@mantine/notifications";
 
 const Register = () => {
   const [type, setType] = useState("student");
@@ -100,6 +102,14 @@ const Register = () => {
                   values.course
                 )
               );
+          error &&
+            showNotification({
+              autoClose: 4000,
+              title: "Oops, something went wrong",
+              message: "Please check your registration details!",
+              color: "red",
+              icon: <X />,
+            });
         })}
       >
         <Stepper active={active} onStepClick={setActive} breakpoint="sm">
@@ -111,7 +121,8 @@ const Register = () => {
             color={
               error?.includes("email") ||
               error?.includes("Password") ||
-              error?.includes("Exist")
+              error?.includes("Exist") ||
+              error?.includes("Empty")
                 ? "red"
                 : null
             }

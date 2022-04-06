@@ -8,6 +8,10 @@ import {
   UPDATE_COURSE_FAIL,
   UPDATE_COURSE_REQUEST,
   UPDATE_COURSE_SUCCESS,
+  VIEW_COURSENAME_FAIL,
+  VIEW_COURSENAME_REQUEST,
+  VIEW_COURSENAME_RESET,
+  VIEW_COURSENAME_SUCCESS,
   VIEW_COURSE_FAIL,
   VIEW_COURSE_REQUEST,
   VIEW_COURSE_SUCCESS,
@@ -60,6 +64,21 @@ export const courseUpdateReducer = (state = { course: {} }, action) => {
       return { loading: false, success: true, course: action.payload };
     case UPDATE_COURSE_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const courseNameReducer = (state = { courseInfo: [] }, action) => {
+  switch (action.type) {
+    case VIEW_COURSENAME_REQUEST:
+      return { loading: true };
+    case VIEW_COURSENAME_SUCCESS:
+      return { loading: false, success: true, courseInfo: action.payload };
+    case VIEW_COURSENAME_FAIL:
+      return { loading: false, error: action.payload };
+    case VIEW_COURSENAME_RESET:
+      return { courseInfo: [] };
     default:
       return state;
   }
