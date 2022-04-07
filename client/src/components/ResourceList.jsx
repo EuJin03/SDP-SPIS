@@ -10,6 +10,9 @@ import {
   TextInput,
   Anchor,
   ActionIcon,
+  Modal,
+  Button,
+  Divider,
 } from "@mantine/core";
 import {
   Selector,
@@ -18,7 +21,12 @@ import {
   Search,
   Pencil,
   Trash,
+  ExternalLink,
 } from "tabler-icons-react";
+import { ButtonCopy } from "./Clipboard";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { resourceDeleteAction } from "../actions/resourceAction";
 
 const useStyles = createStyles(theme => ({
   th: {
@@ -69,8 +77,7 @@ function filterData(data, search) {
   return data.filter(item =>
     keys.some(
       key =>
-        typeof item[key] === "string" &&
-        item[key]?.toLowerCase().includes(query)
+        typeof item[key] === "string" && item[key].toLowerCase().includes(query)
     )
   );
 }
@@ -83,16 +90,18 @@ function sortData(data, payload) {
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
-        return b[payload.sortBy]?.localeCompare(a[payload.sortBy]);
+        return b[payload.sortBy].localeCompare(a[payload.sortBy]);
       }
 
-      return a[payload.sortBy]?.localeCompare(b[payload.sortBy]);
+      return a[payload.sortBy].localeCompare(b[payload.sortBy]);
     }),
     payload.search
   );
 }
 
-export const ResourceList = ({ data }) => {
+export const ResourceList = ({ data, staff, test }) => {
+  const [remove, setRemove] = useState({ id: "", status: false });
+
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState(null);
@@ -116,90 +125,171 @@ export const ResourceList = ({ data }) => {
   const rows = sortedData.map(row => (
     <tr key={row._id}>
       <td>
-        <Anchor size="sm" href={row.topicURL}>
-          {row.topicName}
+        <Anchor
+          size="sm"
+          href={row.topicURL}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            textDecoration: "none",
+          }}
+          rel="noopener noreferrer"
+        >
+          <Text size="sm" mr="md">
+            {row.topicName.length > 65
+              ? row.topicName.substring(0, 65) + "..."
+              : row.topicName}
+          </Text>
+          <ExternalLink size={16} />
         </Anchor>
       </td>
       <td>{row.subjectName}</td>
       <td>{row.staffName}</td>
-      <td>{row.createdAt.substring(0, 10)}</td>
-      <td colSpan={0.5}>
-        <Group spacing={10} position="right">
-          <ActionIcon>
-            <Pencil size={16} />
-          </ActionIcon>
-          <ActionIcon color="red">
-            <Trash size={16} />
-          </ActionIcon>
+      <td>
+        <Group position="apart">
+          {row.staffEmail}
+          <ButtonCopy ctrlc={row.staffEmail} />
         </Group>
       </td>
+      <td>{row.createdAt.substring(0, 10)}</td>
+      {staff && staff === row.staffEmail ? (
+        <td>
+          <Group spacing={10} position="right">
+            <ActionIcon component={Link} to={`/resource/${row._id}/edit`}>
+              <Pencil size={16} />
+            </ActionIcon>
+            <ActionIcon
+              color="red"
+              onClick={() => {
+                setRemove({ id: row._id, status: true });
+              }}
+            >
+              <Trash size={16} />
+            </ActionIcon>
+          </Group>
+        </td>
+      ) : (
+        <td></td>
+      )}
     </tr>
   ));
 
-  return (
-    <ScrollArea>
-      <TextInput
-        placeholder="Search by any field"
-        mb="md"
-        icon={<Search size={14} />}
-        value={search}
-        onChange={handleSearchChange}
-      />
-      <Table
-        horizontalSpacing="md"
-        verticalSpacing="xs"
-        sx={{ minWidth: 700 }}
-        striped
-        highlightOnHover
-      >
-        <thead>
-          <tr>
-            <Th
-              sorted={sortBy === "topic"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("topic")}
-            >
-              Topic
-            </Th>
+  const dispatch = useDispatch();
 
-            <Th
-              sorted={sortBy === "subject"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("subject")}
-            >
-              Subject
-            </Th>
-            <Th
-              sorted={sortBy === "staff"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("staff")}
-            >
-              Uploaded By
-            </Th>
-            <Th
-              sorted={sortBy === "date"}
-              reversed={reverseSortDirection}
-              onSort={() => setSorting("date")}
-            >
-              Uploaded Date
-            </Th>
-            <Th />
-          </tr>
-        </thead>
-        <tbody>
-          {rows.length > 0 ? (
-            rows
-          ) : (
+  const resourceDelete = useSelector(state => state.resourceDelete);
+  const { loading, success } = resourceDelete;
+
+  useEffect(() => {
+    if (success) {
+      setRemove({ id: "", status: false });
+    }
+  }, [success]);
+
+  function deleteHandler(id) {
+    dispatch(resourceDeleteAction(id));
+  }
+
+  return (
+    <>
+      <Modal
+        opened={remove.status}
+        onClose={() => setRemove({ id: "", status: false })}
+        title="Are you sure to delete this resource?"
+        centered
+        size="xs"
+        withCloseButton={false}
+        closeOnClickOutside={false}
+      >
+        <Divider my="lg" />
+        <Group position="right">
+          <Button
+            loading={loading}
+            size="xs"
+            onClick={() => deleteHandler(remove.id)}
+          >
+            Confirm
+          </Button>
+          <Button
+            onClick={() => setRemove({ id: "", status: false })}
+            size="xs"
+            variant="outline"
+          >
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
+      <ScrollArea>
+        <TextInput
+          placeholder="Search by any field"
+          mb="md"
+          icon={<Search size={14} />}
+          value={search}
+          onChange={handleSearchChange}
+        />
+        <Table
+          horizontalSpacing="md"
+          verticalSpacing="xs"
+          sx={{ minWidth: 700 }}
+          striped
+          highlightOnHover
+        >
+          <thead>
             <tr>
-              <td colSpan={5}>
-                <Text mt="xl" weight={500} align="center">
-                  Nothing found
-                </Text>
-              </td>
+              <Th
+                sorted={sortBy === "topicName"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("topicName")}
+              >
+                Topic
+              </Th>
+
+              <Th
+                sorted={sortBy === "subjectName"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("subjectName")}
+              >
+                Subject
+              </Th>
+              <Th
+                sorted={sortBy === "staffName"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("staffName")}
+              >
+                Uploaded By
+              </Th>
+              <Th
+                sorted={sortBy === "staffEmail"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("staffEmail")}
+              >
+                Staff Email
+              </Th>
+              <Th
+                sorted={sortBy === "createdAt"}
+                reversed={reverseSortDirection}
+                onSort={() => setSorting("createdAt")}
+              >
+                Uploaded Date
+              </Th>
+              {staff && <Th />}
             </tr>
-          )}
-        </tbody>
-      </Table>
-    </ScrollArea>
+          </thead>
+          <tbody>
+            {rows.length > 0 ? (
+              rows
+            ) : (
+              <tr>
+                <td colSpan={5}>
+                  <Text mt="xl" weight={500} align="center">
+                    Nothing found
+                  </Text>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </ScrollArea>
+    </>
   );
 };

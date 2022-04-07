@@ -1,24 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Navbar,
-  Group,
-  createStyles,
-  Text,
-  Image,
-  UnstyledButton,
-} from "@mantine/core";
-import {
-  Writing,
-  Home,
-  Books,
-  Book,
-  Message,
-  Logout,
-} from "tabler-icons-react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Navbar, Group, createStyles, Text, Image, Badge } from "@mantine/core";
+import { Writing, Home, Books, Book, Message } from "tabler-icons-react";
 import UserButton from "./UserButton";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { logout } from "../actions/studentAction";
+import { Link, useLocation } from "react-router-dom";
 
 const studentData = [
   { label: "Dashboard", icon: Home, url: "/" },
@@ -54,6 +39,7 @@ const useStyles = createStyles(theme => ({
   },
 
   header: {
+    marginTop: "10px",
     padding: "0 16px 16px",
     marginLeft: "2px",
     color: theme.colorScheme === "dark" ? theme.white : theme.black,
@@ -76,8 +62,9 @@ const useStyles = createStyles(theme => ({
 
     span: {
       marginLeft: "10px",
-      fontSize: "32px",
-      fontWeight: 600,
+      fontSize: "30px",
+      fontWeight: 500,
+      fontFamily: "cursive",
     },
   },
 
@@ -127,7 +114,6 @@ const useStyles = createStyles(theme => ({
 }));
 
 const SideBar = () => {
-  const dispatch = useDispatch();
   const location = useLocation().pathname;
 
   const userLogin = useSelector(state => state.userLogin);
@@ -141,7 +127,6 @@ const SideBar = () => {
   const [activeLink, setActiveLink] = useState(path);
   const { classes, cx } = useStyles();
 
-  const navigate = useNavigate();
   if (
     !userInfo ||
     location.includes("register") ||
@@ -150,11 +135,6 @@ const SideBar = () => {
     location.includes("forgot")
   )
     return null;
-
-  const logoutHandler = () => {
-    dispatch(logout());
-    navigate("/");
-  };
 
   const links = (userInfo && userInfo.isAdmin ? adminData : studentData).map(
     link => (
@@ -195,9 +175,11 @@ const SideBar = () => {
             <span>SPIS</span>
           </div>
           <div className={classes.headerRight}>
-            <UnstyledButton onClick={logoutHandler}>
-              <Logout size={28} color={"#339AF0"} />
-            </UnstyledButton>
+            {userInfo?.studentID ? (
+              <Badge>Student v1.0</Badge>
+            ) : (
+              <Badge>Staff v1.0</Badge>
+            )}
           </div>
         </Group>
       </Navbar.Section>

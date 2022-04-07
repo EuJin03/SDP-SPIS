@@ -16,12 +16,18 @@ export const uploadImageAction = image => async dispatch => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     };
 
-    const { data } = await axios.post(`/api/v1/uploads/image`, image, config);
+    const formData = new FormData();
+    formData.append("image", image);
+
+    const { data } = await axios.post(
+      `/api/v1/uploads/image`,
+      formData,
+      config
+    );
 
     dispatch({
       type: UPLOAD_IMAGE_SUCCESS,
@@ -46,12 +52,14 @@ export const uploadFileAction = file => async dispatch => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        "Content-Type": "multipart/form-data",
       },
     };
 
-    const { data } = await axios.post(`/api/v1/uploads/file`, file, config);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const { data } = await axios.post(`/api/v1/uploads/file`, formData, config);
 
     dispatch({
       type: UPLOAD_FILE_SUCCESS,

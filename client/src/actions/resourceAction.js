@@ -136,7 +136,7 @@ export const resourceUpdateAction =
     }
   };
 
-export const resourceDeleteAction = id => async (getState, dispatch) => {
+export const resourceDeleteAction = id => async (dispatch, getState) => {
   try {
     dispatch({
       type: DELETE_RESOURCE_REQUEST,
@@ -148,7 +148,6 @@ export const resourceDeleteAction = id => async (getState, dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
       },
     };

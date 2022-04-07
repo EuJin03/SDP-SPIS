@@ -1,16 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import { Logout } from "tabler-icons-react";
 import { viewCourseNameAction } from "../actions/courseAction";
+import {
+  LoadingOverlay,
+  UnstyledButton,
+  createStyles,
+  Box,
+} from "@mantine/core";
+import { logout } from "../actions/studentAction";
+
+const useStyles = createStyles(theme => ({
+  header: {
+    padding: "30px 40px",
+    position: "relative",
+    minHeight: "100vh",
+    width: "100%",
+  },
+
+  profile: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    padding: "30px",
+    width: "100%",
+    height: "20vh",
+    borderRadius: "13px",
+    backgroundColor: "purple",
+  },
+}));
 
 const Dashboard = () => {
+  const { classes, cx } = useStyles();
+
   const userRegister = useSelector(state => state.userRegister);
   const { userInfo: regInfo } = userRegister;
 
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
+
+  const courseNames = useSelector(state => state.courseNames);
+  const { loading } = courseNames;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -30,38 +61,27 @@ const Dashboard = () => {
     }
   }, [userInfo, navigate, regInfo]);
 
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
   return (
     <>
-      <Wrapper>
-        <ProfileContainer>
+      <Box className={classes.header}>
+        {loading && <LoadingOverlay visible={true} />}
+        <Box className={classes.profile}>
           <h1>I am dashboard</h1>
-          <Logout />
-        </ProfileContainer>
-      </Wrapper>
+          <UnstyledButton onClick={logoutHandler}>
+            <Logout size={28} color={"#339AF0"} />
+          </UnstyledButton>
+        </Box>
+      </Box>
     </>
   );
 };
 
 export default Dashboard;
-
-const Wrapper = styled.div`
-  padding: 30px 40px;
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  background-color: #f1f1f1;
-`;
-
-const ProfileContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 30px;
-  width: 100%;
-  height: 20vh;
-  border-radius: 13px;
-  background-color: purple;
-`;
 
 //  const dispatch = useDispatch();
 

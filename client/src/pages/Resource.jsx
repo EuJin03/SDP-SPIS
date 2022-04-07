@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { resourceListAction } from "../actions/resourceAction";
 import { LoadingOverlay, NativeSelect } from "@mantine/core";
-import { viewCourseNameAction } from "../actions/courseAction";
-import { Hash } from "tabler-icons-react";
+import { Check, Hash, X } from "tabler-icons-react";
 import { ResourceList } from "../components/ResourceList";
 import { usePrevious } from "../hooks/usePrevious";
+import { showNotification } from "@mantine/notifications";
 
 const Resource = () => {
   const dispatch = useDispatch();
@@ -20,8 +20,14 @@ const Resource = () => {
   const { courseInfo } = courseNames;
 
   useEffect(() => {
-    !userInfo || (!courseInfo && navigate("/", { replace: true }));
-  }, []);
+    if (!userInfo) {
+      navigate("/login", { replace: true });
+    }
+
+    if (userInfo && !courseInfo) {
+      navigate("/", { replace: true });
+    }
+  }, [courseInfo, navigate, userInfo]);
 
   const [course, setCourse] = useState(courseInfo[0].id);
   const prevCourse = usePrevious(course);
@@ -33,6 +39,31 @@ const Resource = () => {
     if (course.length !== 0 && prevCourse !== course)
       dispatch(resourceListAction(course));
   }, [course, dispatch, prevCourse]);
+
+  const resourceDelete = useSelector(state => state.resourceDelete);
+  const { success: successRemove } = resourceDelete;
+
+  useEffect(() => {
+    if (successRemove) {
+      showNotification({
+        autoClose: 4000,
+        title: "Happy",
+        message: "Resource has been removed successfully",
+        color: "green",
+        icon: <Check />,
+      });
+      dispatch(resourceListAction(course));
+    }
+
+    error &&
+      showNotification({
+        autoClose: 4000,
+        title: "Sad",
+        message: "Resource cannot be deleted",
+        color: "red",
+        icon: <X />,
+      });
+  }, [course, dispatch, error, successRemove]);
 
   const data = courseInfo.map(v => ({
     value: v.id,
@@ -55,7 +86,13 @@ const Resource = () => {
         </Header>
         {loading && resources.length === 0 && <LoadingOverlay visible={true} />}
         <Container>
-          {resources.length !== 0 && <ResourceList data={resources} />}
+          {resources.length !== 0 && (
+            <ResourceList
+              key={resources}
+              data={resources}
+              staff={userInfo?.studentID ? null : userInfo.email}
+            />
+          )}
         </Container>
       </Wrapper>
     </>

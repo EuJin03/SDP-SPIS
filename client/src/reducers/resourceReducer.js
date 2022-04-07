@@ -10,6 +10,7 @@ import {
   SINGLE_RESOURCE_SUCCESS,
   UPDATE_RESOURCE_FAIL,
   UPDATE_RESOURCE_REQUEST,
+  UPDATE_RESOURCE_RESET,
   UPDATE_RESOURCE_SUCCESS,
   VIEW_RESOURCE_FAIL,
   VIEW_RESOURCE_REQUEST,
@@ -63,6 +64,8 @@ export const resourceUpdateReducer = (state = { resource: {} }, action) => {
       return { loading: false, success: true, resource: action.payload };
     case UPDATE_RESOURCE_FAIL:
       return { loading: false, error: action.payload };
+    case UPDATE_RESOURCE_RESET:
+      return { resource: {} };
     default:
       return state;
   }
