@@ -27,6 +27,8 @@ import { ButtonCopy } from "./Clipboard";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { resourceDeleteAction } from "../actions/resourceAction";
+import ResourceEditModal from "./ResourceEditModal";
+import { DELETE_RESOURCE_RESET } from "../constants/resourceConstant";
 
 const useStyles = createStyles(theme => ({
   th: {
@@ -122,6 +124,14 @@ export const ResourceList = ({ data, staff, test }) => {
     );
   };
 
+  const [toggle, setToggle] = useState(false);
+  const [editId, setEditId] = useState("");
+
+  const setEditModal = (bool, id) => {
+    setToggle(bool);
+    setEditId(id);
+  };
+
   const rows = sortedData.map(row => (
     <tr key={row._id}>
       <td>
@@ -153,10 +163,11 @@ export const ResourceList = ({ data, staff, test }) => {
         </Group>
       </td>
       <td>{row.createdAt.substring(0, 10)}</td>
+
       {staff && staff === row.staffEmail ? (
         <td>
           <Group spacing={10} position="right">
-            <ActionIcon component={Link} to={`/resource/${row._id}/edit`}>
+            <ActionIcon onClick={() => setEditModal(true, row._id)}>
               <Pencil size={16} />
             </ActionIcon>
             <ActionIcon
@@ -183,8 +194,9 @@ export const ResourceList = ({ data, staff, test }) => {
   useEffect(() => {
     if (success) {
       setRemove({ id: "", status: false });
+      dispatch({ type: DELETE_RESOURCE_RESET });
     }
-  }, [success]);
+  }, [dispatch, success]);
 
   function deleteHandler(id) {
     dispatch(resourceDeleteAction(id));
@@ -192,6 +204,14 @@ export const ResourceList = ({ data, staff, test }) => {
 
   return (
     <>
+      {editId !== "" && (
+        <ResourceEditModal
+          key={editId}
+          resourceId={editId}
+          editToggle={toggle}
+          setEditToggle={setEditModal}
+        />
+      )}
       <Modal
         opened={remove.status}
         onClose={() => setRemove({ id: "", status: false })}
@@ -219,14 +239,16 @@ export const ResourceList = ({ data, staff, test }) => {
           </Button>
         </Group>
       </Modal>
-      <ScrollArea>
-        <TextInput
-          placeholder="Search by any field"
-          mb="md"
-          icon={<Search size={14} />}
-          value={search}
-          onChange={handleSearchChange}
-        />
+
+      <TextInput
+        style={{ width: "80%" }}
+        placeholder="Search by any field"
+        mb="md"
+        icon={<Search size={14} />}
+        value={search}
+        onChange={handleSearchChange}
+      />
+      <ScrollArea style={{ flex: "0.84", width: "80%" }}>
         <Table
           horizontalSpacing="md"
           verticalSpacing="xs"
@@ -280,7 +302,7 @@ export const ResourceList = ({ data, staff, test }) => {
               rows
             ) : (
               <tr>
-                <td colSpan={5}>
+                <td colSpan={staff ? 6 : 5}>
                   <Text mt="xl" weight={500} align="center">
                     Nothing found
                   </Text>

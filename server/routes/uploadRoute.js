@@ -27,7 +27,7 @@ router.post("/image", uploadImage.single("image"), async (req, res) => {
       resource_type: "image",
     });
     res.json({
-      success: true,
+      filepath: req.file.originalname,
       url: uploadResult.url,
     });
   } catch (error) {
@@ -47,7 +47,7 @@ router.post("/file", uploadFile.single("file"), async (req, res) => {
       resource_type: "raw",
     });
     res.json({
-      success: true,
+      filepath: req.file.originalname,
       url: uploadResult.url,
     });
   } catch (error) {

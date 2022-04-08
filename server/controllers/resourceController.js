@@ -68,6 +68,7 @@ const getResources = asyncHandler(async (req, res) => {
         const merged = Object.assign(
           {
             staffName: staff.lName + " " + staff.fName,
+            staffEmail: staff.email,
           },
           resources[i]
         );
@@ -123,6 +124,7 @@ const getResourceDetails = asyncHandler(async (req, res) => {
         const merged = Object.assign(
           {
             staffName: staff.lName + " " + staff.fName,
+            staffEmail: staff.email,
           },
           resource[i]
         );
@@ -137,7 +139,7 @@ const getResourceDetails = asyncHandler(async (req, res) => {
   await updated(updatedResource);
 
   res.json(updatedResourceDetails[0]);
-}); 
+});
 
 // @desc Create new resource
 // @route POST /api/resource
@@ -236,7 +238,7 @@ const editResource = asyncHandler(async (req, res) => {
 });
 
 // @desc Delete resource
-// @route DELETE /api/resource?resourceId=xxx
+// @route DELETE /api/resource/:resourceId
 // @access Private (lecturer)
 const deleteResource = asyncHandler(async (req, res) => {
   const { resourceId } = req.query;

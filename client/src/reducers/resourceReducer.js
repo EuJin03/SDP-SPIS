@@ -1,9 +1,11 @@
 import {
   CREATE_RESOURCE_FAIL,
   CREATE_RESOURCE_REQUEST,
+  CREATE_RESOURCE_RESET,
   CREATE_RESOURCE_SUCCESS,
   DELETE_RESOURCE_FAIL,
   DELETE_RESOURCE_REQUEST,
+  DELETE_RESOURCE_RESET,
   DELETE_RESOURCE_SUCCESS,
   SINGLE_RESOURCE_FAIL,
   SINGLE_RESOURCE_REQUEST,
@@ -51,6 +53,8 @@ export const resourceCreateReducer = (state = {}, action) => {
       return { loading: false, success: true, message: action.payload };
     case CREATE_RESOURCE_FAIL:
       return { loading: false, error: action.payload };
+    case CREATE_RESOURCE_RESET:
+      return (state = {});
     default:
       return state;
   }
@@ -79,6 +83,8 @@ export const resourceDeleteReducer = (state = {}, action) => {
       return { loading: false, success: true };
     case DELETE_RESOURCE_FAIL:
       return { loading: false, error: action.payload };
+    case DELETE_RESOURCE_RESET:
+      return (state = {});
     default:
       return state;
   }

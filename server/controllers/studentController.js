@@ -23,6 +23,7 @@ const mg = mailgun({
   apiKey: __mailgun_api_key,
   domain: __domain,
 });
+import mongoose from "mongoose";
 
 // @desc Login student and get auth token
 // @route POST /api/students/login
@@ -91,7 +92,14 @@ const registerStudent = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (email) {
-    const validEmail = email.slice(0, 2).toUpperCase() + email.slice(2);
+    const validEmail = email.slice(0, 2).toLowerCase() + email.slice(2);
+
+    if (course.length < 12) {
+      res.status(400);
+      throw new Error("Course ID is not valid");
+    }
+
+    const validCourse = mongoose.Types.ObjectId(course);
 
     const userExists = await Student.findOne({ email: validEmail });
 
@@ -107,7 +115,7 @@ const registerStudent = asyncHandler(async (req, res) => {
       gender,
       password,
       confirmPassword,
-      course
+      validCourse
     );
 
     if (!valid) {
@@ -119,11 +127,11 @@ const registerStudent = asyncHandler(async (req, res) => {
       studentID: "TP" + validEmail.slice(2, 8),
       fName: fName.charAt(0).toUpperCase() + fName.slice(1),
       lName: lName.charAt(0).toUpperCase() + lName.slice(1),
-      email: validEmail,
+      email: validEmail.toLowerCase(),
       password: password,
       dob: dob,
       gender: gender,
-      course: course,
+      course: validCourse,
     });
 
     if (student) {

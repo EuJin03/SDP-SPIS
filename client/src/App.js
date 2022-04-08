@@ -12,7 +12,7 @@ import Resource from "./pages/Resource";
 import Course from "./pages/Course";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
-import ResourceEdit from "./pages/ResourceEdit";
+import ResourceCreate from "./pages/ResourceCreate";
 
 import "./App.css";
 
@@ -31,8 +31,8 @@ const App = () => {
             <Route path="/assignments" element={<Assignment />} />
             <Route path="/resources" element={<Resource />} />
             <Route
-              path="/resource/:resourceId/edit"
-              element={<ResourceEdit />}
+              path="/resources/:courseId/create"
+              element={<ResourceCreate />}
             />
             <Route path="/courses" element={<Course />} />
             <Route path="/register" element={<Register />} />

@@ -21,6 +21,7 @@
   "author": "eujin",
   "license": "ISC",
   "dependencies": {
+    "@mantine/hooks": "^4.1.2",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.28.1",
     "cors": "^2.8.5",
@@ -33,6 +34,7 @@
     "mongoose": "^6.2.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
-    "react-scripts": "^4.0.1"
+    "react-scripts": "^4.0.1",
+    "tabler-icons-react": "^1.43.0"
   }
 }

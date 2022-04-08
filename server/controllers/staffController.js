@@ -17,6 +17,7 @@ import {
   __mailgun_domain,
   __url,
 } from "../constant.js";
+import mongoose from "mongoose";
 
 const __domain = __mailgun_domain;
 const mg = mailgun({
@@ -41,6 +42,7 @@ const authStaff = asyncHandler(async (req, res) => {
       gender: staff.gender,
       dob: staff.dob,
       course: staff.course,
+      isAdmin: staff.isAdmin,
       token: generateToken(staff._id),
     });
   } else {
@@ -64,6 +66,7 @@ const getStaffProfile = asyncHandler(async (req, res) => {
       gender: staff.gender,
       dob: staff.dob,
       course: staff.course,
+      isAdmin: staff.isAdmin,
     });
   } else {
     res.status(404);
@@ -87,14 +90,14 @@ const registerStaff = asyncHandler(async (req, res) => {
   } = req.body;
 
   if (email) {
-    const userExists = await Staff.findOne({ email }).select("-password");
+    const userExists = await Staff.findOne({ email });
 
     if (userExists) {
       res.status(400);
       throw new Error("Staff already Exist");
     }
 
-    const { valid, errors } = validateStaffRegisterInput(
+    const { valid, errors } = await validateStaffRegisterInput(
       fName,
       lName,
       email,

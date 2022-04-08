@@ -122,6 +122,8 @@ const SideBar = () => {
   const path =
     location === "/"
       ? "Dashboard"
+      : location.includes("resources")
+      ? "Resources"
       : location.substring(1, 2).toUpperCase() + location.substring(2);
 
   const [activeLink, setActiveLink] = useState(path);

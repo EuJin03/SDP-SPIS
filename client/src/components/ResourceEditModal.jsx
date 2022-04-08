@@ -1,47 +1,47 @@
 import {
-  ActionIcon,
   Alert,
-  Anchor,
-  Box,
   Button,
   createStyles,
   Divider,
   Group,
   LoadingOverlay,
+  Modal,
   Paper,
   Text,
+  Anchor,
+  Box,
   TextInput,
   UnstyledButton,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
-  Link as LinkIcon,
   AlertCircle,
   Ballpen,
   Book,
   Book2,
-  X,
-  ExternalLink,
-  Trash,
   Check,
+  ExternalLink,
+  Link as LinkIcon,
+  Trash,
+  X,
 } from "tabler-icons-react";
 import {
   resourceDetailsAction,
   resourceListAction,
   resourceUpdateAction,
 } from "../actions/resourceAction";
-import { DropZone } from "../components/DropZone";
 import { UPDATE_RESOURCE_RESET } from "../constants/resourceConstant";
+import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
+import { usePrevious } from "../hooks/usePrevious";
+import { DropZone } from "./DropZone";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
-    height: "100vh",
-    width: "100%",
+    minHeight: "520px",
     position: "relative",
-    padding: "120px",
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
@@ -68,7 +68,7 @@ const useStyles = createStyles(theme => ({
     alignItems: "center",
   },
 
-  test: {
+  box: {
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -76,12 +76,13 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const ResourceEdit = () => {
-  const { resourceId } = useParams();
+const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const prevResourceId = usePrevious(resourceId);
 
   const resourceDetails = useSelector(state => state.resourceDetails);
   const { resource, loading, error } = resourceDetails;
@@ -91,9 +92,14 @@ const ResourceEdit = () => {
 
   const [topicName, setTopicName] = useState("");
   const [topicURL, setTopicURL] = useState("");
+  const [filePath, setFilePath] = useState("");
 
   useEffect(() => {
     if (!resource?.course) {
+      dispatch(resourceDetailsAction(resourceId));
+    }
+
+    if (prevResourceId !== resourceId) {
       dispatch(resourceDetailsAction(resourceId));
     }
 
@@ -101,12 +107,14 @@ const ResourceEdit = () => {
       setTopicName(resource.topicName);
       setTopicURL(resource.topicURL);
     }
-  }, [dispatch, resource, resourceId]);
+  }, [dispatch, prevResourceId, resource, resourceId]);
 
   useEffect(() => {
     if (success) {
       if (file) {
         setTopicURL(file.url);
+        setFilePath(file.filepath);
+        dispatch({ type: UPLOAD_FILE_RESET });
         showNotification({
           title: "Happy",
           message: "File has been uploaded successfully",
@@ -124,7 +132,7 @@ const ResourceEdit = () => {
         icon: <X />,
       });
     }
-  }, [file, fileError, success]);
+  }, [dispatch, file, fileError, success]);
 
   const resourceUpdate = useSelector(state => state.resourceUpdate);
   const {
@@ -135,15 +143,17 @@ const ResourceEdit = () => {
 
   useEffect(() => {
     if (updateSuccess) {
+      dispatch({ type: UPDATE_RESOURCE_RESET });
+      dispatch(resourceListAction(resource.course));
+      setEditToggle(false, "");
+      setTopicName("");
+      setTopicURL("");
       showNotification({
         title: "Happy",
         message: "Resource has been updated successfully",
         color: "green",
         icon: <Check />,
       });
-      navigate("/resources");
-      dispatch({ type: UPDATE_RESOURCE_RESET });
-      // window.location.reload();
     }
 
     if (updateError) {
@@ -154,14 +164,20 @@ const ResourceEdit = () => {
         icon: <X />,
       });
     }
-  }, [dispatch, navigate, resource.course, updateError, updateSuccess]);
+  }, [
+    dispatch,
+    navigate,
+    resource.course,
+    setEditToggle,
+    updateError,
+    updateSuccess,
+  ]);
 
   const removeTopicURL = () => {
     setTimeout(() => setTopicURL(""), 500);
   };
 
-  const updateResourceHandler = e => {
-    e.preventDefault();
+  const updateResourceHandler = () => {
     if (topicURL !== "" && topicName !== "") {
       dispatch(
         resourceUpdateAction(
@@ -176,9 +192,19 @@ const ResourceEdit = () => {
       );
     }
   };
-
   return (
-    <>
+    <Modal
+      centered
+      opened={editToggle}
+      onClose={() => setEditToggle(false, "")}
+      withCloseButton={false}
+      closeOnClickOutside={false}
+      style={{
+        minHeight: "500px",
+        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+      }}
+      size="700"
+    >
       <Box className={classes.wrapper}>
         {loading && <LoadingOverlay visible={true} />}
         {updateLoading && <LoadingOverlay visible={true} />}
@@ -200,7 +226,7 @@ const ResourceEdit = () => {
           style={{
             minHeight: "520px",
             width: "800px",
-            boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+            border: "none",
           }}
         >
           <Text size="xl" weight={500}>
@@ -208,7 +234,7 @@ const ResourceEdit = () => {
           </Text>
 
           <Divider className={classes.divide} labelPosition="center" mt="lg" />
-          <form onSubmit={e => updateResourceHandler(e)}>
+          <form onSubmit={() => updateResourceHandler()}>
             <Group direction="column" grow mt="-md">
               <TextInput
                 label="Course Name"
@@ -239,7 +265,7 @@ const ResourceEdit = () => {
                     </Text>
                     <Box className={classes.resourceLink}>
                       <LinkIcon color="#ADB5BD" size="16" />
-                      <Box className={classes.test}>
+                      <Box className={classes.box}>
                         <Anchor
                           className={classes.anchor}
                           underline={false}
@@ -248,7 +274,7 @@ const ResourceEdit = () => {
                           weight={500}
                           href={topicURL}
                         >
-                          {file?.filepath ? file.filepath : "Resource"}
+                          {filePath !== "" ? filePath : "Resource"}
                           <ExternalLink
                             style={{ marginLeft: "8px" }}
                             size="16"
@@ -273,8 +299,11 @@ const ResourceEdit = () => {
                 <Button type="submit">Update</Button>
                 <Button
                   variant="outline"
-                  component={Link}
-                  to={"/resources"}
+                  onClick={() => {
+                    setEditToggle(false, "");
+                    setTopicName("");
+                    setTopicURL("");
+                  }}
                   type="button"
                 >
                   Cancel
@@ -284,8 +313,8 @@ const ResourceEdit = () => {
           </form>
         </Paper>
       </Box>
-    </>
+    </Modal>
   );
 };
 
-export default ResourceEdit;
+export default ResourceEditModal;

@@ -4,6 +4,7 @@ import {
   createCourse,
   getCourse,
   getCourseDetails,
+  getCourseName,
   updateCourse,
 } from "../controllers/courseController.js";
 const router = express.Router();
@@ -13,5 +14,6 @@ router
   .route("/:id")
   .get(getCourseDetails)
   .patch(protectStaff, admin, updateCourse);
+router.route("/find").post(getCourseName);
 
 export default router;

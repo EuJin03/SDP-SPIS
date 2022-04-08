@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Assignment from "../models/Assignment.js";
 import Course from "../models/Course.js";
+import mongoose from "mongoose";
 
 // @desc Get all course details
 // @route GET /api/course
@@ -39,12 +40,12 @@ const getCourse = asyncHandler(async (req, res) => {
 // @route GET /api/course/:id
 // @access Public route
 const getCourseDetails = asyncHandler(async (req, res) => {
-  const { courseId } = req.params;
-  const course = await Course.findById(courseId);
+  const { id } = req.params;
+  const course = await Course.findById(id);
 
   if (!course) {
     res.status(404);
-    throw new Error("Courses do not exist.");
+    throw new Error("Course do not exist.");
   }
 
   const assignments = await Assignment.find({});
@@ -139,4 +140,31 @@ const updateCourse = asyncHandler(async (req, res) => {
   }
 });
 
-export { getCourse, getCourseDetails, createCourse, updateCourse };
+const getCourseName = asyncHandler(async (req, res) => {
+  const { courses } = req.body;
+
+  let courseNames = [];
+  for (let course of courses) {
+    let findCourse = await Course.findById(course);
+
+    if (!findCourse) {
+      res.status(401);
+      throw new Error("Course does not exist");
+    }
+
+    courseNames.push({
+      id: findCourse._id,
+      courseName: findCourse.courseName,
+    });
+  }
+
+  res.json(courseNames);
+});
+
+export {
+  getCourse,
+  getCourseDetails,
+  createCourse,
+  updateCourse,
+  getCourseName,
+};

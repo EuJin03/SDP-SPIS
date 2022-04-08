@@ -3,8 +3,8 @@ import Assignment from "../models/Assignment.js";
 // errors[Object.keys(errors)[0]]
 
 export const validatePassword = (password, confirmPassword) => {
-  if (password === "" || password.length < 8) {
-    return "Password must contain at least 8 characters";
+  if (password === "" || password.length < 6) {
+    return "Password must contain at least 6 characters";
   } else if (password !== confirmPassword) {
     return "Password do not match";
   }
@@ -14,27 +14,21 @@ export const validatePassword = (password, confirmPassword) => {
 
 export const validateCourse = course => {
   if (course) {
-    const courseExist = Course.exists({ id: course });
+    const courseExist = Course.findById(course);
 
-    if (!courseExist) {
-      return "Course does not exist";
-    }
+    if (!courseExist) return "Course does not exist";
   }
 
   return false;
 };
 
-export const validateArrayCourse = course => {
-  if (course) {
-    course.forEach(c => {
-      const courseExist = Course.exists({ id: c });
-
-      if (!courseExist) {
-        return "Course does not exist";
-      }
-    });
+export const validateArrayCourse = async courses => {
+  for (let i = 0; i < courses.length; i++) {
+    const courseExist = await Course.findById(courses[i]);
+    if (!courseExist) {
+      return "Course does not Exist";
+    }
   }
-
   return false;
 };
 
@@ -55,7 +49,7 @@ export const validateStudentRegisterInput = (
   }
 
   // Email
-  const regEx = /^TP[0-9]+@mail.apu.edu.my$/;
+  const regEx = /^tp[0-9]+@mail.apu.edu.my$/;
   if (!email.match(regEx)) {
     errors.email =
       "Email must be a valid STUDENT email address from Asia Pacific University";
@@ -94,7 +88,7 @@ export const validateAssignment = asg => {
   return false;
 };
 
-export const validateStaffRegisterInput = (
+export const validateStaffRegisterInput = async (
   fName,
   lName,
   email,
@@ -129,7 +123,7 @@ export const validateStaffRegisterInput = (
   }
 
   // Course
-  const vac = validateArrayCourse(course);
+  const vac = await validateArrayCourse(course);
   if (vac) {
     errors.course = vac;
   }
