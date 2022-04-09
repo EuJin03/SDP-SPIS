@@ -12,6 +12,7 @@ import {
   viewSingleTask,
   viewStudentTask,
   viewTask,
+  viewTaskByCourse,
 } from "../controllers/assignmentController.js";
 import { protectStudent, protectStaff } from "../middleware/authMiddleware.js";
 
@@ -27,7 +28,9 @@ router
 // lecturer access only
 router.route("/uploaded-task").get(protectStaff, viewTask);
 router.route("/uploaded-task/:taskId").get(protectStaff, viewSingleTask);
+router.route("/uploaded-task/c/:courseId").get(protectStaff, viewTaskByCourse);
 router.route("/create-task").post(protectStaff, createTask);
+// tsk tsk
 router.route("/assign-task/:assignmentId").patch(protectStaff, assignTask);
 router.route("/update-task/:assignmentId").patch(protectStaff, updateTask);
 router.route("/:assignmentId").delete(protectStaff, deleteTask);

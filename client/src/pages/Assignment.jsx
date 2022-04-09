@@ -9,14 +9,15 @@ import {
   NativeSelect,
   Text,
 } from "@mantine/core";
-import { FilePlus, Hash, X } from "tabler-icons-react";
+import { Check, FilePlus, Hash, X } from "tabler-icons-react";
 import { usePrevious } from "../hooks/usePrevious";
-import { showNotification } from "@mantine/notifications";
+import { showNotification, updateNotification } from "@mantine/notifications";
 import {
   taskListAction,
   assignmentViewAction,
 } from "../actions/assignmentAction";
 import { TaskList } from "../components/TaskList";
+import { ASSIGN_TASK_RESET } from "../constants/assignmentConstant";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -57,8 +58,21 @@ const Resource = () => {
   const [course, setCourse] = useState(courseInfo[0].id);
   const prevCourse = usePrevious(course);
 
+  /** TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST */
   const taskList = useSelector(state => state.taskList);
   const { loading: taskLoading, error: taskError, tasks } = taskList;
+
+  useEffect(() => {
+    taskError &&
+      showNotification({
+        autoClose: 4000,
+        title: "Sad",
+        message: "Assignment cannot be found",
+        color: "red",
+        icon: <X />,
+      });
+  }, [course, taskError]);
+  /** TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST */
 
   const assignmentView = useSelector(state => state.assignmentView);
   const {
@@ -85,28 +99,77 @@ const Resource = () => {
     }
   }, [course, courseInfo, dispatch, navigate, prevCourse, tasks, userInfo]);
 
-  // asg soon
-  // const resourceDelete = useSelector(state => state.resourceDelete);
-  // const { success: successRemove } = resourceDelete;
-
-  // const resourceUpdate = useSelector(state => state.resourceUpdate);
-  // const { success: successEdit } = resourceUpdate;
-
-  useEffect(() => {
-    taskError &&
-      showNotification({
-        autoClose: 4000,
-        title: "Sad",
-        message: "Assignment cannot be found",
-        color: "red",
-        icon: <X />,
-      });
-  }, [course, taskError]);
-
   const data = courseInfo.map(v => ({
     value: v.id,
     label: v.courseName,
   }));
+
+  /** DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+  const taskDelete = useSelector(state => state.taskDelete);
+  const { success: successDelete, error: errorDelete } = taskDelete;
+
+  useEffect(() => {
+    if (successDelete) {
+      showNotification({
+        autoClose: 4000,
+        title: "Happy",
+        message: "Assignment has been removed successfully",
+        color: "green",
+        icon: <Check />,
+      });
+      dispatch(taskListAction(course));
+    }
+
+    errorDelete &&
+      showNotification({
+        autoClose: 4000,
+        title: "Sad",
+        message: "Assignment cannot be removed",
+        color: "red",
+        icon: <X />,
+      });
+  }, [course, dispatch, errorDelete, successDelete]);
+  /** DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
+
+  const taskAssign = useSelector(state => state.taskAssign);
+  const { success: successAssign, error: errorAssign, loading } = taskAssign;
+
+  useEffect(() => {
+    if (loading) {
+      showNotification({
+        id: "task-assign",
+        loading: loading,
+        title: "Assigning task to students",
+        message: "Please be patient",
+        autoClose: false,
+        disallowClose: true,
+      });
+    }
+    if (successAssign) {
+      updateNotification({
+        id: "task-assign",
+        autoClose: 2000,
+        title: "Happy",
+        message: "Assignment has been assigned to new students",
+        color: "green",
+        icon: <Check />,
+      });
+      dispatch(taskListAction(course));
+      dispatch({ type: ASSIGN_TASK_RESET });
+    }
+
+    errorAssign &&
+      showNotification({
+        autoClose: 4000,
+        title: "Sad",
+        message: "Assignment is either due or something is wrong",
+        color: "red",
+        icon: <X />,
+      });
+  }, [course, dispatch, errorAssign, loading, successAssign]);
+
+  // const resourceUpdate = useSelector(state => state.resourceUpdate);
+  // const { success: successEdit } = resourceUpdate;
 
   // const resourceCreate = useSelector(state => state.resourceCreate);
   // const {
@@ -171,9 +234,10 @@ const Resource = () => {
             />
           </Box>
         </Box>
-        {taskLoading && course.length === 0 && (
-          <LoadingOverlay visible={true} />
-        )}
+        {taskLoading ||
+          (course.length === 0 && <LoadingOverlay visible={true} />)}
+        {assignmentLoading ||
+          (course.length === 0 && <LoadingOverlay visible={true} />)}
 
         {tasks && tasks.length !== 0 && (
           <TaskList

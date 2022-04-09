@@ -1,6 +1,7 @@
 import {
   ASSIGN_TASK_FAIL,
   ASSIGN_TASK_REQUEST,
+  ASSIGN_TASK_RESET,
   ASSIGN_TASK_SUCCESS,
   CREATE_TASK_FAIL,
   CREATE_TASK_REQUEST,
@@ -123,6 +124,8 @@ export const taskAssignReducer = (state = { studentAssigned: 0 }, action) => {
       return { loading: false, success: true, studentAssigned: action.payload };
     case ASSIGN_TASK_FAIL:
       return { loading: false, error: action.payload };
+    case ASSIGN_TASK_RESET:
+      return {};
     default:
       return state;
   }

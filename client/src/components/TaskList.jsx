@@ -29,11 +29,14 @@ import {
   CloudFog,
 } from "tabler-icons-react";
 import { useDispatch, useSelector } from "react-redux";
-import { resourceDeleteAction } from "../actions/resourceAction";
 import ResourceEditModal from "./ResourceEditModal";
 import dayjs from "dayjs";
 import { DELETE_TASK_RESET } from "../constants/assignmentConstant";
 import { ButtonCopy } from "./Clipboard";
+import {
+  taskAssignAction,
+  taskDeleteAction,
+} from "../actions/assignmentAction";
 
 const useStyles = createStyles(theme => ({
   th: {
@@ -179,11 +182,7 @@ export const TaskList = ({ data, staff }) => {
                 <Text size="xs" style={{ marginRight: 2 }}>
                   {row.studentAssigned}
                 </Text>
-                <ActionIcon
-                  onClick={() => {
-                    console.log("fak u 2");
-                  }}
-                >
+                <ActionIcon onClick={() => dispatch(taskAssignAction(row._id))}>
                   <UserPlus size={16} />
                 </ActionIcon>
               </Box>
@@ -260,19 +259,31 @@ export const TaskList = ({ data, staff }) => {
 
   const dispatch = useDispatch();
 
+  /** DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
   const taskDelete = useSelector(state => state.taskDelete);
-  const { loading: loadingDelete, success: successDelete } = taskDelete;
+  const {
+    loading: loadingDelete,
+    success: successDelete,
+    error: errorDelete,
+  } = taskDelete;
 
   useEffect(() => {
     if (successDelete) {
       setRemove({ id: "", status: false });
       dispatch({ type: DELETE_TASK_RESET });
     }
-  }, [dispatch, successDelete]);
 
-  function deleteHandler(id) {
-    dispatch(resourceDeleteAction(id));
-  }
+    if (errorDelete) {
+      setRemove({ id: "", status: false });
+      dispatch({ type: DELETE_TASK_RESET });
+    }
+  }, [dispatch, errorDelete, successDelete]);
+
+  const deleteTaskHandler = id => {
+    console.log("wtf");
+    dispatch(taskDeleteAction(id));
+  };
+  /** DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
 
   return (
     <>
@@ -298,7 +309,7 @@ export const TaskList = ({ data, staff }) => {
           <Button
             loading={loadingDelete}
             size="xs"
-            onClick={() => deleteHandler(remove.id)}
+            onClick={() => deleteTaskHandler(remove.id)}
           >
             Confirm
           </Button>
@@ -362,20 +373,25 @@ export const TaskList = ({ data, staff }) => {
               >
                 Due Date
               </Th>
-              <Th
-                sorted={sortBy === "due"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("due")}
-              >
-                Time Remaining
-              </Th>
-              <Th
-                sorted={sortBy === "grade"}
-                reversed={reverseSortDirection}
-                onSort={() => setSorting("grade")}
-              >
-                Grade
-              </Th>
+
+              {!staff && (
+                <>
+                  <Th
+                    sorted={sortBy === "due"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("due")}
+                  >
+                    Time Remaining
+                  </Th>
+                  <Th
+                    sorted={sortBy === "grade"}
+                    reversed={reverseSortDirection}
+                    onSort={() => setSorting("grade")}
+                  >
+                    Grade
+                  </Th>
+                </>
+              )}
               {staff && (
                 <Th
                   sorted={sortBy === "updatedAt"}

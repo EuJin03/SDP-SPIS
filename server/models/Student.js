@@ -95,7 +95,8 @@ studentSchema.pre("save", async function (next) {
     next();
   }
 
-  this.password = bcrypt.hash(this.password, 10);
+  const salt = await bcrypt.genSalt(10);
+  this.password = bcrypt.hash(this.password, salt);
 });
 
 const Student = mongoose.model("Student", studentSchema);

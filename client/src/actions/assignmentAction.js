@@ -104,7 +104,7 @@ export const taskDetailsAction = id => async (dispatch, getState) => {
   }
 };
 
-export const taskCreateReducer = task => async (dispatch, getState) => {
+export const taskCreateAction = task => async (dispatch, getState) => {
   try {
     dispatch({
       type: CREATE_TASK_REQUEST,
@@ -180,7 +180,7 @@ export const taskUpdateAction = (task, id) => async (dispatch, getState) => {
   }
 };
 
-export const taskDeleteAction = id => async (getState, dispatch) => {
+export const taskDeleteAction = id => async (dispatch, getState) => {
   try {
     dispatch({
       type: DELETE_TASK_REQUEST,
@@ -231,6 +231,7 @@ export const taskAssignAction = id => async (dispatch, getState) => {
 
     const { data } = await axios.patch(
       `/api/v1/assignment/assign-task/${id}`,
+      {},
       config
     );
 

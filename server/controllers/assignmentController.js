@@ -3,6 +3,7 @@ import Course from "../models/Course.js";
 import Student from "../models/Student.js";
 import Assignment from "../models/Assignment.js";
 import { validateURL } from "../utils/validator.js";
+import Staff from "../models/Staff.js";
 
 // Lecturer
 // ------------------------------------------------------
@@ -33,6 +34,46 @@ const viewTask = asyncHandler(async (req, res) => {
         task[i]._doc
       );
       updatedTask.push(merged);
+    }
+  };
+
+  await pushCourseName(task);
+
+  res.json(updatedTask);
+});
+
+// Lecturer
+// ------------------------------------------------------
+// @desc Lecturer view task uploaded by course ID
+// @route GET /api/assignment/uploaded-task/c/:courseId
+// @access Private (lecturer only)
+const viewTaskByCourse = asyncHandler(async (req, res) => {
+  const { _id } = req.staff;
+  const { courseId } = req.params;
+
+  const task = await Assignment.find({ uploadedBy: _id });
+
+  if (!task) {
+    res.status(400);
+    throw new Error("Tasks not found");
+  }
+
+  let updatedTask = [];
+  const pushCourseName = async task => {
+    for (let i = 0; i < task.length; i++) {
+      if (task[i].course.toString() === courseId.toString()) {
+        const course = await Course.findById(task[i].course);
+        const merged = Object.assign(
+          {
+            courseName: course.courseName,
+            subjectName: course.subjects.filter(
+              s => s._id.toString() === task[i].subject.toString()
+            )[0].subjectName,
+          },
+          task[i]._doc
+        );
+        updatedTask.push(merged);
+      }
     }
   };
 
@@ -228,7 +269,7 @@ const deleteTask = asyncHandler(async (req, res) => {
 // @access Private (lecturer only)
 const assignTask = asyncHandler(async (req, res) => {
   const { assignmentId } = req.params;
-  const task = await Assignment.findById(assignmentId);
+  const task = await Assignment.findOne({ _id: assignmentId });
 
   if (!task) {
     res.status(400);
@@ -238,12 +279,13 @@ const assignTask = asyncHandler(async (req, res) => {
   let studentCounter = task.studentAssigned;
 
   if (new Date(task.due).toISOString() > new Date(Date.now()).toISOString()) {
-    const students = await Student.find({}).select("-password");
+    const students = await Student.find({});
 
     if (!students) {
       res.status(404);
       throw new Error("Student not found");
     }
+
     let updateStudent;
     const pushAssignment = async students => {
       for (let i = 0; i < students.length; i++) {
@@ -254,7 +296,6 @@ const assignTask = asyncHandler(async (req, res) => {
             updateStudent = await Student.findById(studentIndex).select(
               "-password"
             );
-
             if (
               !updateStudent.assignments.find(
                 asg => asg.assignment.toString() === assignmentId.toString()
@@ -399,6 +440,7 @@ const viewStudentTask = asyncHandler(async (req, res) => {
           topicName: assignment.topicName,
           topicURL: assignment.topicURL,
           due: assignment.due,
+          uploadedBy: assignment.uploadedBy,
         },
         asg[i]._doc
       );
@@ -429,7 +471,30 @@ const viewStudentTask = asyncHandler(async (req, res) => {
 
   await pushCourseDetails(updatedStudentAssignment);
 
-  res.status(200).json(updatedStudentAssignmentDetails);
+  let updatedTask = [];
+  const updated = async task => {
+    for (let i = 0; i < task.length; i++) {
+      const staff = await Staff.findById(task[i].uploadedBy);
+
+      if (staff) {
+        const merged = Object.assign(
+          {
+            staffName: staff.lName + " " + staff.fName,
+            staffEmail: staff.email,
+          },
+          task[i]
+        );
+
+        updatedTask.push(merged);
+      } else {
+        updatedTask.push(task[i]);
+      }
+    }
+  };
+
+  await updated(updatedStudentAssignmentDetails);
+
+  res.status(200).json(updatedTask);
 });
 
 // @desc View single assignment
@@ -505,6 +570,7 @@ const submitAssignment = asyncHandler(async (req, res) => {
 
 export {
   viewTask,
+  viewTaskByCourse,
   viewSingleTask,
   assignTask,
   createTask,
