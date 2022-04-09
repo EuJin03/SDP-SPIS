@@ -1,4 +1,4 @@
-import { Button, Tooltip, UnstyledButton } from "@mantine/core";
+import { Tooltip, UnstyledButton } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { Copy } from "tabler-icons-react";
 
@@ -16,6 +16,7 @@ export function ButtonCopy({ ctrlc }) {
       opened={clipboard.copied}
     >
       <UnstyledButton
+        mt="4px"
         radius="xl"
         size="sm"
         styles={{}}

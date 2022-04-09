@@ -4,15 +4,18 @@ import {
   ASSIGN_TASK_SUCCESS,
   CREATE_TASK_FAIL,
   CREATE_TASK_REQUEST,
+  CREATE_TASK_RESET,
   CREATE_TASK_SUCCESS,
   DELETE_TASK_FAIL,
   DELETE_TASK_REQUEST,
+  DELETE_TASK_RESET,
   DELETE_TASK_SUCCESS,
   DISPLAY_SUBMISSION_FAIL,
   DISPLAY_SUBMISSION_REQUEST,
   DISPLAY_SUBMISSION_SUCCESS,
   GRADE_TASK_FAIL,
   GRADE_TASK_REQUEST,
+  GRADE_TASK_RESET,
   GRADE_TASK_SUCCESS,
   SINGLE_ASSIGNMENT_FAIL,
   SINGLE_ASSIGNMENT_REQUEST,
@@ -22,15 +25,19 @@ import {
   SINGLE_TASK_SUCCESS,
   SUBMIT_ASSIGNMENT_FAIL,
   SUBMIT_ASSIGNMENT_REQUEST,
+  SUBMIT_ASSIGNMENT_RESET,
   SUBMIT_ASSIGNMENT_SUCCESS,
   UPDATE_TASK_FAIL,
   UPDATE_TASK_REQUEST,
+  UPDATE_TASK_RESET,
   UPDATE_TASK_SUCCESS,
   VIEW_ASSIGNMENT_FAIL,
   VIEW_ASSIGNMENT_REQUEST,
+  VIEW_ASSIGNMENT_RESET,
   VIEW_ASSIGNMENT_SUCCESS,
   VIEW_TASK_FAIL,
   VIEW_TASK_REQUEST,
+  VIEW_TASK_RESET,
   VIEW_TASK_SUCCESS,
 } from "../constants/assignmentConstant";
 
@@ -40,9 +47,11 @@ export const taskListReducer = (state = { tasks: [] }, action) => {
     case VIEW_TASK_REQUEST:
       return { loading: true, tasks: [] };
     case VIEW_TASK_SUCCESS:
-      return { loading: false, tasks: action.payload.tasks };
+      return { loading: false, tasks: action.payload };
     case VIEW_TASK_FAIL:
       return { loading: false, error: action.payload };
+    case VIEW_TASK_RESET:
+      return {};
     default:
       return state;
   }
@@ -69,6 +78,8 @@ export const taskCreateReducer = (state = {}, action) => {
       return { loading: false, success: true };
     case CREATE_TASK_FAIL:
       return { loading: false, error: action.payload };
+    case CREATE_TASK_RESET:
+      return {};
     default:
       return state;
   }
@@ -82,6 +93,8 @@ export const taskUpdateReducer = (state = { task: {} }, action) => {
       return { loading: false, success: true, task: action.payload };
     case UPDATE_TASK_FAIL:
       return { loading: false, error: action.payload };
+    case UPDATE_TASK_RESET:
+      return {};
     default:
       return state;
   }
@@ -95,6 +108,8 @@ export const taskDeleteReducer = (state = {}, action) => {
       return { loading: false, success: true };
     case DELETE_TASK_FAIL:
       return { loading: false, error: action.payload };
+    case DELETE_TASK_RESET:
+      return {};
     default:
       return state;
   }
@@ -136,6 +151,8 @@ export const taskGradeReducer = (state = { submission: {} }, action) => {
       return { loading: false, success: true, submission: action.payload };
     case GRADE_TASK_FAIL:
       return { loading: false, error: action.payload };
+    case GRADE_TASK_RESET:
+      return {};
     default:
       return state;
   }
@@ -150,6 +167,8 @@ export const assignmentViewReducer = (state = { assignments: [] }, action) => {
       return { loading: false, assignments: action.payload };
     case VIEW_ASSIGNMENT_FAIL:
       return { loading: false, error: action.payload };
+    case VIEW_ASSIGNMENT_RESET:
+      return {};
     default:
       return state;
   }
@@ -177,6 +196,8 @@ export const assignmentSubmitReducer = (state = { submission: {} }, action) => {
       return { loading: false, success: true, submission: action.payload };
     case SUBMIT_ASSIGNMENT_FAIL:
       return { loading: false, error: action.payload };
+    case SUBMIT_ASSIGNMENT_RESET:
+      return {};
     default:
       return state;
   }

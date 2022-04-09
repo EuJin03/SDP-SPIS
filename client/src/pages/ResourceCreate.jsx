@@ -32,6 +32,7 @@ import {
 import { courseDetailsAction } from "../actions/courseAction";
 import { resourceCreateAction } from "../actions/resourceAction";
 import { DropZone } from "../components/DropZone";
+import { usePrevious } from "../hooks/usePrevious";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
 
 const useStyles = createStyles(theme => ({
@@ -84,6 +85,8 @@ const ResourceCreate = () => {
   const [topicURL, setTopicURL] = useState("");
   const [filePath, setFilePath] = useState("");
 
+  const prevCourse = usePrevious(courseId);
+
   const navigate = useNavigate();
 
   const courseDetails = useSelector(state => state.courseDetails);
@@ -100,6 +103,9 @@ const ResourceCreate = () => {
     if (courseId && !course?.courseName) {
       dispatch(courseDetailsAction(courseId));
     }
+    if (courseId !== prevCourse) {
+      dispatch(courseDetailsAction(courseId));
+    }
 
     if (!courseId) {
       navigate("/", { replace: true });
@@ -108,7 +114,7 @@ const ResourceCreate = () => {
     if (course?.courseName && subject === "") {
       setSubject(course.subjects[0]._id);
     }
-  }, [course, courseId, dispatch, navigate, subject]);
+  }, [course, courseId, dispatch, navigate, prevCourse, subject]);
 
   useEffect(() => {
     if (success) {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
 import { resourceListAction } from "../actions/resourceAction";
 import {
   ActionIcon,
@@ -9,7 +8,6 @@ import {
   createStyles,
   LoadingOverlay,
   NativeSelect,
-  ScrollArea,
   Text,
 } from "@mantine/core";
 import { Check, FilePlus, Hash, X } from "tabler-icons-react";
@@ -26,26 +24,19 @@ const useStyles = createStyles(theme => ({
     alignItems: "center",
     height: "100vh",
     width: "100%",
-    padding: "90px",
     position: "relative",
-  },
-  container: {
-    flex: "0.84",
-    width: "80%",
   },
   header: {
     flex: "0.16",
-    width: "80%",
+    width: "90%",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
   },
-
   rightHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    width: "26%",
   },
 }));
 
@@ -77,7 +68,7 @@ const Resource = () => {
   const { loading, error, resources } = resourceList;
 
   const resourceDelete = useSelector(state => state.resourceDelete);
-  const { success: successRemove } = resourceDelete;
+  const { success: successRemove, error: errorRemove } = resourceDelete;
 
   const resourceUpdate = useSelector(state => state.resourceUpdate);
   const { success: successEdit } = resourceUpdate;
@@ -102,7 +93,16 @@ const Resource = () => {
       showNotification({
         autoClose: 4000,
         title: "Sad",
-        message: "Resource cannot be deleted",
+        message: "Resource cannot be found",
+        color: "red",
+        icon: <X />,
+      });
+
+    errorRemove &&
+      showNotification({
+        autoClose: 4000,
+        title: "Sad",
+        message: "Resource cannot be removed",
         color: "red",
         icon: <X />,
       });
@@ -110,7 +110,15 @@ const Resource = () => {
     if (course.length !== 0 && prevCourse !== course) {
       dispatch(resourceListAction(course));
     }
-  }, [course, dispatch, error, prevCourse, successEdit, successRemove]);
+  }, [
+    course,
+    dispatch,
+    error,
+    errorRemove,
+    prevCourse,
+    successEdit,
+    successRemove,
+  ]);
 
   const data = courseInfo.map(v => ({
     value: v.id,
@@ -136,7 +144,7 @@ const Resource = () => {
     }
 
     if (createError) {
-      navigate(-1);
+      dispatch({ type: CREATE_RESOURCE_RESET });
       showNotification({
         title: "Sad",
         message: "Resource cannot be created",
@@ -161,9 +169,15 @@ const Resource = () => {
             Resources
           </Text>
           <Box className={classes.rightHeader}>
-            <ActionIcon component={Link} to={`/resources/${course}/create`}>
-              <FilePlus size="26" color="#427AEB" />
-            </ActionIcon>
+            {userInfo?.studentID ? null : (
+              <ActionIcon
+                mr="md"
+                component={Link}
+                to={`/resources/${course}/create`}
+              >
+                <FilePlus size="26" color="#427AEB" />
+              </ActionIcon>
+            )}
             <NativeSelect
               placeholder="Select a course"
               data={data}

@@ -32,7 +32,7 @@ import {
   VIEW_TASK_SUCCESS,
 } from "../constants/assignmentConstant";
 
-export const taskListAction = () => async (dispatch, getState) => {
+export const taskListAction = courseId => async (dispatch, getState) => {
   try {
     dispatch({
       type: VIEW_TASK_REQUEST,
@@ -49,7 +49,7 @@ export const taskListAction = () => async (dispatch, getState) => {
     };
 
     const { data } = await axios.get(
-      `/api/v1/assignment/uploaded-task`,
+      `/api/v1/assignment/uploaded-task/c/${courseId}`,
       config
     );
 

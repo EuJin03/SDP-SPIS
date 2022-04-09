@@ -54,7 +54,7 @@ export const resourceCreateReducer = (state = {}, action) => {
     case CREATE_RESOURCE_FAIL:
       return { loading: false, error: action.payload };
     case CREATE_RESOURCE_RESET:
-      return (state = {});
+      return {};
     default:
       return state;
   }
@@ -84,7 +84,7 @@ export const resourceDeleteReducer = (state = {}, action) => {
     case DELETE_RESOURCE_FAIL:
       return { loading: false, error: action.payload };
     case DELETE_RESOURCE_RESET:
-      return (state = {});
+      return {};
     default:
       return state;
   }

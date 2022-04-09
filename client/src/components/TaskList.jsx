@@ -13,6 +13,7 @@ import {
   Modal,
   Button,
   Divider,
+  Box,
 } from "@mantine/core";
 import {
   Selector,
@@ -22,13 +23,17 @@ import {
   Pencil,
   Trash,
   ExternalLink,
+  Book2,
+  FileUpload,
+  UserPlus,
+  CloudFog,
 } from "tabler-icons-react";
-import { ButtonCopy } from "./Clipboard";
 import { useDispatch, useSelector } from "react-redux";
 import { resourceDeleteAction } from "../actions/resourceAction";
 import ResourceEditModal from "./ResourceEditModal";
-import { DELETE_RESOURCE_RESET } from "../constants/resourceConstant";
 import dayjs from "dayjs";
+import { DELETE_TASK_RESET } from "../constants/assignmentConstant";
+import { ButtonCopy } from "./Clipboard";
 
 const useStyles = createStyles(theme => ({
   th: {
@@ -101,7 +106,7 @@ function sortData(data, payload) {
   );
 }
 
-export const ResourceList = ({ data, staff }) => {
+export const TaskList = ({ data, staff }) => {
   const [remove, setRemove] = useState({ id: "", status: false });
 
   const [search, setSearch] = useState("");
@@ -147,68 +152,123 @@ export const ResourceList = ({ data, staff }) => {
           rel="noopener noreferrer"
         >
           <Text size="sm" mr="md">
-            {row.topicName.length > 45
-              ? row.topicName.substring(0, 45) + "..."
+            {row.topicName.length > 50
+              ? row.topicName.substring(0, 50) + "..."
               : row.topicName}
           </Text>
           <ExternalLink size={16} />
         </Anchor>
       </td>
       <td>
-        {row.subjectName.length > 45
-          ? row.subjectName.substring(0, 45) + "..."
+        {row.subjectName.length > 50
+          ? row.subjectName.substring(0, 50) + "..."
           : row.subjectName}
       </td>
-      <td style={{ width: 180 }}>
-        {row.staffName.length > 20
-          ? row.staffName.substring(0, 20) + "..."
-          : row.staffName}
-      </td>
-      <td style={{ width: 250 }}>
-        <Group position="apart">
-          {row.staffEmail.length > 25
-            ? row.staffEmail.substring(0, 25) + "..."
-            : row.staffEmail}
-          <ButtonCopy ctrlc={row.staffEmail} />
-        </Group>
-      </td>
-      <td style={{ width: 200 }}>
-        {dayjs(row.updatedAt).format("MMM D, YYYY h:mm A")}
-      </td>
+      {staff ? (
+        <>
+          <td style={{ width: 200 }}>
+            {dayjs(row.due).format("MMM D, YYYY h:mm A")}
+          </td>
 
-      {staff && staff === row.staffEmail ? (
-        <td style={{ width: 100 }}>
-          <Group spacing={6} position="right">
-            <ActionIcon onClick={() => setEditModal(true, row._id)}>
-              <Pencil size={16} />
-            </ActionIcon>
-            <ActionIcon
-              color="red"
-              onClick={() => {
-                setRemove({ id: row._id, status: true });
-              }}
-            >
-              <Trash size={16} />
-            </ActionIcon>
-          </Group>
-        </td>
+          <td style={{ width: 200 }}>
+            {dayjs(row.due).format("MMM D, YYYY h:mm A")}
+          </td>
+          <td style={{ width: 180 }}>
+            <Group spacing={4} position="right">
+              <Box style={{ display: "flex", alignItems: "center" }}>
+                <Text size="xs" style={{ marginRight: 2 }}>
+                  {row.studentAssigned}
+                </Text>
+                <ActionIcon
+                  onClick={() => {
+                    console.log("fak u 2");
+                  }}
+                >
+                  <UserPlus size={16} />
+                </ActionIcon>
+              </Box>
+              <ActionIcon
+                onClick={() => {
+                  console.log("fak u");
+                }}
+              >
+                <Book2 size={16} />
+              </ActionIcon>
+
+              <ActionIcon onClick={() => setEditModal(true, row._id)}>
+                <Pencil size={16} />
+              </ActionIcon>
+              <ActionIcon
+                color="red"
+                onClick={() => {
+                  setRemove({ id: row._id, status: true });
+                }}
+              >
+                <Trash size={16} />
+              </ActionIcon>
+            </Group>
+          </td>
+        </>
       ) : (
-        <td></td>
+        <>
+          <td style={{ width: 180 }}>
+            <Group position="apart">
+              {row.staffName.length > 20
+                ? row.staffName.substring(0, 20) + "..."
+                : row.staffName}
+              <ButtonCopy ctrlc={row.staffEmail} />
+            </Group>
+          </td>
+          <td style={{ width: 200 }}>
+            {dayjs(row.due).format("MMM D, YYYY h:mm A")}
+          </td>
+          <td style={{ width: 180 }}>
+            {dayjs(row.due).diff(new Date()) >= 0
+              ? `${Math.floor(
+                  dayjs(row.due).diff(new Date(), "hours") / 24
+                )} days ${
+                  dayjs(row.due).diff(new Date(), "hours") -
+                  Math.floor(dayjs(row.due).diff(new Date(), "hours") / 24) * 24
+                } hours`
+              : "-"}
+          </td>
+          <td style={{ width: 120 }}>
+            {row.submission ? row.grade : "Not graded"}
+          </td>
+          <td style={{ width: 70 }}>
+            <Group spacing={0} position="right">
+              <ActionIcon
+                onClick={() => {
+                  if (row.submission) {
+                    console.log("hi");
+                  } else {
+                    console.log("bye");
+                  }
+                }}
+              >
+                <FileUpload
+                  color={row.submission ? "green" : "#1C7ED6"}
+                  size={20}
+                />
+              </ActionIcon>
+            </Group>
+          </td>
+        </>
       )}
     </tr>
   ));
 
   const dispatch = useDispatch();
 
-  const resourceDelete = useSelector(state => state.resourceDelete);
-  const { loading, success } = resourceDelete;
+  const taskDelete = useSelector(state => state.taskDelete);
+  const { loading: loadingDelete, success: successDelete } = taskDelete;
 
   useEffect(() => {
-    if (success) {
+    if (successDelete) {
       setRemove({ id: "", status: false });
-      dispatch({ type: DELETE_RESOURCE_RESET });
+      dispatch({ type: DELETE_TASK_RESET });
     }
-  }, [dispatch, success]);
+  }, [dispatch, successDelete]);
 
   function deleteHandler(id) {
     dispatch(resourceDeleteAction(id));
@@ -236,7 +296,7 @@ export const ResourceList = ({ data, staff }) => {
         <Divider my="lg" />
         <Group position="right">
           <Button
-            loading={loading}
+            loading={loadingDelete}
             size="xs"
             onClick={() => deleteHandler(remove.id)}
           >
@@ -285,28 +345,47 @@ export const ResourceList = ({ data, staff }) => {
               >
                 Subject
               </Th>
+
+              {!staff && (
+                <Th
+                  sorted={sortBy === "staffName"}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting("staffName")}
+                >
+                  Uploaded By
+                </Th>
+              )}
               <Th
-                sorted={sortBy === "staffName"}
+                sorted={sortBy === "due"}
                 reversed={reverseSortDirection}
-                onSort={() => setSorting("staffName")}
+                onSort={() => setSorting("due")}
               >
-                Uploaded By
+                Due Date
               </Th>
               <Th
-                sorted={sortBy === "staffEmail"}
+                sorted={sortBy === "due"}
                 reversed={reverseSortDirection}
-                onSort={() => setSorting("staffEmail")}
+                onSort={() => setSorting("due")}
               >
-                Staff Email
+                Time Remaining
               </Th>
               <Th
-                sorted={sortBy === "updatedAt"}
+                sorted={sortBy === "grade"}
                 reversed={reverseSortDirection}
-                onSort={() => setSorting("updatedAt")}
+                onSort={() => setSorting("grade")}
               >
-                Last Modified
+                Grade
               </Th>
-              {staff && <Th />}
+              {staff && (
+                <Th
+                  sorted={sortBy === "updatedAt"}
+                  reversed={reverseSortDirection}
+                  onSort={() => setSorting("updatedAt")}
+                >
+                  Last Modified
+                </Th>
+              )}
+              <Th />
             </tr>
           </thead>
           <tbody>

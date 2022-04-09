@@ -1,4 +1,8 @@
 import axios from "axios";
+import {
+  VIEW_ASSIGNMENT_RESET,
+  VIEW_TASK_RESET,
+} from "../constants/assignmentConstant";
 import { VIEW_COURSENAME_RESET } from "../constants/courseConstant";
 import {
   USER_LOGIN_FAIL,
@@ -111,6 +115,8 @@ export const logout = () => dispatch => {
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: VIEW_COURSENAME_RESET });
+  dispatch({ type: VIEW_ASSIGNMENT_RESET });
+  dispatch({ type: VIEW_TASK_RESET });
 };
 
 export const getStudentDetails = () => async (dispatch, getState) => {
