@@ -407,8 +407,10 @@ const gradePaper = asyncHandler(async (req, res) => {
   }
 
   const gradeTask = student.assignments.filter(
-    assignment => assignment._id.toString() === assignmentId.toString()
+    assignment => assignment.assignment.toString() === assignmentId.toString()
   );
+
+  console.log(gradeTask);
 
   if (!gradeTask || gradeTask.length === 0) {
     res.status(404);
@@ -520,7 +522,7 @@ const viewSingleStudentTask = asyncHandler(async (req, res) => {
     }
   }
 
-  res.json(singleAssignment);
+  res.json(singleAssignment[0]);
 });
 
 // @desc Submit assignment

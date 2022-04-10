@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Logout } from "tabler-icons-react";
+import { Logout, X } from "tabler-icons-react";
 import { viewCourseNameAction } from "../actions/courseAction";
 import {
   LoadingOverlay,
@@ -9,6 +9,7 @@ import {
   createStyles,
   Box,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { logout } from "../actions/studentAction";
 
 const useStyles = createStyles(theme => ({
@@ -41,7 +42,7 @@ const Dashboard = () => {
   const { userInfo } = userLogin;
 
   const courseNames = useSelector(state => state.courseNames);
-  const { loading } = courseNames;
+  const { loading, error: courseNameError } = courseNames;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -52,6 +53,16 @@ const Dashboard = () => {
     }
     if (userInfo && !userInfo?.studentID) {
       dispatch(viewCourseNameAction(userInfo.course));
+    }
+
+    if (courseNameError) {
+      showNotification({
+        autoClose: 4000,
+        title: "Oops, something went wrong",
+        message: "Please check your internet connections!",
+        color: "red",
+        icon: <X />,
+      });
     }
   }, [dispatch, userInfo]);
 

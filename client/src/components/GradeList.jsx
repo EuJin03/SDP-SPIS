@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   createStyles,
   Table,
@@ -10,24 +10,15 @@ import {
   TextInput,
   Anchor,
   ActionIcon,
-  Modal,
-  Button,
-  Divider,
-  Avatar,
-  Box,
 } from "@mantine/core";
 import {
   Selector,
   ChevronDown,
   ChevronUp,
   Search,
-  Pencil,
-  Trash,
   ExternalLink,
   Checklist,
 } from "tabler-icons-react";
-import { ButtonCopy } from "./Clipboard";
-import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import GradeModal from "./GradeModal";
 
@@ -93,18 +84,30 @@ function sortData(data, payload) {
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
-        return b[payload.sortBy].localeCompare(a[payload.sortBy]);
+        if (
+          typeof a[payload.sortBy] === "number" ||
+          typeof b[payload.sortBy] === "number"
+        ) {
+          return b[payload.sortBy] - a[payload.sortBy];
+        } else {
+          return b[payload.sortBy].localeCompare(a[payload.sortBy]);
+        }
       }
 
-      return a[payload.sortBy].localeCompare(b[payload.sortBy]);
+      if (
+        typeof a[payload.sortBy] === "number" ||
+        typeof b[payload.sortBy] === "number"
+      ) {
+        return a[payload.sortBy] - b[payload.sortBy];
+      } else {
+        return a[payload.sortBy].localeCompare(b[payload.sortBy]);
+      }
     }),
     payload.search
   );
 }
 
 export const GradeList = ({ data }) => {
-  const [remove, setRemove] = useState({ id: "", status: false });
-
   const [search, setSearch] = useState("");
   const [sortedData, setSortedData] = useState(data);
   const [sortBy, setSortBy] = useState(null);
@@ -127,14 +130,14 @@ export const GradeList = ({ data }) => {
 
   const [toggle, setToggle] = useState(false);
   const [editId, setEditId] = useState("");
-  const [name, setName] = useState("");
-  const [editGrade, setEditGrade] = useState("");
+  const [studentID, setStudentID] = useState("");
+  const [editGrade, setEditGrade] = useState(1);
   const [editComment, setEditComment] = useState("");
 
-  const setEditModal = (bool, id, name, grade, comment) => {
+  const setEditModal = (bool, id, studentID, grade, comment) => {
     setToggle(bool);
     setEditId(id);
-    setName(name);
+    setStudentID(studentID);
     setEditGrade(grade);
     setEditComment(comment);
   };
@@ -143,7 +146,7 @@ export const GradeList = ({ data }) => {
     <tr key={row.assignments[0]._id}>
       <td style={{ width: "140px" }}>{row.studentID}</td>
       <td>{row.lName.substring(0, 28) + " " + row.fName.substring(0, 28)}</td>
-      <td style={{ width: 160 }}>
+      <td style={{ width: 140 }}>
         <Anchor
           size="sm"
           href={row.assignments[0].submissionFile}
@@ -164,7 +167,7 @@ export const GradeList = ({ data }) => {
       <td style={{ width: "180px" }}>
         {dayjs(row.updatedAt).format("MMM D, YYYY h:mm A")}
       </td>
-      <td style={{ width: "120px" }}>
+      <td style={{ width: "110px" }}>
         {row.assignments[0].grade === 0
           ? "Not graded"
           : row.assignments[0].grade}
@@ -182,7 +185,7 @@ export const GradeList = ({ data }) => {
             setEditModal(
               true,
               row.assignments[0]._id,
-              row.lName + " " + row.fName,
+              row.studentID,
               row.assignments[0].grade,
               row.assignments[0].comments
             )
@@ -194,14 +197,12 @@ export const GradeList = ({ data }) => {
     </tr>
   ));
 
-  const dispatch = useDispatch();
-
   return (
     <>
       {editId !== "" && (
         <GradeModal
           key={editId}
-          name={name}
+          studentID={studentID}
           grade={editGrade}
           comment={editComment}
           editToggle={toggle}
@@ -239,7 +240,7 @@ export const GradeList = ({ data }) => {
                 reversed={reverseSortDirection}
                 onSort={() => setSorting("lName")}
               >
-                Student Name
+                Name
               </Th>
               <th>
                 <Text size="sm" weight={500}>

@@ -37,6 +37,6 @@ router.route("/:assignmentId").delete(protectStaff, deleteTask);
 router
   .route("/grade-paper")
   .get(protectStaff, viewPaper)
-  .post(protectStaff, gradePaper);
+  .patch(protectStaff, gradePaper);
 
 export default router;

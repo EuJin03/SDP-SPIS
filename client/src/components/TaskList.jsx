@@ -26,6 +26,7 @@ import {
   Book2,
   FileUpload,
   UserPlus,
+  X,
 } from "tabler-icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -37,6 +38,8 @@ import {
 } from "../actions/assignmentAction";
 import TaskEditModal from "./TaskEditModal";
 import { Link } from "react-router-dom";
+import { showNotification } from "@mantine/notifications";
+import SubmitModal from "./SubmitModal";
 
 const useStyles = createStyles(theme => ({
   th: {
@@ -100,10 +103,24 @@ function sortData(data, payload) {
   return filterData(
     [...data].sort((a, b) => {
       if (payload.reversed) {
-        return b[payload.sortBy].localeCompare(a[payload.sortBy]);
+        if (
+          typeof a[payload.sortBy] === "number" ||
+          typeof b[payload.sortBy] === "number"
+        ) {
+          return b[payload.sortBy] - a[payload.sortBy];
+        } else {
+          return b[payload.sortBy].localeCompare(a[payload.sortBy]);
+        }
       }
 
-      return a[payload.sortBy].localeCompare(b[payload.sortBy]);
+      if (
+        typeof a[payload.sortBy] === "number" ||
+        typeof b[payload.sortBy] === "number"
+      ) {
+        return a[payload.sortBy] - b[payload.sortBy];
+      } else {
+        return a[payload.sortBy].localeCompare(b[payload.sortBy]);
+      }
     }),
     payload.search
   );
@@ -134,10 +151,16 @@ export const TaskList = ({ data, staff }) => {
 
   const [toggle, setToggle] = useState(false);
   const [editId, setEditId] = useState("");
+  const [submitId, setSubmitId] = useState("");
 
   const setEditModal = (bool, id) => {
     setToggle(bool);
     setEditId(id);
+  };
+
+  const setSubmitModal = (bool, id) => {
+    setToggle(bool);
+    setSubmitId(id);
   };
 
   const rows = sortedData.map(row => (
@@ -182,7 +205,20 @@ export const TaskList = ({ data, staff }) => {
                 <Text size="xs" style={{ marginRight: 2 }}>
                   {row.studentAssigned}
                 </Text>
-                <ActionIcon onClick={() => dispatch(taskAssignAction(row._id))}>
+                <ActionIcon
+                  onClick={() =>
+                    dayjs(row.due).diff(new Date()) > 0
+                      ? dispatch(taskAssignAction(row._id))
+                      : showNotification({
+                          autoClose: 4000,
+                          title: "Oops, the assignment is due",
+                          message:
+                            "You cannot assign this task to students anymore!",
+                          color: "red",
+                          icon: <X />,
+                        })
+                  }
+                >
                   <UserPlus size={16} />
                 </ActionIcon>
               </Box>
@@ -224,7 +260,7 @@ export const TaskList = ({ data, staff }) => {
           >
             {dayjs(row.due).format("MMM D, YYYY h:mm A")}
           </td>
-          <td style={{ width: 180 }}>
+          <td style={{ width: 160 }}>
             {dayjs(row.due).diff(new Date()) >= 0
               ? `${Math.floor(
                   dayjs(row.due).diff(new Date(), "hours") / 24
@@ -235,16 +271,25 @@ export const TaskList = ({ data, staff }) => {
               : "-"}
           </td>
           <td style={{ width: 120 }}>
-            {row.submission ? row.grade : "Not graded"}
+            {row.grade !== 0 ? row.grade.toString() : "Not graded"}
           </td>
-          <td style={{ width: 70 }}>
+          <td style={{ width: 50 }}>
             <Group spacing={0} position="right">
               <ActionIcon
                 onClick={() => {
-                  if (row.submission) {
-                    console.log("hi");
-                  } else {
-                    console.log("bye");
+                  if (dayjs(row.due).diff(new Date()) > 0) {
+                    setSubmitModal(true, row._id);
+                  } else if (
+                    !row.submission &&
+                    dayjs(row.due).diff(new Date()) < 0
+                  ) {
+                    showNotification({
+                      autoClose: 4000,
+                      title: "Oops, the assignment is due",
+                      message: "You cannot submit the assignment anymore!",
+                      color: "red",
+                      icon: <X />,
+                    });
                   }
                 }}
               >
@@ -283,7 +328,6 @@ export const TaskList = ({ data, staff }) => {
   }, [dispatch, errorDelete, successDelete]);
 
   const deleteTaskHandler = id => {
-    console.log("wtf");
     dispatch(taskDeleteAction(id));
   };
   /** DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
@@ -296,6 +340,14 @@ export const TaskList = ({ data, staff }) => {
           taskId={editId}
           editToggle={toggle}
           setEditToggle={setEditModal}
+        />
+      )}
+      {submitId !== "" && (
+        <SubmitModal
+          key={submitId}
+          submissionId={submitId}
+          editToggle={toggle}
+          setEditToggle={setSubmitModal}
         />
       )}
       <Modal
@@ -379,13 +431,11 @@ export const TaskList = ({ data, staff }) => {
 
               {!staff && (
                 <>
-                  <Th
-                    sorted={sortBy === "due"}
-                    reversed={reverseSortDirection}
-                    onSort={() => setSorting("due")}
-                  >
-                    Time Remaining
-                  </Th>
+                  <th>
+                    <Text size="sm" weight="600">
+                      Time Remaining
+                    </Text>
+                  </th>
                   <Th
                     sorted={sortBy === "grade"}
                     reversed={reverseSortDirection}
@@ -404,7 +454,7 @@ export const TaskList = ({ data, staff }) => {
                   Last Modified
                 </Th>
               )}
-              <Th />
+              <th />
             </tr>
           </thead>
           <tbody>

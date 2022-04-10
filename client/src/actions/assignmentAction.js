@@ -394,7 +394,7 @@ export const assignmentDetailsAction = asgId => async (dispatch, getState) => {
   }
 };
 export const assignmentSubmitAction =
-  (submissionURL, asgId) => async (dispatch, getState) => {
+  (submissionId, submissionURL) => async (dispatch, getState) => {
     try {
       dispatch({
         type: VIEW_ASSIGNMENT_REQUEST,
@@ -411,9 +411,11 @@ export const assignmentSubmitAction =
         },
       };
 
-      const { data } = await axios.patch(
-        `/api/v1/assignment/submit-task/${asgId}`,
-        submissionURL,
+      console.log(submissionURL);
+      console.log(submissionId);
+      const { data } = await axios.post(
+        `/api/v1/assignment/submit-task/${submissionId}`,
+        { submissionFile: submissionURL },
         config
       );
 

@@ -84,6 +84,8 @@ const Assignment = () => {
     assignments,
   } = assignmentView;
 
+  console.log(assignments);
+
   useEffect(() => {
     assignmentError &&
       showNotification({

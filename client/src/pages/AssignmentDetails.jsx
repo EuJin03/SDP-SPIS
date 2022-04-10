@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Box,
+  Button,
   Center,
   createStyles,
   Divider,
@@ -37,6 +38,13 @@ const useStyles = createStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
+  },
+
+  test: {
+    width: "84%",
+    display: "flex",
+    justifyContent: "space-between",
     alignItems: "center",
   },
 }));
@@ -83,19 +91,29 @@ const AssignmentDetails = () => {
               style={{ width: "80%" }}
               align="center"
             >
-              <Text
-                component="span"
-                align="center"
-                variant="gradient"
-                gradient={{ from: "indigo", to: "cyan", deg: 45 }}
-                weight={700}
-                style={{
-                  fontFamily: "Greycliff CF, sans-serif",
-                  fontSize: "26px",
-                }}
-              >
-                Assignment Details
-              </Text>
+              <Box className={classes.test}>
+                <Text
+                  component="span"
+                  align="center"
+                  variant="gradient"
+                  gradient={{ from: "indigo", to: "cyan", deg: 45 }}
+                  weight={700}
+                  style={{
+                    fontFamily: "Greycliff CF, sans-serif",
+                    fontSize: "26px",
+                  }}
+                >
+                  Assignment Details
+                </Text>
+                <Button
+                  component={Link}
+                  to="/assignments"
+                  variant="outline"
+                  size="xs"
+                >
+                  Return
+                </Button>
+              </Box>
               <SimpleGrid cols={3} breakpoints={[{ maxWidth: "sm", cols: 1 }]}>
                 <Paper withBorder radius="md" p="xs">
                   <Box p="md">

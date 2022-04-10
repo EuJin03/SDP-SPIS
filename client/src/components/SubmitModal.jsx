@@ -1,40 +1,41 @@
 import {
-  Alert,
-  Anchor,
   Button,
   createStyles,
   Divider,
   Group,
-  LoadingOverlay,
   Modal,
   Paper,
   Box,
   Text,
   TextInput,
+  Textarea,
+  NumberInput,
+  Slider,
+  Anchor,
+  LoadingOverlay,
+  Alert,
   UnstyledButton,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  AlertCircle,
-  Ballpen,
-  Book,
-  Book2,
-  Check,
-  ExternalLink,
-  Trash,
-  Link as LinkIcon,
   X,
-  CalendarEvent,
+  Check,
+  Link,
+  ExternalLink,
+  AlertCircle,
+  Trash,
 } from "tabler-icons-react";
 import {
-  taskDetailsAction,
-  taskListAction,
-  taskUpdateAction,
+  assignmentDetailsAction,
+  assignmentSubmitAction,
+  assignmentViewAction,
 } from "../actions/assignmentAction";
-import { UPDATE_TASK_RESET } from "../constants/assignmentConstant";
+import {
+  SUBMIT_ASSIGNMENT_RESET,
+  VIEW_ASSIGNMENT_RESET,
+} from "../constants/assignmentConstant";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
 import { usePrevious } from "../hooks/usePrevious";
 import { DropZone } from "./DropZone";
@@ -77,39 +78,39 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
+const SubmitModal = ({ submissionId, editToggle, setEditToggle }) => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
 
-  const prevTaskId = usePrevious(taskId);
+  const prevSubmissionId = usePrevious(submissionId);
 
-  const taskDetails = useSelector(state => state.taskDetails);
-  const { task, loading, error } = taskDetails;
+  const assignmentDetails = useSelector(state => state.assignmentDetails);
+  const {
+    assignment,
+    loading: assLoading,
+    error: assError,
+  } = assignmentDetails;
 
   const fileUpload = useSelector(state => state.fileUpload);
   const { file, success, error: fileError } = fileUpload;
 
-  const [topicName, setTopicName] = useState("");
-  const [topicURL, setTopicURL] = useState("");
+  const [submissionURL, setSubmissionURL] = useState("");
   const [filePath, setFilePath] = useState("");
-  const [due, setDue] = useState("");
 
   useEffect(() => {
-    if (prevTaskId !== taskId) {
-      dispatch(taskDetailsAction(taskId));
+    if (prevSubmissionId !== submissionId) {
+      dispatch(assignmentDetailsAction(submissionId));
     }
 
-    if (task?.course) {
-      setTopicName(task.topicName);
-      setTopicURL(task.topicURL);
-      setDue(new Date(task.due));
+    if (assignment?.submissionFile) {
+      setSubmissionURL(assignment.submissionFile);
     }
-  }, [dispatch, prevTaskId, task, taskId]);
+  }, [assignment?.submissionFile, dispatch, prevSubmissionId, submissionId]);
 
   useEffect(() => {
     if (success) {
       if (file) {
-        setTopicURL(file.url);
+        setSubmissionURL(file.url);
         setFilePath(file.filepath);
         dispatch({ type: UPLOAD_FILE_RESET });
         showNotification({
@@ -131,59 +132,43 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
     }
   }, [dispatch, file, fileError, success]);
 
-  const taskUpdate = useSelector(state => state.taskUpdate);
+  const removeTopicURL = () => {
+    setTimeout(() => setSubmissionURL(""), 500);
+  };
+
+  const assignmentSubmit = useSelector(state => state.assignmentSubmit);
   const {
-    error: updateError,
-    success: updateSuccess,
-    loading: updateLoading,
-  } = taskUpdate;
+    error: submitError,
+    success: submitSuccess,
+    loading: submitLoading,
+  } = assignmentSubmit;
 
   useEffect(() => {
-    if (updateSuccess) {
-      dispatch({ type: UPDATE_TASK_RESET });
-      dispatch(taskListAction(task.course));
+    if (submitSuccess) {
+      dispatch({ type: SUBMIT_ASSIGNMENT_RESET });
+      dispatch({ type: VIEW_ASSIGNMENT_RESET });
       setEditToggle(false, "");
-      setTopicName("");
-      setTopicURL("");
-      setDue(new Date());
+      setSubmissionURL("");
       showNotification({
         title: "Happy",
-        message: "Resource has been updated successfully",
+        message: "Submission has been uploaded successfully",
         color: "green",
         icon: <Check />,
       });
     }
 
-    if (updateError) {
+    if (submitError) {
       showNotification({
         title: "Sad",
-        message: "Resource is unable to update, please check your input",
+        message: "Submission is unable to upload, please check your input",
         color: "red",
         icon: <X />,
       });
     }
-  }, [dispatch, setEditToggle, task.course, updateError, updateSuccess]);
+  }, [dispatch, setEditToggle, submitError, submitSuccess]);
 
-  const removeTopicURL = () => {
-    setTimeout(() => setTopicURL(""), 500);
-  };
-
-  const updateResourceHandler = e => {
-    e.preventDefault();
-    if (topicURL !== "" && topicName !== "" && due !== null && due !== "") {
-      dispatch(
-        taskUpdateAction(
-          {
-            course: task.course,
-            subject: task.subject,
-            due: due.toISOString(),
-            topicName,
-            topicURL,
-          },
-          taskId
-        )
-      );
-    }
+  const updateFileSubmission = e => {
+    dispatch(assignmentSubmitAction(submissionId, submissionURL));
   };
 
   return (
@@ -193,23 +178,14 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
       onClose={() => setEditToggle(false, "")}
       withCloseButton={false}
       closeOnClickOutside={false}
-      style={{
-        minHeight: "520px",
-        boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
-      }}
       size="700"
     >
       <Box className={classes.wrapper}>
-        {loading && <LoadingOverlay visible={true} />}
-        {updateLoading && <LoadingOverlay visible={true} />}
-        {error && (
+        {assLoading && <LoadingOverlay visible={true} />}
+        {submitLoading && <LoadingOverlay visible={true} />}
+        {assError && (
           <Alert icon={<AlertCircle size={16} />} title="Uh Oh!" color="red">
-            Resource details could not load for some reason!
-          </Alert>
-        )}
-        {updateError && (
-          <Alert icon={<AlertCircle size={16} />} title="Uh Oh!" color="red">
-            Resource could not update for some reason!
+            Assignment submission could not load for some reason!
           </Alert>
         )}
         <Paper
@@ -218,58 +194,29 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
           p="xl"
           withBorder
           style={{
-            minHeight: "320px",
-            width: "800px",
+            width: "600px",
             border: "none",
           }}
         >
           <Text size="xl" weight={500}>
-            Edit Resource Details
+            Assignment Submission
           </Text>
 
           <Divider className={classes.divide} labelPosition="center" mt="lg" />
-          <form onSubmit={e => updateResourceHandler(e)}>
+          <form onSubmit={e => updateFileSubmission(e)}>
             <Group direction="column" grow mt="-md">
-              <Group position="apart" grow="1">
-                <TextInput
-                  label="Course Name"
-                  icon={<Book2 size={16} />}
-                  value={task?.course ? task.courseName : ""}
-                  disabled
-                />
-                <TextInput
-                  label="Subject Name"
-                  icon={<Book size={16} />}
-                  value={task?.course ? task.subjectName : ""}
-                  disabled
-                />
-              </Group>
-              <DatePicker
-                label="Due Date"
-                icon={<CalendarEvent size={16} />}
-                value={due}
-                onChange={e => setDue(e)}
-                required
-                excludeDate={date => date <= new Date()}
-                onFocus={false}
-              />
-              <TextInput
-                required
-                label="Topic Name"
-                icon={<Ballpen size={16} />}
-                placeholder="Topic Name"
-                value={topicName}
-                onChange={event => setTopicName(event.target.value)}
-              />
-
               <Box>
-                {topicURL !== "" ? (
+                {submissionURL !== "" ? (
                   <>
                     <Text mb="sm" size="sm" weight={500}>
-                      Topic Link
+                      Topic Link{" "}
+                      <Text size="xs" weight={400}>
+                        *Can only submit once
+                      </Text>
                     </Text>
+
                     <Box className={classes.resourceLink}>
-                      <LinkIcon color="#ADB5BD" size="16" />
+                      <Link color="#ADB5BD" size="16" />
                       <Box className={classes.box}>
                         <Anchor
                           className={classes.anchor}
@@ -277,17 +224,19 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
                           ml="md"
                           size="sm"
                           weight={500}
-                          href={topicURL}
+                          href={submissionURL}
                         >
-                          {filePath !== "" ? filePath : "Resource"}
+                          {filePath !== "" ? filePath : "Submission"}
                           <ExternalLink
                             style={{ marginLeft: "8px" }}
                             size="16"
                           />
                         </Anchor>
-                        <UnstyledButton onClick={() => removeTopicURL()}>
-                          <Trash color="red" size={14} />
-                        </UnstyledButton>
+                        {assignment?.submission ? null : (
+                          <UnstyledButton onClick={() => removeTopicURL()}>
+                            <Trash color="red" size={14} />
+                          </UnstyledButton>
+                        )}
                       </Box>
                     </Box>
                   </>
@@ -300,16 +249,17 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
                   </>
                 )}
               </Box>
-              <Group position="right" mt="xl" my="-xl">
-                <Button loading={updateLoading} type="submit">
-                  Update
-                </Button>
+              <Group position="right" mt="xl">
+                {assignment?.submission ? null : (
+                  <Button loading={submitLoading} type="submit">
+                    Submit
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   onClick={() => {
                     setEditToggle(false, "");
-                    setTopicName("");
-                    setTopicURL("");
+                    setSubmissionURL("");
                   }}
                   type="button"
                 >
@@ -324,4 +274,4 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
   );
 };
 
-export default TaskEditModal;
+export default SubmitModal;

@@ -1,48 +1,27 @@
 import {
-  Alert,
-  Anchor,
   Button,
   createStyles,
   Divider,
   Group,
-  LoadingOverlay,
   Modal,
   Paper,
   Box,
   Text,
   TextInput,
-  UnstyledButton,
   Textarea,
   NumberInput,
   Slider,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { X, User, Check } from "tabler-icons-react";
 import {
-  AlertCircle,
-  Ballpen,
-  Book,
-  Book2,
-  Check,
-  ExternalLink,
-  Trash,
-  Link as LinkIcon,
-  X,
-  CalendarEvent,
-  User,
-} from "tabler-icons-react";
-import {
-  taskDetailsAction,
-  taskListAction,
-  taskUpdateAction,
+  taskGradeAction,
+  taskSubmissionAction,
 } from "../actions/assignmentAction";
-import { UPDATE_TASK_RESET } from "../constants/assignmentConstant";
-import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
-import { usePrevious } from "../hooks/usePrevious";
-import { DropZone } from "./DropZone";
+import { GRADE_TASK_RESET } from "../constants/assignmentConstant";
+import { useSearchParams } from "react-router-dom";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -120,15 +99,59 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const GradeModal = ({ name, grade, comments, editToggle, setEditToggle }) => {
+const GradeModal = ({
+  studentID,
+  grade,
+  comment,
+  editToggle,
+  setEditToggle,
+}) => {
+  const [search] = useSearchParams();
+  const assignmentId = search.get("id");
+
   const { classes } = useStyles();
   const dispatch = useDispatch();
 
-  const [value, setValue] = useState(40);
+  const [value, setValue] = useState(grade ? grade : 40);
+  const [comm, setComm] = useState(comment ? comment : "");
 
-  const updateResourceHandler = e => {
+  const updateGradeHandler = e => {
     e.preventDefault();
+    dispatch(
+      taskGradeAction({ grade: value, comments: comm }, studentID, assignmentId)
+    );
   };
+
+  const taskGrade = useSelector(state => state.taskGrade);
+  const {
+    error: updateError,
+    success: updateSuccess,
+    loading: updateLoading,
+  } = taskGrade;
+
+  useEffect(() => {
+    if (updateSuccess) {
+      dispatch({ type: GRADE_TASK_RESET });
+      dispatch(taskSubmissionAction(assignmentId));
+      setEditToggle(false, "", 1, "", "");
+      showNotification({
+        title: "Happy",
+        message: "Submission has been updated successfully",
+        color: "green",
+        icon: <Check />,
+      });
+    }
+
+    if (updateError) {
+      showNotification({
+        title: "Sad",
+        message: "Submission is unable to update, please check your input",
+        color: "red",
+        icon: <X />,
+      });
+      dispatch({ type: GRADE_TASK_RESET });
+    }
+  }, [assignmentId, dispatch, setEditToggle, updateError, updateSuccess]);
 
   return (
     <Modal
@@ -155,15 +178,17 @@ const GradeModal = ({ name, grade, comments, editToggle, setEditToggle }) => {
           </Text>
 
           <Divider className={classes.divide} labelPosition="center" mt="lg" />
-          <form onSubmit={e => updateResourceHandler(e)}>
+          <form onSubmit={e => updateGradeHandler(e)}>
             <Group direction="column" grow mt="-md">
               <TextInput
-                label="Student Name"
+                label="Student ID"
                 icon={<User size={16} />}
-                value={name}
+                value={studentID}
+                onChange={() => {}}
               />
               <div className={classes.container}>
                 <NumberInput
+                  required
                   value={value}
                   onChange={setValue}
                   label="Grade"
@@ -189,7 +214,9 @@ const GradeModal = ({ name, grade, comments, editToggle, setEditToggle }) => {
               </div>
               <Textarea
                 placeholder="Your comment"
-                label="Your comment"
+                value={comm}
+                onChange={event => setComm(event.currentTarget.value)}
+                label="Comment"
                 autosize
                 minRows={2}
                 maxRows={4}
@@ -197,7 +224,9 @@ const GradeModal = ({ name, grade, comments, editToggle, setEditToggle }) => {
               />
 
               <Group position="right" mt="xl">
-                <Button type="submit">Update</Button>
+                <Button loading={updateLoading} type="submit">
+                  Update
+                </Button>
                 <Button
                   variant="outline"
                   onClick={() => {
