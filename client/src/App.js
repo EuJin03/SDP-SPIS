@@ -13,6 +13,8 @@ import Course from "./pages/Course";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import ResourceCreate from "./pages/ResourceCreate";
+import AssignmentCreate from "./pages/AssignmentCreate";
+import AssignmentDetails from "./pages/AssignmentDetails";
 
 import "./App.css";
 
@@ -28,7 +30,14 @@ const App = () => {
             <Route path="/user-profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            {/* <Route path="/forgot-password" />
+            <Route path="/reset-password/:token" /> */}
             <Route path="/assignments" element={<Assignment />} />
+            <Route
+              path="/assignments/:courseId/create"
+              element={<AssignmentCreate />}
+            />
+            <Route path="/assignments/grade" element={<AssignmentDetails />} />
             <Route path="/resources" element={<Resource />} />
             <Route
               path="/resources/:courseId/create"

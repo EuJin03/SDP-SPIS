@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  UPDATE_TASK_RESET,
   VIEW_ASSIGNMENT_RESET,
   VIEW_TASK_RESET,
 } from "../constants/assignmentConstant";
@@ -117,6 +118,7 @@ export const logout = () => dispatch => {
   dispatch({ type: VIEW_COURSENAME_RESET });
   dispatch({ type: VIEW_ASSIGNMENT_RESET });
   dispatch({ type: VIEW_TASK_RESET });
+  dispatch({ type: UPDATE_TASK_RESET });
 };
 
 export const getStudentDetails = () => async (dispatch, getState) => {

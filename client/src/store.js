@@ -11,6 +11,7 @@ import {
   taskDetailsReducer,
   taskGradeReducer,
   taskListReducer,
+  taskSubmissionReducer,
   taskUpdateReducer,
 } from "./reducers/assignmentReducer";
 import {
@@ -53,6 +54,7 @@ const reducer = combineReducers({
   taskUpdate: taskUpdateReducer,
   taskDelete: taskDeleteReducer,
   taskAssign: taskAssignReducer,
+  taskSubmission: taskSubmissionReducer,
   taskGrade: taskGradeReducer,
   assignmentView: assignmentViewReducer,
   assignmentDetails: assignmentDetailsReducer,

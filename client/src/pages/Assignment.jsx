@@ -17,7 +17,10 @@ import {
   assignmentViewAction,
 } from "../actions/assignmentAction";
 import { TaskList } from "../components/TaskList";
-import { ASSIGN_TASK_RESET } from "../constants/assignmentConstant";
+import {
+  ASSIGN_TASK_RESET,
+  CREATE_TASK_RESET,
+} from "../constants/assignmentConstant";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -44,7 +47,7 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const Resource = () => {
+const Assignment = () => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -80,6 +83,17 @@ const Resource = () => {
     error: assignmentError,
     assignments,
   } = assignmentView;
+
+  useEffect(() => {
+    assignmentError &&
+      showNotification({
+        autoClose: 4000,
+        title: "Sad",
+        message: "Assignment cannot be found",
+        color: "red",
+        icon: <X />,
+      });
+  }, [assignmentError]);
 
   useEffect(() => {
     if (!userInfo) {
@@ -131,6 +145,7 @@ const Resource = () => {
   }, [course, dispatch, errorDelete, successDelete]);
   /** DELETE DELETE DELETE DELETE DELETE DELETE DELETE */
 
+  /** ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN */
   const taskAssign = useSelector(state => state.taskAssign);
   const { success: successAssign, error: errorAssign, loading } = taskAssign;
 
@@ -167,39 +182,47 @@ const Resource = () => {
         icon: <X />,
       });
   }, [course, dispatch, errorAssign, loading, successAssign]);
+  /** ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN */
 
-  // const resourceUpdate = useSelector(state => state.resourceUpdate);
-  // const { success: successEdit } = resourceUpdate;
+  /** UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE */
+  const taskUpdate = useSelector(state => state.taskUpdate);
+  const { success: successEdit } = taskUpdate;
 
-  // const resourceCreate = useSelector(state => state.resourceCreate);
-  // const {
-  //   success: createSuccess,
-  //   loading: createLoading,
-  //   error: createError,
-  // } = resourceCreate;
+  useEffect(() => {
+    successEdit && dispatch(taskListAction(course));
+  }, [course, dispatch, successEdit]);
+  /** UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE */
 
-  // useEffect(() => {
-  //   if (createSuccess) {
-  //     dispatch({ type: CREATE_RESOURCE_RESET });
-  //     showNotification({
-  //       title: "Happy",
-  //       message: "Resource has been created successfully",
-  //       color: "green",
-  //       icon: <Check />,
-  //     });
-  //   }
+  /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
+  const taskCreate = useSelector(state => state.taskCreate);
+  const {
+    success: createSuccess,
+    loading: createLoading,
+    error: createError,
+  } = taskCreate;
 
-  //   if (createError) {
-  //     dispatch({ type: CREATE_RESOURCE_RESET });
-  //     showNotification({
-  //       title: "Sad",
-  //       message: "Resource cannot be created",
-  //       color: "red",
-  //       icon: <X />,
-  //     });
-  //   }
-  // }, [createError, createSuccess, dispatch, navigate]);
-  console.log(assignments);
+  useEffect(() => {
+    if (createSuccess) {
+      dispatch({ type: CREATE_TASK_RESET });
+      showNotification({
+        title: "Happy",
+        message: "Task has been created successfully",
+        color: "green",
+        icon: <Check />,
+      });
+    }
+
+    if (createError) {
+      dispatch({ type: CREATE_TASK_RESET });
+      showNotification({
+        title: "Sad",
+        message: "Task cannot be create",
+        color: "red",
+        icon: <X />,
+      });
+    }
+  }, [createError, createSuccess, dispatch, navigate]);
+  /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
 
   return (
     <>
@@ -234,10 +257,12 @@ const Resource = () => {
             />
           </Box>
         </Box>
-        {taskLoading ||
-          (course.length === 0 && <LoadingOverlay visible={true} />)}
-        {assignmentLoading ||
-          (course.length === 0 && <LoadingOverlay visible={true} />)}
+        {taskLoading && course.length === 0 && (
+          <LoadingOverlay visible={true} />
+        )}
+        {assignmentLoading && course.length === 0 && (
+          <LoadingOverlay visible={true} />
+        )}
 
         {tasks && tasks.length !== 0 && (
           <TaskList
@@ -246,6 +271,7 @@ const Resource = () => {
             staff={userInfo?.studentID ? null : userInfo.email}
           />
         )}
+        {createLoading && <LoadingOverlay visible={true} />}
 
         {assignments && assignments.length !== 0 && (
           <TaskList
@@ -259,4 +285,4 @@ const Resource = () => {
   );
 };
 
-export default Resource;
+export default Assignment;

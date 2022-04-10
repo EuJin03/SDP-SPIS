@@ -26,10 +26,8 @@ import {
   Book2,
   FileUpload,
   UserPlus,
-  CloudFog,
 } from "tabler-icons-react";
 import { useDispatch, useSelector } from "react-redux";
-import ResourceEditModal from "./ResourceEditModal";
 import dayjs from "dayjs";
 import { DELETE_TASK_RESET } from "../constants/assignmentConstant";
 import { ButtonCopy } from "./Clipboard";
@@ -37,6 +35,8 @@ import {
   taskAssignAction,
   taskDeleteAction,
 } from "../actions/assignmentAction";
+import TaskEditModal from "./TaskEditModal";
+import { Link } from "react-router-dom";
 
 const useStyles = createStyles(theme => ({
   th: {
@@ -174,7 +174,7 @@ export const TaskList = ({ data, staff }) => {
           </td>
 
           <td style={{ width: 200 }}>
-            {dayjs(row.due).format("MMM D, YYYY h:mm A")}
+            {dayjs(row.updatedAt).format("MMM D, YYYY h:mm A")}
           </td>
           <td style={{ width: 180 }}>
             <Group spacing={4} position="right">
@@ -187,9 +187,8 @@ export const TaskList = ({ data, staff }) => {
                 </ActionIcon>
               </Box>
               <ActionIcon
-                onClick={() => {
-                  console.log("fak u");
-                }}
+                component={Link}
+                to={`/assignments/grade?id=${row._id}&students=${row.studentAssigned}`}
               >
                 <Book2 size={16} />
               </ActionIcon>
@@ -218,7 +217,11 @@ export const TaskList = ({ data, staff }) => {
               <ButtonCopy ctrlc={row.staffEmail} />
             </Group>
           </td>
-          <td style={{ width: 200 }}>
+          <td
+            style={{
+              width: 200,
+            }}
+          >
             {dayjs(row.due).format("MMM D, YYYY h:mm A")}
           </td>
           <td style={{ width: 180 }}>
@@ -288,9 +291,9 @@ export const TaskList = ({ data, staff }) => {
   return (
     <>
       {editId !== "" && (
-        <ResourceEditModal
+        <TaskEditModal
           key={editId}
-          resourceId={editId}
+          taskId={editId}
           editToggle={toggle}
           setEditToggle={setEditModal}
         />
@@ -298,7 +301,7 @@ export const TaskList = ({ data, staff }) => {
       <Modal
         opened={remove.status}
         onClose={() => setRemove({ id: "", status: false })}
-        title="Are you sure to delete this resource?"
+        title="Are you sure to delete this assignment?"
         centered
         size="xs"
         withCloseButton={false}

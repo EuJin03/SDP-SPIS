@@ -250,7 +250,7 @@ export const taskAssignAction = id => async (dispatch, getState) => {
   }
 };
 
-export const taskSubmissionAction = () => async (dispatch, getState) => {
+export const taskSubmissionAction = id => async (dispatch, getState) => {
   try {
     dispatch({
       type: DISPLAY_SUBMISSION_REQUEST,
@@ -266,7 +266,10 @@ export const taskSubmissionAction = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/v1/assignment/grade-paper`, config);
+    const { data } = await axios.get(
+      `/api/v1/assignment/grade-paper?assignmentId=${id}`,
+      config
+    );
 
     dispatch({
       type: DISPLAY_SUBMISSION_SUCCESS,

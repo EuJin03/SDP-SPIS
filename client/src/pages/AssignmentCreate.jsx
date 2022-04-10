@@ -28,12 +28,14 @@ import {
   ExternalLink,
   Trash,
   Check,
+  CalendarEvent,
 } from "tabler-icons-react";
 import { courseDetailsAction } from "../actions/courseAction";
-import { resourceCreateAction } from "../actions/resourceAction";
+import { taskCreateAction } from "../actions/assignmentAction";
 import { DropZone } from "../components/DropZone";
 import { usePrevious } from "../hooks/usePrevious";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
+import { DatePicker } from "@mantine/dates";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -75,7 +77,7 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const ResourceCreate = () => {
+const AssignmentCreate = () => {
   const { courseId } = useParams();
   const { classes } = useStyles();
   const dispatch = useDispatch();
@@ -84,6 +86,7 @@ const ResourceCreate = () => {
   const [topicName, setTopicName] = useState("");
   const [topicURL, setTopicURL] = useState("");
   const [filePath, setFilePath] = useState("");
+  const [due, setDue] = useState(new Date());
 
   const prevCourse = usePrevious(courseId);
 
@@ -145,11 +148,11 @@ const ResourceCreate = () => {
     setTimeout(() => setTopicURL(""), 500);
   };
 
-  const createResourceHandler = e => {
+  const createTaskHandler = () => {
     dispatch(
-      resourceCreateAction({ course: courseId, subject, topicName, topicURL })
+      taskCreateAction({ course: courseId, subject, topicName, topicURL, due })
     );
-    navigate("/resources", { replace: true });
+    navigate("/assignments", { replace: true });
   };
 
   return (
@@ -174,7 +177,7 @@ const ResourceCreate = () => {
             }}
           >
             <Text size="xl" weight={500}>
-              Create Resource
+              Create Assignment
             </Text>
 
             <Divider
@@ -182,24 +185,34 @@ const ResourceCreate = () => {
               labelPosition="center"
               mt="lg"
             />
-            <form onSubmit={() => createResourceHandler()}>
+            <form onSubmit={() => createTaskHandler()}>
               <Group direction="column" grow mt="-md">
-                <TextInput
-                  label="Course Name"
-                  icon={<Book2 size={16} />}
-                  value={course.courseName}
-                  onChange={() => {}}
-                  disabled
-                />
-                <NativeSelect
-                  data={course.subjects.map(v => ({
-                    value: v._id,
-                    label: v.subjectName,
-                  }))}
-                  value={subject}
-                  onChange={e => setSubject(e.target.value)}
-                  label="Subject Name"
-                  icon={<Book size={16} />}
+                <Group position="apart" grow>
+                  <TextInput
+                    label="Course Name"
+                    icon={<Book2 size={16} />}
+                    value={course.courseName}
+                    onChange={() => {}}
+                    disabled
+                  />
+                  <NativeSelect
+                    data={course.subjects.map(v => ({
+                      value: v._id,
+                      label: v.subjectName,
+                    }))}
+                    value={subject}
+                    onChange={e => setSubject(e.target.value)}
+                    label="Subject Name"
+                    icon={<Book size={16} />}
+                  />
+                </Group>
+                <DatePicker
+                  label="Due Date"
+                  icon={<CalendarEvent size={16} />}
+                  value={due}
+                  onChange={e => setDue(e)}
+                  required
+                  excludeDate={date => date <= new Date()}
                 />
                 <TextInput
                   required
@@ -255,7 +268,7 @@ const ResourceCreate = () => {
                   <Button
                     variant="outline"
                     component={Link}
-                    to={"/resources"}
+                    to={"/assignments"}
                     type="button"
                   >
                     Cancel
@@ -270,4 +283,4 @@ const ResourceCreate = () => {
   );
 };
 
-export default ResourceCreate;
+export default AssignmentCreate;

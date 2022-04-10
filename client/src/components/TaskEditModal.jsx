@@ -1,5 +1,6 @@
 import {
   Alert,
+  Anchor,
   Button,
   createStyles,
   Divider,
@@ -7,12 +8,12 @@ import {
   LoadingOverlay,
   Modal,
   Paper,
-  Text,
-  Anchor,
   Box,
+  Text,
   TextInput,
   UnstyledButton,
 } from "@mantine/core";
+import { DatePicker } from "@mantine/dates";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,16 +25,17 @@ import {
   Book2,
   Check,
   ExternalLink,
-  Link as LinkIcon,
   Trash,
+  Link as LinkIcon,
   X,
+  CalendarEvent,
 } from "tabler-icons-react";
 import {
-  resourceDetailsAction,
-  resourceListAction,
-  resourceUpdateAction,
-} from "../actions/resourceAction";
-import { UPDATE_RESOURCE_RESET } from "../constants/resourceConstant";
+  taskDetailsAction,
+  taskListAction,
+  taskUpdateAction,
+} from "../actions/assignmentAction";
+import { UPDATE_TASK_RESET } from "../constants/assignmentConstant";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
 import { usePrevious } from "../hooks/usePrevious";
 import { DropZone } from "./DropZone";
@@ -76,14 +78,14 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
+const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
 
-  const prevResourceId = usePrevious(resourceId);
+  const prevTaskId = usePrevious(taskId);
 
-  const resourceDetails = useSelector(state => state.resourceDetails);
-  const { resource, loading, error } = resourceDetails;
+  const taskDetails = useSelector(state => state.taskDetails);
+  const { task, loading, error } = taskDetails;
 
   const fileUpload = useSelector(state => state.fileUpload);
   const { file, success, error: fileError } = fileUpload;
@@ -91,17 +93,19 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
   const [topicName, setTopicName] = useState("");
   const [topicURL, setTopicURL] = useState("");
   const [filePath, setFilePath] = useState("");
+  const [due, setDue] = useState("");
 
   useEffect(() => {
-    if (prevResourceId !== resourceId) {
-      dispatch(resourceDetailsAction(resourceId));
+    if (prevTaskId !== taskId) {
+      dispatch(taskDetailsAction(taskId));
     }
 
-    if (resource?.course) {
-      setTopicName(resource.topicName);
-      setTopicURL(resource.topicURL);
+    if (task?.course) {
+      setTopicName(task.topicName);
+      setTopicURL(task.topicURL);
+      setDue(new Date(task.due));
     }
-  }, [dispatch, prevResourceId, resource, resourceId]);
+  }, [dispatch, prevTaskId, task, taskId]);
 
   useEffect(() => {
     if (success) {
@@ -128,20 +132,21 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
     }
   }, [dispatch, file, fileError, success]);
 
-  const resourceUpdate = useSelector(state => state.resourceUpdate);
+  const taskUpdate = useSelector(state => state.taskUpdate);
   const {
     error: updateError,
     success: updateSuccess,
     loading: updateLoading,
-  } = resourceUpdate;
+  } = taskUpdate;
 
   useEffect(() => {
     if (updateSuccess) {
-      dispatch({ type: UPDATE_RESOURCE_RESET });
-      dispatch(resourceListAction(resource.course));
+      dispatch({ type: UPDATE_TASK_RESET });
+      dispatch(taskListAction(task.course));
       setEditToggle(false, "");
       setTopicName("");
       setTopicURL("");
+      setDue(new Date());
       showNotification({
         title: "Happy",
         message: "Resource has been updated successfully",
@@ -158,27 +163,30 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
         icon: <X />,
       });
     }
-  }, [dispatch, resource.course, setEditToggle, updateError, updateSuccess]);
+  }, [dispatch, setEditToggle, task.course, updateError, updateSuccess]);
 
   const removeTopicURL = () => {
     setTimeout(() => setTopicURL(""), 500);
   };
 
-  const updateResourceHandler = () => {
-    if (topicURL !== "" && topicName !== "") {
+  const updateResourceHandler = e => {
+    e.preventDefault();
+    if (topicURL !== "" && topicName !== "" && due !== null && due !== "") {
       dispatch(
-        resourceUpdateAction(
+        taskUpdateAction(
           {
-            course: resource.course,
-            subject: resource.subject,
+            course: task.course,
+            subject: task.subject,
+            due: due.toISOString(),
             topicName,
             topicURL,
           },
-          resourceId
+          taskId
         )
       );
     }
   };
+
   return (
     <Modal
       centered
@@ -187,7 +195,7 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
       withCloseButton={false}
       closeOnClickOutside={false}
       style={{
-        minHeight: "500px",
+        minHeight: "520px",
         boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
       }}
       size="700"
@@ -211,7 +219,7 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
           p="xl"
           withBorder
           style={{
-            minHeight: "520px",
+            minHeight: "320px",
             width: "800px",
             border: "none",
           }}
@@ -221,19 +229,30 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
           </Text>
 
           <Divider className={classes.divide} labelPosition="center" mt="lg" />
-          <form onSubmit={() => updateResourceHandler()}>
+          <form onSubmit={e => updateResourceHandler(e)}>
             <Group direction="column" grow mt="-md">
-              <TextInput
-                label="Course Name"
-                icon={<Book2 size={16} />}
-                value={resource?.course ? resource.courseName : ""}
-                disabled
-              />
-              <TextInput
-                label="Subject Name"
-                icon={<Book size={16} />}
-                value={resource?.course ? resource.subjectName : ""}
-                disabled
+              <Group position="apart" grow="1">
+                <TextInput
+                  label="Course Name"
+                  icon={<Book2 size={16} />}
+                  value={task?.course ? task.courseName : ""}
+                  disabled
+                />
+                <TextInput
+                  label="Subject Name"
+                  icon={<Book size={16} />}
+                  value={task?.course ? task.subjectName : ""}
+                  disabled
+                />
+              </Group>
+              <DatePicker
+                label="Due Date"
+                icon={<CalendarEvent size={16} />}
+                value={due}
+                onChange={e => setDue(e)}
+                required
+                excludeDate={date => date <= new Date()}
+                onFocus={false}
               />
               <TextInput
                 required
@@ -282,8 +301,10 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
                   </>
                 )}
               </Box>
-              <Group position="right" mt="xl">
-                <Button type="submit">Update</Button>
+              <Group position="right" mt="xl" my="-xl">
+                <Button loading={updateLoading} type="submit">
+                  Update
+                </Button>
                 <Button
                   variant="outline"
                   onClick={() => {
@@ -304,4 +325,4 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
   );
 };
 
-export default ResourceEditModal;
+export default TaskEditModal;

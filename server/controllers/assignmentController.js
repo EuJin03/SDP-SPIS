@@ -349,6 +349,9 @@ const viewPaper = asyncHandler(async (req, res) => {
     student.assignments = singleAssignment;
     singleAssignment = [];
   });
+  const realStudents = students.filter(
+    student => student.assignments[0].submission
+  );
 
   // parse topicName and topicURL
   const assignment = await Assignment.findById(assignmentId);
@@ -365,15 +368,14 @@ const viewPaper = asyncHandler(async (req, res) => {
       topicName: assignment.topicName,
       topicURL: assignment.topicURL,
       due: new Date(assignment.due), //.toString().slice(0, 15)
-      students,
+      students: realStudents,
     });
   } else {
     res.json({
       topicName: assignment.topicName,
       topicURL: assignment.topicURL,
       due: new Date(assignment.due),
-      message:
-        "Assignment submission due date has passed, all actions on student grades have been halted!",
+      students: [],
     });
   }
 });

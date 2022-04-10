@@ -144,8 +144,6 @@ export const taskSubmissionReducer = (state = { submissions: [] }, action) => {
   }
 };
 
-// might need one task submission details field
-
 export const taskGradeReducer = (state = { submission: {} }, action) => {
   switch (action.type) {
     case GRADE_TASK_REQUEST:

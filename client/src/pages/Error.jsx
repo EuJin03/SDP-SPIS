@@ -68,7 +68,7 @@ function Error() {
           <Text color="dimmed" size="lg">
             Page you are trying to open does not exist. You may have mistyped
             the address, or the page has been moved to another URL. If you think
-            this is an error contact support.
+            this is an error contact TP061195@mail.apu.edu.my.
           </Text>
           <Button
             variant="outline"
