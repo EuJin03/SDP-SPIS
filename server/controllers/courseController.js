@@ -111,25 +111,23 @@ const updateCourse = asyncHandler(async (req, res) => {
   const course = await Course.findById(id);
 
   if (course) {
-    course.courseName = req.body.courseName || course.courseName;
+    course.courseName = req.body?.courseName || course.courseName;
 
-    if (req.body?.subjectName) {
-      const validate = course.subjects.find(
-        subject =>
-          subject.subjectName.toLowerCase().replace(/\s/g, "") ===
-          req.body.subjectName.toLowerCase().replace(/\s/g, "")
-      );
+    const validate = course.subjects.find(
+      subject =>
+        subject.subjectName.toLowerCase().replace(/\s/g, "") ===
+        req.body.subjectName.toLowerCase().replace(/\s/g, "")
+    );
 
-      if (!validate) {
-        const subject = {
-          subjectName: req.body.subjectName,
-        };
+    if (!validate) {
+      const subject = {
+        subjectName: req.body.subjectName,
+      };
 
-        course.subjects.push(subject);
-      } else {
-        res.status(401);
-        throw new Error("Subject already existed");
-      }
+      course.subjects.push(subject);
+    } else {
+      res.status(401);
+      throw new Error("Subject already existed");
     }
 
     const updatedCourse = await course.save();

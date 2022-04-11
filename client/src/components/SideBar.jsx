@@ -24,7 +24,7 @@ const adminData = [
     url: "/assignments",
   },
   { label: "Resources", icon: Books, url: "/resources" },
-  { label: "Course", icon: Book, url: "/course" },
+  { label: "Course", icon: Book, url: "/courses" },
   { label: "Messages", icon: Message, url: "/messages" },
 ];
 

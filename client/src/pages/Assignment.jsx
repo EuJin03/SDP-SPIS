@@ -195,7 +195,14 @@ const Assignment = () => {
 
   /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
   const taskCreate = useSelector(state => state.taskCreate);
-  const { loading: createLoading } = taskCreate;
+  const { loading: createLoading, success: createSuccess } = taskCreate;
+
+  useEffect(() => {
+    if (createSuccess) {
+      dispatch(taskListAction(course));
+      dispatch({ type: CREATE_TASK_RESET });
+    }
+  }, [course, createSuccess, dispatch]);
 
   return (
     <>

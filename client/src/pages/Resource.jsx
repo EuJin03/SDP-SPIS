@@ -134,6 +134,7 @@ const Resource = () => {
 
   useEffect(() => {
     if (createSuccess) {
+      dispatch(resourceListAction(course));
       dispatch({ type: CREATE_RESOURCE_RESET });
       showNotification({
         title: "Happy",
@@ -152,7 +153,7 @@ const Resource = () => {
         icon: <X />,
       });
     }
-  }, [createError, createSuccess, dispatch, navigate]);
+  }, [course, createError, createSuccess, dispatch, navigate]);
 
   return (
     <>
