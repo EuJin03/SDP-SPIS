@@ -10,6 +10,7 @@ import {
   validateStaffRegisterInput,
 } from "../utils/validator.js";
 import mailgun from "mailgun-js";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {
   __jwt_secret,
@@ -238,7 +239,7 @@ const resetPassword = asyncHandler(async (req, res) => {
 // @route PATCH /api/staff/profile
 // @access Private route
 const updateStaff = asyncHandler(async (req, res) => {
-  const staff = await Staff.findById(req.staff.id);
+  const staff = await Staff.findById(req.staff._id);
 
   if (staff) {
     staff.fName = req.body?.fName || staff.fName;
@@ -249,14 +250,20 @@ const updateStaff = asyncHandler(async (req, res) => {
     staff.fName = staff.fName.charAt(0).toUpperCase() + staff.fName.slice(1);
     staff.lName = staff.lName.charAt(0).toUpperCase() + staff.lName.slice(1);
 
+    if (req.body?.oldPassword) {
+      if (!(await staff.matchPassword(req.body?.oldPassword))) {
+        res.status(400);
+        throw new Error("Password Invalid");
+      }
+    }
+
     if (req.body?.password) {
       const password = req.body.password,
         confirmPassword = req.body.confirmPassword;
 
-      const vp = validatePassword(password, confirmPassword);
-      if (vp) {
+      if (password !== confirmPassword) {
         res.status(400);
-        throw new Error(vp);
+        throw new Error("New Passwords do not match");
       }
 
       staff.password = req.body.password;
@@ -277,10 +284,14 @@ const updateStaff = asyncHandler(async (req, res) => {
     //   });
 
     //   courses = [...new Set(courses)];
-    staff.course = req.body?.course;
+    if (req.body?.course) {
+      staff.course = req.body?.course;
+    }
     // }
 
     const updatedStaff = await staff.save();
+
+    console.log(updatedStaff);
 
     res.json({
       image: updatedStaff.image,

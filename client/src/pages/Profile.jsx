@@ -13,18 +13,18 @@ import {
   Button,
   Modal,
   Image,
+  Divider,
+  Switch,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/hooks";
 import { showNotification } from "@mantine/notifications";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
-  Binary,
-  Book,
   CalendarEvent,
   Check,
-  CloudFog,
   Edit,
   Hash,
   Logout,
@@ -33,11 +33,14 @@ import {
   User,
   UserOff,
   Users,
+  Lock,
+  ShieldLock,
+  LockAccess,
   X,
 } from "tabler-icons-react";
 import { courseListAction } from "../actions/courseAction";
 import { updateStaffProfile } from "../actions/staffAction";
-import { updateStudentProfile } from "../actions/studentAction";
+import { logout, updateStudentProfile } from "../actions/studentAction";
 import { DropImage } from "../components/DropImage";
 import { UPLOAD_IMAGE_RESET } from "../constants/uploadConstant";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstant";
@@ -45,7 +48,7 @@ import { usePrevious } from "../hooks/usePrevious";
 
 const links = [
   { link: "/edit", label: "Edit Profile", icon: Edit },
-  { link: "/reset-password", label: "Reset Password", icon: Binary },
+  { link: "/reset-password", label: "Reset Password", icon: LockAccess },
   { link: "/deactivate-account", label: "Deactivate Account", icon: UserOff },
 ];
 
@@ -124,6 +127,14 @@ const useStyles = createStyles(theme => ({
     alignItems: "flex-end",
   },
 
+  resetPassword: {
+    height: "10vh",
+    width: "100%",
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+  },
+
   imagePlaceholder: {
     display: "flex",
     width: "100%",
@@ -138,6 +149,7 @@ const Profile = () => {
   const [active, setActive] = useState("Edit Profile");
   const [toggle, setToggle] = useState(false);
   const [tempImage, setTempImage] = useState("");
+  const [remove, setRemove] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -165,6 +177,9 @@ const Profile = () => {
       lname: userInfo?.lname,
       dob: new Date(userInfo?.dob),
       course: userInfo?.course,
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
     },
   });
 
@@ -186,17 +201,21 @@ const Profile = () => {
         color: "green",
         icon: <Check />,
       });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
 
     if (updateError) {
       showNotification({
-        title: "Sad",
-        message: "Profile is not updated. Please try again later",
+        title: "Invalid Input",
+        message: "Please check your input again!",
         color: "red",
         icon: <X />,
       });
+      dispatch({ type: USER_UPDATE_PROFILE_RESET });
     }
-  }, [dispatch, updateError, updateSuccess]);
+  }, [dispatch, updateError, updateInfo, updateSuccess]);
 
   const imageUpload = useSelector(state => state.imageUpload);
   const { image, success, error: imageError } = imageUpload;
@@ -225,6 +244,8 @@ const Profile = () => {
     }
   }, [dispatch, image, imageError, success, tempImage]);
 
+  const [checked, setChecked] = useState(userInfo.isActive);
+
   const linkButtons = links.map(item => (
     <UnstyledButton
       key={item.link}
@@ -250,8 +271,34 @@ const Profile = () => {
       }))
     : [];
 
+  const navigate = useNavigate();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    navigate("/");
+  };
+
   return (
     <div className={classes.wrapper}>
+      <Modal
+        opened={remove}
+        onClose={() => setRemove(false)}
+        title="Are you sure to logout?"
+        centered
+        size="xs"
+        withCloseButton={false}
+        closeOnClickOutside={false}
+      >
+        <Divider my="lg" />
+        <Group position="right">
+          <Button size="xs" onClick={() => logoutHandler()}>
+            Confirm
+          </Button>
+          <Button onClick={() => setRemove(false)} size="xs" variant="outline">
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
       <Modal
         centered
         opened={toggle}
@@ -303,6 +350,7 @@ const Profile = () => {
         <Box className={classes.nav}>
           <Box>{linkButtons}</Box>
           <UnstyledButton
+            onClick={() => setRemove(true)}
             className={classes.navButton}
             style={{ borderRadius: "0px 0px 0px 2px" }}
           >
@@ -330,13 +378,13 @@ const Profile = () => {
                       })
                     )
                   : dispatch(
-                      updateStaffProfile(
-                        form.values.image,
-                        form.values.fname,
-                        form.values.lname,
-                        form.values.dob.toISOString(),
-                        form.values.course
-                      )
+                      updateStaffProfile({
+                        image: form.values.image,
+                        fName: form.values.fname,
+                        lName: form.values.lname,
+                        dob: form.values.dob.toISOString(),
+                        course: form.values.course,
+                      })
                     );
               }}
             >
@@ -432,8 +480,117 @@ const Profile = () => {
                 </>
               )}
             </form>
-            {active === "Reset Password" && <h1>fak</h1>}
-            {active === "Deactivate Account" && <h1>fak</h1>}
+            <form
+              onSubmit={e => {
+                e.preventDefault();
+                userInfo?.studentID
+                  ? dispatch(
+                      updateStudentProfile({
+                        oldPassword: form.values.oldPassword,
+                        password: form.values.newPassword,
+                        confirmPassword: form.values.confirmPassword,
+                      })
+                    )
+                  : dispatch(
+                      updateStaffProfile({
+                        oldPassword: form.values.oldPassword,
+                        password: form.values.newPassword,
+                        confirmPassword: form.values.confirmPassword,
+                      })
+                    );
+              }}
+            >
+              {active === "Reset Password" && (
+                <>
+                  <Text weight={600} size="xl">
+                    Reset Password
+                  </Text>
+                  <Divider
+                    label="reset password"
+                    labelPosition="center"
+                    my="md"
+                  />
+                  <Group direction="column" grow>
+                    <TextInput
+                      type="password"
+                      label="Old Password"
+                      required
+                      value={form.values.oldPassword}
+                      onChange={() => form.setFieldValue("oldPassword")}
+                      {...form.getInputProps("oldPassword")}
+                      icon={<ShieldLock size={16} />}
+                    />
+                    <TextInput
+                      label="New Password"
+                      required
+                      type="password"
+                      value={form.values.newPassword}
+                      onChange={() => form.setFieldValue("newPassword")}
+                      {...form.getInputProps("newPassword")}
+                      icon={<Lock size={16} />}
+                    />
+                    <TextInput
+                      label="Confirm Password"
+                      required
+                      type="password"
+                      value={form.values.confirmPassword}
+                      onChange={() => form.setFieldValue("confirmPassword")}
+                      {...form.getInputProps("confirmPassword")}
+                      icon={<Lock size={16} />}
+                    />
+                  </Group>
+
+                  <Box className={classes.resetPassword}>
+                    <Button type="submit" loading={updateLoading}>
+                      Reset
+                    </Button>
+                  </Box>
+                </>
+              )}
+            </form>
+            {active === "Deactivate Account" && (
+              <>
+                <Text weight={600} size="xl">
+                  Account Visibility
+                </Text>
+                <Divider
+                  label="Disable Your Account?"
+                  labelPosition="center"
+                  my="md"
+                />
+                {userInfo?.studentID ? (
+                  <>
+                    <Text size="sm" color="red">
+                      Disabling your account will prevent you from receiving
+                      assignment from lecturers
+                    </Text>
+                    <Text size="sm" color="green">
+                      You may reactivate it on future
+                    </Text>
+                    <Switch
+                      my="xl"
+                      label="Are you sure to enable/disable your account?"
+                      checked={checked}
+                      onChange={e => {
+                        dispatch(
+                          updateStudentProfile({
+                            isActive: !checked ? "true" : "false",
+                          })
+                        );
+                        setChecked(e.currentTarget.checked);
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Text size="sm" color="red">
+                      Staff are not allowed to disable account manually. Please
+                      contact admin for assistant.
+                    </Text>
+                  </>
+                )}
+              </>
+            )}
           </Box>
         </ScrollArea>
       </Paper>

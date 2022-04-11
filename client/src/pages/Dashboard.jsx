@@ -64,7 +64,7 @@ const Dashboard = () => {
         icon: <X />,
       });
     }
-  }, [dispatch, userInfo]);
+  }, [courseNameError, dispatch, userInfo]);
 
   useEffect(() => {
     if (!userInfo && !regInfo) {

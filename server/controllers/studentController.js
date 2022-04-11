@@ -4,6 +4,7 @@ import {
   generateForgotPasswordToken,
 } from "../utils/generateToken.js";
 import Student from "../models/Student.js";
+import bcrypt from "bcryptjs";
 import {
   validateCourse,
   validatePassword,
@@ -44,6 +45,7 @@ const authStudent = asyncHandler(async (req, res) => {
       dob: student.dob,
       course: student.course,
       assignments: student.assignments,
+      isActive: student.isActive,
       token: generateToken(student._id),
     });
   } else {
@@ -69,6 +71,7 @@ const getStudentProfile = asyncHandler(async (req, res) => {
       dob: student.dob,
       course: student.course,
       assignments: student.assignments,
+      isActive: student.isActive,
     });
   } else {
     res.status(404);
@@ -145,6 +148,7 @@ const registerStudent = asyncHandler(async (req, res) => {
         dob: student.dob,
         course: student.course,
         assignments: student.assignments,
+        isActive: student.isActive,
         token: generateToken(student._id),
       });
     } else {
@@ -265,14 +269,20 @@ const updateStudent = asyncHandler(async (req, res) => {
     student.lName =
       student.lName.charAt(0).toUpperCase() + student.lName.slice(1);
 
+    if (req.body?.oldPassword) {
+      if (!(await student.matchPassword(req.body?.oldPassword))) {
+        res.status(400);
+        throw new Error("Password Invalid");
+      }
+    }
+
     if (req.body?.password) {
       const password = req.body.password,
         confirmPassword = req.body.confirmPassword;
 
-      const vp = validatePassword(password, confirmPassword);
-      if (vp) {
+      if (password !== confirmPassword) {
         res.status(400);
-        throw new Error(vp);
+        throw new Error("New Passwords do not match");
       }
 
       student.password = req.body.password;
@@ -288,6 +298,10 @@ const updateStudent = asyncHandler(async (req, res) => {
       student.course = req.body.course;
     }
 
+    if (req.body?.isActive) {
+      student.isActive = req.body.isActive === "true" ? true : false;
+    }
+
     const updatedStudent = await student.save();
 
     res.json({
@@ -300,6 +314,7 @@ const updateStudent = asyncHandler(async (req, res) => {
       dob: updatedStudent.dob,
       course: updatedStudent.course,
       assignments: updatedStudent.assignments,
+      isActive: updatedStudent.isActive,
       token: generateToken(updatedStudent._id),
     });
   } else {
