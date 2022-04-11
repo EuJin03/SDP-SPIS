@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Navbar, Group, createStyles, Text, Image, Badge } from "@mantine/core";
-import { Writing, Home, Books, Book, Message } from "tabler-icons-react";
+import { Writing, Home, Books, Book, Message, Users } from "tabler-icons-react";
 import UserButton from "./UserButton";
 import { Link, useLocation } from "react-router-dom";
 
@@ -25,6 +25,7 @@ const adminData = [
   },
   { label: "Resources", icon: Books, url: "/resources" },
   { label: "Course", icon: Book, url: "/courses" },
+  { label: "Staff", icon: Users, url: "/staff-management" },
   { label: "Messages", icon: Message, url: "/messages" },
 ];
 

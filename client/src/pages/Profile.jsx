@@ -62,6 +62,7 @@ const useStyles = createStyles(theme => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    overflowY: "hidden",
   },
 
   paper: {
@@ -442,8 +443,8 @@ const Profile = () => {
                       icon={<CalendarEvent size={16} />}
                       required
                       placeholder="Select your birthday"
-                      excludeDate={date => date => new Date()}
                       onFocus={false}
+                      excludeDate={date => date > new Date()}
                       value={form.values.dob}
                       onChange={e => form.setFieldValue("dob", e)}
                       {...form.getInputProps("dob")}

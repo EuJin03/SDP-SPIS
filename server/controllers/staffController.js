@@ -291,8 +291,6 @@ const updateStaff = asyncHandler(async (req, res) => {
 
     const updatedStaff = await staff.save();
 
-    console.log(updatedStaff);
-
     res.json({
       image: updatedStaff.image,
       fname: updatedStaff.fName,
@@ -324,6 +322,38 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc View All staff
+// @route GET /api/admin/staff
+// @access Private admin
+const viewAllStaff = asyncHandler(async (req, res) => {
+  const staff = await Staff.find({}).select("-password");
+  if (staff) {
+    res.json(staff);
+  } else {
+    res.status(404);
+    throw new Error("Staff not found");
+  }
+});
+
+// @desc set staff status
+// @route POST /api/staff/admin/:id
+// @access Private admin
+const setStaffStatus = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const staff = await Staff.findById(id);
+
+  if (staff) {
+    staff.isAdmin = !staff.isAdmin;
+
+    const updatedStaff = await staff.save();
+    res.json("User updated successfully");
+  } else {
+    res.status(404);
+    throw new Error("Staff not found");
+  }
+});
+
 export {
   authStaff,
   getStaffProfile,
@@ -332,4 +362,6 @@ export {
   resetPassword,
   updateStaff,
   deleteUser,
+  viewAllStaff,
+  setStaffStatus,
 };

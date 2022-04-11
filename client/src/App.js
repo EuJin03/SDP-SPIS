@@ -15,6 +15,8 @@ import Profile from "./pages/Profile";
 import ResourceCreate from "./pages/ResourceCreate";
 import AssignmentCreate from "./pages/AssignmentCreate";
 import AssignmentDetails from "./pages/AssignmentDetails";
+import StaffManagement from "./pages/StaffManagement";
+import Messages from "./pages/Messages";
 
 import "./App.css";
 
@@ -45,6 +47,8 @@ const App = () => {
             />
             <Route path="/courses" element={<Course />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/staff-management" element={<StaffManagement />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </Router>

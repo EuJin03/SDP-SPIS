@@ -1,5 +1,13 @@
 import axios from "axios";
 import {
+  ADMIN_ASSIGN_FAIL,
+  ADMIN_ASSIGN_REQUEST,
+  ADMIN_ASSIGN_SUCCESS,
+  ADMIN_VIEW_STAFF_FAIL,
+  ADMIN_VIEW_STAFF_REQUEST,
+  ADMIN_VIEW_STAFF_SUCCESS,
+} from "../constants/staffConstant";
+import {
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
@@ -230,3 +238,71 @@ export const staffResetPassword =
       });
     }
   };
+
+export const viewAllStaffAction = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_VIEW_STAFF_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(`/api/v1/staff/admin`, config);
+
+    dispatch({
+      type: ADMIN_VIEW_STAFF_SUCCESS,
+      payload: data,
+    });
+  } catch (err) {
+    dispatch({
+      type: ADMIN_VIEW_STAFF_FAIL,
+      payload:
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.message,
+    });
+  }
+};
+
+export const adminAssignAction = id => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADMIN_ASSIGN_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/v1/staff/admin/${id}`, {}, config);
+
+    dispatch({
+      type: ADMIN_ASSIGN_SUCCESS,
+      payload: data,
+    });
+  } catch (err) {
+    dispatch({
+      type: ADMIN_ASSIGN_FAIL,
+      payload:
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.message,
+    });
+  }
+};

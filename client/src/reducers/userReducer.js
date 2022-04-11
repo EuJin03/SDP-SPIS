@@ -1,4 +1,13 @@
 import {
+  ADMIN_ASSIGN_FAIL,
+  ADMIN_ASSIGN_REQUEST,
+  ADMIN_ASSIGN_RESET,
+  ADMIN_ASSIGN_SUCCESS,
+  ADMIN_VIEW_STAFF_FAIL,
+  ADMIN_VIEW_STAFF_REQUEST,
+  ADMIN_VIEW_STAFF_SUCCESS,
+} from "../constants/staffConstant";
+import {
   USER_DETAILS_FAIL,
   USER_DETAILS_REQUEST,
   USER_DETAILS_RESET,
@@ -106,6 +115,36 @@ export const userResetPasswordReducer = (state = {}, action) => {
       return { loading: false, success: true, message: action.payload };
     case USER_RESET_PASSWORD_FAIL:
       return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+// view all staff
+export const allStaffReducer = (state = { staffs: [] }, action) => {
+  switch (action.type) {
+    case ADMIN_VIEW_STAFF_REQUEST:
+      return { loading: true };
+    case ADMIN_VIEW_STAFF_SUCCESS:
+      return { loading: false, staffs: action.payload };
+    case ADMIN_VIEW_STAFF_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+// admin update
+export const adminAssignReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADMIN_ASSIGN_REQUEST:
+      return { loading: true };
+    case ADMIN_ASSIGN_SUCCESS:
+      return { loading: false, success: true, message: action.payload };
+    case ADMIN_ASSIGN_FAIL:
+      return { loading: false, error: action.payload };
+    case ADMIN_ASSIGN_RESET:
+      return {};
     default:
       return state;
   }

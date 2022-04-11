@@ -306,7 +306,7 @@ export const ResourceList = ({ data, staff }) => {
               >
                 Last Modified
               </Th>
-              {staff && <Th />}
+              {staff && <th />}
             </tr>
           </thead>
           <tbody>

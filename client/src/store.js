@@ -33,6 +33,8 @@ import {
   imageUploadReducer,
 } from "./reducers/uploadReducer";
 import {
+  adminAssignReducer,
+  allStaffReducer,
   userDetailsReducer,
   userForgotPasswordReducer,
   userLoginReducer,
@@ -71,6 +73,8 @@ const reducer = combineReducers({
   courseNames: courseNameReducer,
   imageUpload: imageUploadReducer,
   fileUpload: fileUploadReducer,
+  allStaff: allStaffReducer,
+  adminAssign: adminAssignReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")
