@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 import students from "./data/students.js";
 // import courses from "./data/courses.js";
-// import staffs from "./data/staffs.js";
+import staffs from "./data/staffs.js";
 import assignments from "./data/assignments.js";
 import resources from "./data/resources.js";
 
@@ -20,17 +20,17 @@ connectDB();
 
 const importData = async () => {
   try {
-    // await Student.deleteMany();
+    await Student.deleteMany();
     await Resource.deleteMany();
     // await Course.deleteMany();
-    // await Staff.deleteMany();
-    // await Assignment.deleteMany();
+    await Staff.deleteMany();
+    await Assignment.deleteMany();
 
-    // await Student.insertMany(students);
+    await Student.insertMany(students);
     await Resource.insertMany(resources);
     // await Course.insertMany(courses);
-    // await Staff.insertMany(staffs);
-    // await Assignment.insertMany(assignments);
+    await Staff.insertMany(staffs);
+    await Assignment.insertMany(assignments);
 
     console.log("Data Imported!");
     process.exit();

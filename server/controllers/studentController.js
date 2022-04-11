@@ -145,6 +145,7 @@ const registerStudent = asyncHandler(async (req, res) => {
         dob: student.dob,
         course: student.course,
         assignments: student.assignments,
+        token: generateToken(student._id),
       });
     } else {
       res.status(400);

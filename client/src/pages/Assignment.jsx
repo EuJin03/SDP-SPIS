@@ -78,13 +78,11 @@ const Assignment = () => {
   /** TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST TASKLIST */
 
   const assignmentView = useSelector(state => state.assignmentView);
-  const {
+  let {
     loading: assignmentLoading,
     error: assignmentError,
     assignments,
   } = assignmentView;
-
-  console.log(assignments);
 
   useEffect(() => {
     assignmentError &&
@@ -197,34 +195,7 @@ const Assignment = () => {
 
   /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
   const taskCreate = useSelector(state => state.taskCreate);
-  const {
-    success: createSuccess,
-    loading: createLoading,
-    error: createError,
-  } = taskCreate;
-
-  useEffect(() => {
-    if (createSuccess) {
-      dispatch({ type: CREATE_TASK_RESET });
-      showNotification({
-        title: "Happy",
-        message: "Task has been created successfully",
-        color: "green",
-        icon: <Check />,
-      });
-    }
-
-    if (createError) {
-      dispatch({ type: CREATE_TASK_RESET });
-      showNotification({
-        title: "Sad",
-        message: "Task cannot be create",
-        color: "red",
-        icon: <X />,
-      });
-    }
-  }, [createError, createSuccess, dispatch, navigate]);
-  /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
+  const { loading: createLoading } = taskCreate;
 
   return (
     <>

@@ -21,6 +21,9 @@ import {
   SINGLE_TASK_FAIL,
   SINGLE_TASK_REQUEST,
   SINGLE_TASK_SUCCESS,
+  SUBMIT_ASSIGNMENT_FAIL,
+  SUBMIT_ASSIGNMENT_REQUEST,
+  SUBMIT_ASSIGNMENT_SUCCESS,
   UPDATE_TASK_FAIL,
   UPDATE_TASK_REQUEST,
   UPDATE_TASK_SUCCESS,
@@ -397,7 +400,7 @@ export const assignmentSubmitAction =
   (submissionId, submissionURL) => async (dispatch, getState) => {
     try {
       dispatch({
-        type: VIEW_ASSIGNMENT_REQUEST,
+        type: SUBMIT_ASSIGNMENT_REQUEST,
       });
 
       const {
@@ -411,21 +414,19 @@ export const assignmentSubmitAction =
         },
       };
 
-      console.log(submissionURL);
-      console.log(submissionId);
-      const { data } = await axios.post(
+      const { data } = await axios.patch(
         `/api/v1/assignment/submit-task/${submissionId}`,
         { submissionFile: submissionURL },
         config
       );
 
       dispatch({
-        type: VIEW_ASSIGNMENT_SUCCESS,
+        type: SUBMIT_ASSIGNMENT_SUCCESS,
         payload: data,
       });
     } catch (err) {
       dispatch({
-        type: VIEW_ASSIGNMENT_FAIL,
+        type: SUBMIT_ASSIGNMENT_FAIL,
         payload:
           err.response && err.response.data.message
             ? err.response.data.message

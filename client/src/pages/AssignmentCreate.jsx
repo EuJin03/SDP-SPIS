@@ -31,11 +31,12 @@ import {
   CalendarEvent,
 } from "tabler-icons-react";
 import { courseDetailsAction } from "../actions/courseAction";
-import { taskCreateAction } from "../actions/assignmentAction";
+import { taskCreateAction, taskListAction } from "../actions/assignmentAction";
 import { DropZone } from "../components/DropZone";
 import { usePrevious } from "../hooks/usePrevious";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
 import { DatePicker } from "@mantine/dates";
+import { CREATE_TASK_RESET } from "../constants/assignmentConstant";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -118,6 +119,34 @@ const AssignmentCreate = () => {
       setSubject(course.subjects[0]._id);
     }
   }, [course, courseId, dispatch, navigate, prevCourse, subject]);
+
+  /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
+  const taskCreate = useSelector(state => state.taskCreate);
+  const { success: createSuccess, error: createError } = taskCreate;
+
+  useEffect(() => {
+    if (createSuccess) {
+      dispatch(taskListAction(courseId));
+      dispatch({ type: CREATE_TASK_RESET });
+      showNotification({
+        title: "Happy",
+        message: "Task has been created successfully",
+        color: "green",
+        icon: <Check />,
+      });
+    }
+
+    if (createError) {
+      dispatch({ type: CREATE_TASK_RESET });
+      showNotification({
+        title: "Sad",
+        message: "Task cannot be create",
+        color: "red",
+        icon: <X />,
+      });
+    }
+  }, [courseId, createError, createSuccess, dispatch, navigate]);
+  /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
 
   useEffect(() => {
     if (success) {

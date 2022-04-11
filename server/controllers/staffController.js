@@ -131,6 +131,7 @@ const registerStaff = asyncHandler(async (req, res) => {
         gender: staff.gender,
         dob: staff.dob,
         course: staff.course,
+        token: generateToken(staff._id),
       });
     } else {
       res.status(400);

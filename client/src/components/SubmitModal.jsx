@@ -146,7 +146,7 @@ const SubmitModal = ({ submissionId, editToggle, setEditToggle }) => {
   useEffect(() => {
     if (submitSuccess) {
       dispatch({ type: SUBMIT_ASSIGNMENT_RESET });
-      dispatch({ type: VIEW_ASSIGNMENT_RESET });
+      dispatch(assignmentViewAction());
       setEditToggle(false, "");
       setSubmissionURL("");
       showNotification({

@@ -23,7 +23,7 @@ router
   .get(protectStudent, viewSingleStudentTask);
 router
   .route("/submit-task/:submissionId")
-  .post(protectStudent, submitAssignment);
+  .patch(protectStudent, submitAssignment);
 
 // lecturer access only
 router.route("/uploaded-task").get(protectStaff, viewTask);
