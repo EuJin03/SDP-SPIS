@@ -24,9 +24,18 @@ import {
   FilePlus,
   SquareMinus,
   SquarePlus,
+  X,
 } from "tabler-icons-react";
 import { useDispatch, useSelector } from "react-redux";
-import { courseListAction } from "../actions/courseAction";
+import {
+  courseCreateAction,
+  courseListAction,
+  courseUpdateAction,
+} from "../actions/courseAction";
+import {
+  CREATE_COURSE_RESET,
+  UPDATE_COURSE_RESET,
+} from "../constants/courseConstant";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -85,8 +94,10 @@ const useStyles = createStyles(theme => ({
 const Course = () => {
   const { classes } = useStyles();
   const [course, setCourse] = useState("");
+  const [create, setCreate] = useState("");
   const [subject, setSubject] = useState("");
   const [toggle, setToggle] = useState({ id: "", status: false });
+  const [toggleCreate, setToggleCreate] = useState(false);
   const [add, setAdd] = useState(false);
 
   const dispatch = useDispatch();
@@ -109,61 +120,242 @@ const Course = () => {
     }
   }, [courses.courseList, dispatch, error]);
 
-  const items = courses?.courseList
-    ? courses.courseList.map(item => (
-        <Card
-          key={item._id}
-          withBorder
-          radius="md"
-          p="xl"
-          className={classes.card}
-        >
-          <Box className={classes.cardHeader}>
-            <Box>
-              <Text size="lg" className={classes.title} weight={500}>
-                {item.courseName}
-              </Text>
-              <Text size="xs" color="dimmed" mt={3} mb="sm">
-                {item._id}
-              </Text>
-            </Box>
-            <Box>
-              <ActionIcon
-                onClick={() => setToggle({ id: item._id, status: true })}
-              >
-                <Edit size="20" />
-              </ActionIcon>
-            </Box>
+  const items = courses?.courseList ? (
+    courses.courseList.map(item => (
+      <Card
+        key={item._id}
+        withBorder
+        radius="md"
+        p="xl"
+        className={classes.card}
+      >
+        <Box className={classes.cardHeader}>
+          <Box>
+            <Text size="lg" className={classes.title} weight={500}>
+              {item.courseName}
+            </Text>
+            <Text size="xs" color="dimmed" mt={3} mb="sm">
+              {item._id}
+            </Text>
           </Box>
-
-          <Divider mb="sm" label="Subjects" labelPosition="center" />
-          {item.subjects.map(subItem => (
-            <Group
-              key={subItem._id}
-              position="apart"
-              className={classes.item}
-              noWrap
-              spacing="xl"
+          <Box>
+            <ActionIcon
+              onClick={() => {
+                setToggle({ id: item._id, status: true });
+                setCourse(item.courseName);
+              }}
             >
-              <div>
-                <Text>{subItem.subjectName}</Text>
-                <Text size="xs" color="dimmed">
-                  {subItem._id}
-                </Text>
-              </div>
-            </Group>
-          ))}
-        </Card>
-      ))
-    : null;
+              <Edit size="20" />
+            </ActionIcon>
+          </Box>
+        </Box>
+
+        <Divider mb="sm" label="Subjects" labelPosition="center" />
+        {item.subjects.map(subItem => (
+          <Group
+            key={subItem._id}
+            position="apart"
+            className={classes.item}
+            noWrap
+            spacing="xl"
+          >
+            <div>
+              <Text>{subItem.subjectName}</Text>
+              <Text size="xs" color="dimmed">
+                {subItem._id}
+              </Text>
+            </div>
+          </Group>
+        ))}
+      </Card>
+    ))
+  ) : loading ? (
+    <LoadingOverlay visible={true} />
+  ) : null;
+
+  const courseUpdate = useSelector(state => state.courseUpdate);
+  const {
+    loading: updateLoading,
+    success: updateSuccess,
+    error: updateError,
+  } = courseUpdate;
+
+  useEffect(() => {
+    if (updateSuccess) {
+      setToggle({ id: "", status: false });
+      setCourse("");
+      setSubject("");
+      showNotification({
+        title: "Happy",
+        message: "Course has been updated successfully",
+        color: "green",
+        icon: <Check />,
+      });
+      dispatch({ type: UPDATE_COURSE_RESET });
+      dispatch(courseListAction());
+    }
+
+    if (updateError) {
+      setToggle({ id: "", status: false });
+      setCourse("");
+      setSubject("");
+      showNotification({
+        title: "Course cannot be updated",
+        message: "Course might already existed",
+        color: "red",
+        icon: <X />,
+      });
+      dispatch({ type: UPDATE_COURSE_RESET });
+    }
+  }, [dispatch, updateError, updateSuccess]);
+
+  const updateCourseHandler = () => {
+    if (course !== "" && subject === "") {
+      dispatch(
+        courseUpdateAction(toggle.id, {
+          courseName:
+            course.substring(0, 1).toUpperCase() + course.substring(1),
+        })
+      );
+      setAdd(add ? !add : add);
+    }
+
+    if (course !== "" && subject !== "") {
+      if (subject.length < 5) {
+        showNotification({
+          title: "Subject name length must be greater than 5",
+          message: "Please recheck your subject name",
+          color: "red",
+          icon: <X />,
+        });
+      } else {
+        dispatch(
+          courseUpdateAction(toggle.id, {
+            courseName:
+              course.substring(0, 1).toUpperCase() + course.substring(1),
+            subjectName:
+              subject.substring(0, 1).toUpperCase() + subject.substring(1),
+          })
+        );
+        setAdd(add ? !add : add);
+      }
+    }
+  };
+
+  const courseCreate = useSelector(state => state.courseCreate);
+  const {
+    loading: createLoading,
+    success: createSuccess,
+    error: createError,
+  } = courseCreate;
+
+  useEffect(() => {
+    if (createSuccess) {
+      setToggleCreate(false);
+      setCreate("");
+      showNotification({
+        title: "Happy",
+        message: "Course has been updated successfully",
+        color: "green",
+        icon: <Check />,
+      });
+      dispatch({ type: CREATE_COURSE_RESET });
+      dispatch(courseListAction());
+    }
+
+    if (createError) {
+      setToggleCreate(false);
+      setCreate("");
+      showNotification({
+        title: "Course cannot be created",
+        message: "Course might already existed",
+        color: "red",
+        icon: <X />,
+      });
+      dispatch({ type: CREATE_COURSE_RESET });
+    }
+  }, [createError, createSuccess, dispatch]);
+
+  const createCourseHandler = () => {
+    if (create.length < 5) {
+      showNotification({
+        title: "Course name length must be greater than 5",
+        message: "Please recheck your course name",
+        color: "red",
+        icon: <X />,
+      });
+    } else {
+      dispatch(
+        courseCreateAction({
+          courseName:
+            create.substring(0, 1).toUpperCase() + create.substring(1),
+        })
+      );
+    }
+  };
 
   return (
     <>
-      {loading && <LoadingOverlay visible={true} />}
+      <Modal
+        centered
+        opened={toggleCreate}
+        onClose={() => {
+          setToggleCreate(false);
+          setCreate("");
+        }}
+        withCloseButton={false}
+        closeOnClickOutside={false}
+        size="800"
+      >
+        <Box>
+          <Group direction="column" grow>
+            <Box>
+              <Text>Create a Course</Text>
+              <Divider mt="md" style={{ width: "100%" }} />
+            </Box>
+
+            <Box style={{ height: 180, width: 400 }}>
+              <Group direction="column" grow>
+                <TextInput
+                  description="Cannot delete course after creation"
+                  label="Course Name"
+                  required
+                  value={create}
+                  placeholder="Software Development Project"
+                  onChange={e => setCreate(e.target.value)}
+                  icon={<Book size={16} />}
+                />
+              </Group>
+            </Box>
+          </Group>
+          <Group position="right">
+            <Button
+              loading={createLoading}
+              onClick={() => createCourseHandler()}
+            >
+              Confirm
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setToggleCreate(false);
+                setCreate("");
+              }}
+            >
+              Cancel
+            </Button>
+          </Group>
+        </Box>
+      </Modal>
       <Modal
         centered
         opened={toggle.status}
-        onClose={() => setToggle({ status: false, id: "" })}
+        onClose={() => {
+          setToggle({ status: false, id: "" });
+          setCourse("");
+          setSubject("");
+          setAdd(add ? !add : add);
+        }}
         withCloseButton={false}
         closeOnClickOutside={false}
         size="800"
@@ -178,6 +370,7 @@ const Course = () => {
               <Group direction="column" grow>
                 <TextInput
                   label="Course Name"
+                  placeholder="Software Development Project"
                   required
                   value={course}
                   onChange={e => setCourse(e.target.value)}
@@ -190,6 +383,7 @@ const Course = () => {
                   <ActionIcon
                     onClick={() => {
                       setAdd(!add);
+                      setSubject("");
                     }}
                   >
                     {!add ? (
@@ -202,7 +396,7 @@ const Course = () => {
                 {add && (
                   <TextInput
                     label="Subject Name"
-                    required
+                    placeholder="Only one subject can be added at a time"
                     value={subject}
                     onChange={e => setSubject(e.target.value)}
                     icon={<Book2 size={16} />}
@@ -212,10 +406,20 @@ const Course = () => {
             </Box>
           </Group>
           <Group position="right">
-            <Button onClick={() => {}}>Confirm</Button>
+            <Button
+              loading={updateLoading}
+              onClick={() => updateCourseHandler()}
+            >
+              Confirm
+            </Button>
             <Button
               variant="outline"
-              onClick={() => setToggle({ status: false, id: "" })}
+              onClick={() => {
+                setToggle({ status: false, id: "" });
+                setCourse("");
+                setSubject("");
+                setAdd(add ? !add : add);
+              }}
             >
               Cancel
             </Button>
@@ -238,11 +442,7 @@ const Course = () => {
             <Text weight={600} size="lg" color="#1C7ED6" mr="sm">
               Create
             </Text>
-            <ActionIcon
-              mr="md"
-              component={Link}
-              to={`/assignments/${course}/create`}
-            >
+            <ActionIcon mr="md" onClick={() => setToggleCreate(true)}>
               <FilePlus size="26" color="#427AEB" />
             </ActionIcon>
           </Box>

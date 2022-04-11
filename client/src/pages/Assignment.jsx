@@ -237,12 +237,12 @@ const Assignment = () => {
             />
           </Box>
         </Box>
-        {taskLoading && course.length === 0 && (
+        {taskLoading || course.length === 0 ? (
           <LoadingOverlay visible={true} />
-        )}
-        {assignmentLoading && course.length === 0 && (
+        ) : null}
+        {assignmentLoading || course.length === 0 ? (
           <LoadingOverlay visible={true} />
-        )}
+        ) : null}
 
         {tasks && tasks.length !== 0 && (
           <TaskList
@@ -251,7 +251,7 @@ const Assignment = () => {
             staff={userInfo?.studentID ? null : userInfo.email}
           />
         )}
-        {createLoading && <LoadingOverlay visible={true} />}
+        {createLoading ? <LoadingOverlay visible={true} /> : null}
 
         {assignments && assignments.length !== 0 && (
           <TaskList

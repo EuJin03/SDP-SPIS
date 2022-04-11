@@ -188,7 +188,9 @@ const Resource = () => {
             />
           </Box>
         </Box>
-        {loading && resources.length === 0 && <LoadingOverlay visible={true} />}
+        {loading || resources.length === 0 ? (
+          <LoadingOverlay visible={true} />
+        ) : null}
         {createLoading && <LoadingOverlay visible={true} />}
 
         {resources.length !== 0 && (

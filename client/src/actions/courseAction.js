@@ -98,7 +98,7 @@ export const courseCreateAction = course => async (dispatch, getState) => {
 };
 
 export const courseUpdateAction =
-  (course, id) => async (dispatch, getState) => {
+  (id, course) => async (dispatch, getState) => {
     try {
       dispatch({
         type: UPDATE_COURSE_REQUEST,
@@ -116,7 +116,7 @@ export const courseUpdateAction =
       };
 
       const { data } = await axios.patch(
-        `/api/v1/course?courseId=${id}`,
+        `/api/v1/course/${id}`,
         course,
         config
       );

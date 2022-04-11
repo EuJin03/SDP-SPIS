@@ -1,12 +1,14 @@
 import {
   CREATE_COURSE_FAIL,
   CREATE_COURSE_REQUEST,
+  CREATE_COURSE_RESET,
   CREATE_COURSE_SUCCESS,
   SINGLE_COURSE_FAIL,
   SINGLE_COURSE_REQUEST,
   SINGLE_COURSE_SUCCESS,
   UPDATE_COURSE_FAIL,
   UPDATE_COURSE_REQUEST,
+  UPDATE_COURSE_RESET,
   UPDATE_COURSE_SUCCESS,
   VIEW_COURSENAME_FAIL,
   VIEW_COURSENAME_REQUEST,
@@ -51,6 +53,8 @@ export const courseCreateReducer = (state = {}, action) => {
       return { loading: false, success: true, message: action.payload };
     case CREATE_COURSE_FAIL:
       return { loading: false, error: action.payload };
+    case CREATE_COURSE_RESET:
+      return {};
     default:
       return state;
   }
@@ -64,6 +68,8 @@ export const courseUpdateReducer = (state = { course: {} }, action) => {
       return { loading: false, success: true, course: action.payload };
     case UPDATE_COURSE_FAIL:
       return { loading: false, error: action.payload };
+    case UPDATE_COURSE_RESET:
+      return {};
     default:
       return state;
   }
