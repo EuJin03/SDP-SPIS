@@ -20,17 +20,17 @@ connectDB();
 
 const importData = async () => {
   try {
-    await Student.deleteMany();
-    await Resource.deleteMany();
+    // await Student.deleteMany();
+    // await Resource.deleteMany();
     // await Course.deleteMany();
-    await Staff.deleteMany();
-    await Assignment.deleteMany();
+    // await Staff.deleteMany();
+    // await Assignment.deleteMany();
 
-    await Student.insertMany(students);
-    await Resource.insertMany(resources);
+    // await Student.insertMany(students);
+    // await Resource.insertMany(resources);
     // await Course.insertMany(courses);
-    await Staff.insertMany(staffs);
-    await Assignment.insertMany(assignments);
+    // await Staff.insertMany(staffs);
+    // await Assignment.insertMany(assignments);
 
     console.log("Data Imported!");
     process.exit();

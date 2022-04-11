@@ -262,23 +262,23 @@ const updateStaff = asyncHandler(async (req, res) => {
       staff.password = req.body.password;
     }
 
-    if (req.body?.course) {
-      //array
-      const course = req.body.course;
-      const vac = validateArrayCourse(course);
-      if (vac) {
-        res.status(400);
-        throw new Error(vc);
-      }
+    // if (req.body?.course) {
+    //   //array
+    //   const course = req.body.course;
+    //   const vac = validateArrayCourse(course);
+    //   if (vac) {
+    //     res.status(400);
+    //     throw new Error(vac);
+    //   }
 
-      let courses = [];
-      course.forEach(c => {
-        courses.push(c);
-      });
+    //   let courses = [];
+    //   course.forEach(c => {
+    //     courses.push(c);
+    //   });
 
-      courses = [...new Set(courses)];
-      staff.course = courses;
-    }
+    //   courses = [...new Set(courses)];
+    staff.course = req.body?.course;
+    // }
 
     const updatedStaff = await staff.save();
 
@@ -290,6 +290,8 @@ const updateStaff = asyncHandler(async (req, res) => {
       gender: updatedStaff.gender,
       dob: updatedStaff.dob,
       course: updatedStaff.course,
+      isAdmin: updatedStaff.isAdmin,
+      token: generateToken(updatedStaff._id),
     });
   } else {
     res.status(404);

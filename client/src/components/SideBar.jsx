@@ -69,6 +69,8 @@ const useStyles = createStyles(theme => ({
   },
 
   link: {
+    margin: "10px 20px",
+    borderRadius: "7px",
     padding: "20px",
     boxSizing: "border-box",
     display: "flex",
@@ -186,7 +188,7 @@ const SideBar = () => {
         </Group>
       </Navbar.Section>
 
-      <Navbar.Section grow className={classes.links}>
+      <Navbar.Section grow>
         <div>{links}</div>
       </Navbar.Section>
 

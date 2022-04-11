@@ -292,6 +292,7 @@ export const PersonalDetails = ({ form, error }) => {
           label="Date of Birth"
           icon={<Cake size={16} />}
           required
+          excludeDate={date => date => new Date()}
           placeholder="Select your birthday"
           value={form.values.dob}
           onChange={e => form.setFieldValue("dob", e)}

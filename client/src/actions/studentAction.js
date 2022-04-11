@@ -121,7 +121,7 @@ export const logout = () => dispatch => {
   dispatch({ type: UPDATE_TASK_RESET });
 };
 
-export const getStudentDetails = () => async (dispatch, getState) => {
+export const getUserDetails = () => async (dispatch, getState) => {
   try {
     dispatch({
       type: USER_DETAILS_REQUEST,
@@ -138,7 +138,9 @@ export const getStudentDetails = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.get(`/api/v1/student/profile`, config);
+    const user = userInfo?.studentID ? "student" : "staff";
+
+    const { data } = await axios.get(`/api/v1/${user}/profile`, config);
 
     dispatch({
       type: USER_DETAILS_SUCCESS,
@@ -171,7 +173,6 @@ export const updateStudentProfile = student => async (dispatch, getState) => {
         Authorization: `Bearer ${userInfo.token}`,
       },
     };
-
     const { data } = await axios.patch(
       `/api/v1/student/profile`,
       student,
@@ -182,6 +183,8 @@ export const updateStudentProfile = student => async (dispatch, getState) => {
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data,
     });
+
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (err) {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,

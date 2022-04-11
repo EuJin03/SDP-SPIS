@@ -300,6 +300,7 @@ const updateStudent = asyncHandler(async (req, res) => {
       dob: updatedStudent.dob,
       course: updatedStudent.course,
       assignments: updatedStudent.assignments,
+      token: generateToken(updatedStudent._id),
     });
   } else {
     res.status(404);

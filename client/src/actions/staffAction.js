@@ -135,39 +135,45 @@ export const getStaffDetails = () => async (dispatch, getState) => {
   }
 };
 
-export const updateStaffProfile = staff => async (dispatch, getState) => {
-  try {
-    dispatch({
-      type: USER_UPDATE_PROFILE_REQUEST,
-    });
+export const updateStaffProfile =
+  (image, fname, lname, dob, course) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_UPDATE_PROFILE_REQUEST,
+      });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
 
-    const { data } = await axios.patch(`/api/v1/staff/profile`, staff, config);
+      const { data } = await axios.patch(
+        `/api/v1/staff/profile`,
+        { image: image, fName: fname, lName: lname, dob, course },
+        config
+      );
 
-    dispatch({
-      type: USER_UPDATE_PROFILE_SUCCESS,
-      payload: data,
-    });
-  } catch (err) {
-    dispatch({
-      type: USER_UPDATE_PROFILE_FAIL,
-      payload:
-        err.response && err.response.data.message
-          ? err.response.data.message
-          : err.message,
-    });
-  }
-};
+      dispatch({
+        type: USER_UPDATE_PROFILE_SUCCESS,
+        payload: data,
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    } catch (err) {
+      dispatch({
+        type: USER_UPDATE_PROFILE_FAIL,
+        payload:
+          err.response && err.response.data.message
+            ? err.response.data.message
+            : err.message,
+      });
+    }
+  };
 
 export const staffForgotPassword = email => async dispatch => {
   try {
