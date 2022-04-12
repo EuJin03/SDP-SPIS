@@ -33,6 +33,8 @@ app.use("/api/v1/assignment", assignmentRoute);
 app.use("/api/v1/resource", resourceRoute);
 app.use("/api/v1/uploads", uploadRoute);
 
+const __dirname = path.resolve();
+
 if (__node_env === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
