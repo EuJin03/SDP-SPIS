@@ -1,6 +1,8 @@
 {
   "name": "client",
   "version": "0.1.0",
+  "proxy": "https://spis-backend.herokuapp.com/",
+  "homepage": "https://tuition-system-spis.herokuapp.com/",
   "private": true,
   "dependencies": {
     "@mantine/core": "^4.1.0",
