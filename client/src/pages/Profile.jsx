@@ -154,6 +154,7 @@ const Profile = () => {
   const [remove, setRemove] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const courseList = useSelector(state => state.courseList);
   const { error: courseErr, courses } = courseList;
@@ -204,8 +205,9 @@ const Profile = () => {
         icon: <Check />,
       });
       setTimeout(() => {
+        navigate("/", { replace: true });
         window.location.reload();
-      }, 2000);
+      }, 1000);
     }
 
     if (updateError) {
@@ -217,7 +219,7 @@ const Profile = () => {
       });
       dispatch({ type: USER_UPDATE_PROFILE_RESET });
     }
-  }, [dispatch, updateError, updateInfo, updateSuccess]);
+  }, [dispatch, navigate, updateError, updateInfo, updateSuccess]);
 
   const imageUpload = useSelector(state => state.imageUpload);
   const { image, success, error: imageError } = imageUpload;
@@ -272,8 +274,6 @@ const Profile = () => {
         label: v.courseName,
       }))
     : [];
-
-  const navigate = useNavigate();
 
   const logoutHandler = () => {
     dispatch(logout());
