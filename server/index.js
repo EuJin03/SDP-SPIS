@@ -36,7 +36,7 @@ app.use("/api/v1/uploads", uploadRoute);
 const __dirname = path.resolve();
 
 if (__node_env === "production") {
-  app.use(express.static(path.join(__dirname, "/client/build")));
+  app.use(express.static(path.join(__dirname, "../client/build")));
 
   app.get("*", (req, res) =>
     res.sendFile(path.resolve(__dirname, "client", "build", " index.html"))
