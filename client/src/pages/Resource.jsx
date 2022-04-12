@@ -188,9 +188,7 @@ const Resource = () => {
             />
           </Box>
         </Box>
-        {loading || resources.length === 0 ? (
-          <LoadingOverlay visible={true} />
-        ) : null}
+        {loading ? <LoadingOverlay visible={true} /> : null}
         {createLoading && <LoadingOverlay visible={true} />}
 
         {resources.length !== 0 && (
@@ -200,6 +198,8 @@ const Resource = () => {
             staff={userInfo?.studentID ? null : userInfo.email}
           />
         )}
+
+        {resources.length === 0 && <ResourceList data={[]} staff={null} />}
       </Box>
     </>
   );

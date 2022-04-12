@@ -8,6 +8,7 @@ import {
   LoadingOverlay,
   NativeSelect,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import { Check, FilePlus, Hash, X } from "tabler-icons-react";
 import { usePrevious } from "../hooks/usePrevious";
@@ -220,13 +221,22 @@ const Assignment = () => {
           </Text>
           <Box className={classes.rightHeader}>
             {userInfo?.studentID ? null : (
-              <ActionIcon
-                mr="md"
-                component={Link}
-                to={`/assignments/${course}/create`}
+              <Tooltip
+                label="Create"
+                withArrow
+                position="left"
+                placement="center"
+                color="indigo"
+                transition="slide-left"
               >
-                <FilePlus size="26" color="#427AEB" />
-              </ActionIcon>
+                <ActionIcon
+                  mr="md"
+                  component={Link}
+                  to={`/assignments/${course}/create`}
+                >
+                  <FilePlus size="26" color="#427AEB" />
+                </ActionIcon>
+              </Tooltip>
             )}
             <NativeSelect
               placeholder="Select a course"
@@ -237,12 +247,9 @@ const Assignment = () => {
             />
           </Box>
         </Box>
-        {taskLoading || course.length === 0 ? (
-          <LoadingOverlay visible={true} />
-        ) : null}
-        {assignmentLoading || course.length === 0 ? (
-          <LoadingOverlay visible={true} />
-        ) : null}
+        {taskLoading && <LoadingOverlay visible={true} />}
+        {assignmentLoading && <LoadingOverlay visible={true} />}
+        {createLoading && <LoadingOverlay visible={true} />}
 
         {tasks && tasks.length !== 0 && (
           <TaskList
@@ -251,7 +258,6 @@ const Assignment = () => {
             staff={userInfo?.studentID ? null : userInfo.email}
           />
         )}
-        {createLoading ? <LoadingOverlay visible={true} /> : null}
 
         {assignments && assignments.length !== 0 && (
           <TaskList

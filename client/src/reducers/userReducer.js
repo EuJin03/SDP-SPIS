@@ -14,6 +14,7 @@ import {
   USER_DETAILS_SUCCESS,
   USER_FORGOT_PASSWORD_FAIL,
   USER_FORGOT_PASSWORD_REQUEST,
+  USER_FORGOT_PASSWORD_RESET,
   USER_FORGOT_PASSWORD_SUCCESS,
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
@@ -102,6 +103,8 @@ export const userForgotPasswordReducer = (state = {}, action) => {
       return { loading: false, success: true, message: action.payload };
     case USER_FORGOT_PASSWORD_FAIL:
       return { loading: false, error: action.payload };
+    case USER_FORGOT_PASSWORD_RESET:
+      return {};
     default:
       return state;
   }

@@ -170,7 +170,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
       to: email,
       subject: "Reset Password Link",
       html: `<h2>Please click on given link to reset your password</h2>
-                <p><a href="${__url}/api/staff/reset-password/${token}">Reset Password</a></p>
+                <p><a href="${__url}/reset-password/staff/${token}">Reset Password</a></p>
                 <hr>
                 <p><b>The link will expire in 30m!</b></p>
               `,

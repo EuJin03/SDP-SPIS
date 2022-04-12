@@ -32,10 +32,7 @@ import {
   assignmentSubmitAction,
   assignmentViewAction,
 } from "../actions/assignmentAction";
-import {
-  SUBMIT_ASSIGNMENT_RESET,
-  VIEW_ASSIGNMENT_RESET,
-} from "../constants/assignmentConstant";
+import { SUBMIT_ASSIGNMENT_RESET } from "../constants/assignmentConstant";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
 import { usePrevious } from "../hooks/usePrevious";
 import { DropZone } from "./DropZone";
@@ -78,7 +75,7 @@ const useStyles = createStyles(theme => ({
   },
 }));
 
-const SubmitModal = ({ submissionId, editToggle, setEditToggle }) => {
+const SubmitModal = ({ submissionId, comment, editToggle, setEditToggle }) => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
 
@@ -247,6 +244,16 @@ const SubmitModal = ({ submissionId, editToggle, setEditToggle }) => {
                     </Text>
                     <DropZone />
                   </>
+                )}
+                {comment !== "" && (
+                  <Textarea
+                    mt="xl"
+                    value={comment}
+                    label="Lecturer's Remark: "
+                    required
+                    minRows={2}
+                    maxRows={5}
+                  />
                 )}
               </Box>
               <Group position="right" mt="xl">

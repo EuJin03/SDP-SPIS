@@ -15,6 +15,7 @@ import {
   Image,
   Divider,
   Switch,
+  Badge,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/hooks";
@@ -403,6 +404,7 @@ const Profile = () => {
                         <Text mb="-sm" size="lg" weight={600}>
                           {form.values.lname + " " + form.values.fname}
                         </Text>
+
                         <UnstyledButton
                           onClick={() => {
                             setToggle(true);
@@ -413,6 +415,21 @@ const Profile = () => {
                           Change Profile Picture
                         </UnstyledButton>
                       </Group>
+                      {userInfo?.studentID ? (
+                        <Badge
+                          mt="-lg"
+                          color={userInfo?.isActive ? "green" : "red"}
+                        >
+                          {userInfo?.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          mt="-lg"
+                          color={userInfo?.isAdmin ? "green" : "blue"}
+                        >
+                          {userInfo?.isAdmin ? "Admin" : "Staff"}
+                        </Badge>
+                      )}
                     </Group>
                     <Group position="apart" grow>
                       <TextInput

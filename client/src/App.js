@@ -17,8 +17,14 @@ import AssignmentCreate from "./pages/AssignmentCreate";
 import AssignmentDetails from "./pages/AssignmentDetails";
 import StaffManagement from "./pages/StaffManagement";
 import Messages from "./pages/Messages";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import Home from "./pages/Home";
 
 import "./App.css";
+import Features from "./pages/Features";
+import About from "./pages/About";
+import FAQ from "./pages/FAQ";
 
 const App = () => {
   return (
@@ -32,8 +38,11 @@ const App = () => {
             <Route path="/user-profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* <Route path="/forgot-password" />
-            <Route path="/reset-password/:token" /> */}
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route
+              path="/reset-password/:user/:token"
+              element={<ResetPassword />}
+            />
             <Route path="/assignments" element={<Assignment />} />
             <Route
               path="/assignments/:courseId/create"
@@ -49,6 +58,11 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/staff-management" element={<StaffManagement />} />
             <Route path="/messages" element={<Messages />} />
+
+            <Route path="/features" element={<Features />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/faq" element={<FAQ />} />
+
             <Route path="*" element={<Error />} />
           </Routes>
         </Router>

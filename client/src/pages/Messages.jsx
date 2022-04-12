@@ -82,10 +82,10 @@ export const Messages = () => {
               A <span className={classes.highlight}>modern</span> React App
             </Title>
             <Text color="dimmed" mt="md">
-              Messaging component might not be able to craft within the short of
-              assignment time frame. Sincerely apology. <br />
-              However, please enjoy your stay with the app that I built with my
-              groupmates.
+              Messaging component might not be able to craft within the short
+              assignment time frame. Please accept my sincere apology! <br />
+              However, please enjoy your stay within the app that I built with
+              my groupmates.
             </Text>
 
             <Group mt={30}>

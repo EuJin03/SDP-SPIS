@@ -196,7 +196,7 @@ export const updateStudentProfile = student => async (dispatch, getState) => {
   }
 };
 
-export const studentForgotPassword = id => async dispatch => {
+export const studentForgotPassword = email => async dispatch => {
   try {
     dispatch({
       type: USER_FORGOT_PASSWORD_REQUEST,
@@ -209,7 +209,7 @@ export const studentForgotPassword = id => async dispatch => {
 
     const { data } = await axios.post(
       "/api/v1/student/forgot-password",
-      id,
+      { email },
       config
     );
     dispatch({

@@ -189,10 +189,13 @@ export const staffForgotPassword = email => async dispatch => {
       },
     };
 
-    const { data } = await axios.post("/api/v1/staff/forgot-password", config);
+    const { data } = await axios.post(
+      "/api/v1/staff/forgot-password",
+      { email },
+      config
+    );
     dispatch({
       type: USER_FORGOT_PASSWORD_SUCCESS,
-      email,
       payload: data,
     });
   } catch (err) {

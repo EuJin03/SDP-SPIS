@@ -14,6 +14,7 @@ import {
   Button,
   Divider,
   Box,
+  Tooltip,
 } from "@mantine/core";
 import {
   Selector,
@@ -152,15 +153,17 @@ export const TaskList = ({ data, staff }) => {
   const [toggle, setToggle] = useState(false);
   const [editId, setEditId] = useState("");
   const [submitId, setSubmitId] = useState("");
+  const [comment, setComment] = useState("");
 
   const setEditModal = (bool, id) => {
     setToggle(bool);
     setEditId(id);
   };
 
-  const setSubmitModal = (bool, id) => {
+  const setSubmitModal = (bool, id, comment) => {
     setToggle(bool);
     setSubmitId(id);
+    setComment(comment);
   };
 
   const rows = sortedData.map(row => (
@@ -205,41 +208,64 @@ export const TaskList = ({ data, staff }) => {
                 <Text size="xs" style={{ marginRight: 2 }}>
                   {row.studentAssigned}
                 </Text>
-                <ActionIcon
-                  onClick={() =>
-                    dayjs(row.due).diff(new Date()) > 0
-                      ? dispatch(taskAssignAction(row._id))
-                      : showNotification({
-                          autoClose: 4000,
-                          title: "Oops, the assignment is due",
-                          message:
-                            "You cannot assign this task to students anymore!",
-                          color: "red",
-                          icon: <X />,
-                        })
-                  }
+                <Tooltip
+                  label="Assign"
+                  withArrow
+                  color="blue"
+                  transition="skew-up"
                 >
-                  <UserPlus size={16} />
-                </ActionIcon>
+                  <ActionIcon
+                    onClick={() =>
+                      dayjs(row.due).diff(new Date()) > 0
+                        ? dispatch(taskAssignAction(row._id))
+                        : showNotification({
+                            autoClose: 4000,
+                            title: "Oops, the assignment is due",
+                            message:
+                              "You cannot assign this task to students anymore!",
+                            color: "red",
+                            icon: <X />,
+                          })
+                    }
+                  >
+                    <UserPlus size={16} />
+                  </ActionIcon>
+                </Tooltip>
               </Box>
-              <ActionIcon
-                component={Link}
-                to={`/assignments/grade?id=${row._id}&students=${row.studentAssigned}`}
+              <Tooltip
+                label="Grade"
+                withArrow
+                color="cyan"
+                transition="skew-up"
               >
-                <Book2 size={16} />
-              </ActionIcon>
+                <ActionIcon
+                  component={Link}
+                  to={`/assignments/grade?id=${row._id}&students=${row.studentAssigned}`}
+                >
+                  <Book2 size={16} />
+                </ActionIcon>
+              </Tooltip>
 
-              <ActionIcon onClick={() => setEditModal(true, row._id)}>
-                <Pencil size={16} />
-              </ActionIcon>
-              <ActionIcon
-                color="red"
-                onClick={() => {
-                  setRemove({ id: row._id, status: true });
-                }}
+              <Tooltip label="Edit" withArrow color="teal" transition="skew-up">
+                <ActionIcon onClick={() => setEditModal(true, row._id)}>
+                  <Pencil size={16} />
+                </ActionIcon>
+              </Tooltip>
+              <Tooltip
+                label="Delete"
+                withArrow
+                color="pink"
+                transition="skew-up"
               >
-                <Trash size={16} />
-              </ActionIcon>
+                <ActionIcon
+                  color="red"
+                  onClick={() => {
+                    setRemove({ id: row._id, status: true });
+                  }}
+                >
+                  <Trash size={16} />
+                </ActionIcon>
+              </Tooltip>
             </Group>
           </td>
         </>
@@ -278,7 +304,7 @@ export const TaskList = ({ data, staff }) => {
               <ActionIcon
                 onClick={() => {
                   if (dayjs(row.due).diff(new Date()) > 0) {
-                    setSubmitModal(true, row._id);
+                    setSubmitModal(true, row._id, row.comments);
                   } else if (
                     !row.submission &&
                     dayjs(row.due).diff(new Date()) < 0
@@ -346,6 +372,7 @@ export const TaskList = ({ data, staff }) => {
         <SubmitModal
           key={submitId}
           submissionId={submitId}
+          comment={comment}
           editToggle={toggle}
           setEditToggle={setSubmitModal}
         />

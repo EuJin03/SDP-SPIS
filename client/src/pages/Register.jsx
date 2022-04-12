@@ -1,4 +1,4 @@
-import { Anchor, Button, Group, Stepper } from "@mantine/core";
+import { Anchor, Button, createStyles, Group, Stepper } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,8 +20,38 @@ import {
   RegisterForm,
 } from "../components/RegisterForm";
 import { showNotification } from "@mantine/notifications";
+import Header from "../components/Header";
+
+const Container = styled.div`
+  height: 92vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+`;
+
+const useStyles = createStyles(theme => ({
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+  },
+
+  container: {
+    height: "92vh",
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+  },
+}));
 
 const Register = () => {
+  const { classes } = useStyles();
   const [type, setType] = useState("student");
   const [active, setActive] = useState(0);
   const nextStep = e => {
@@ -73,141 +103,139 @@ const Register = () => {
   }, [courses, courseErr, dispatch]);
 
   return (
-    <Container>
-      <form
-        id="register"
-        onSubmit={form.onSubmit(values => {
-          type === "student"
-            ? dispatch(
-                studentRegister(
-                  values.fname,
-                  values.lname,
-                  values.email,
-                  values.password,
-                  values.confirmPassword,
-                  values.gender,
-                  values.dob.toISOString(),
-                  values.course
+    <div className={classes.wrapper}>
+      <Header />
+      <div className={classes.container}>
+        <form
+          id="register"
+          onSubmit={form.onSubmit(values => {
+            type === "student"
+              ? dispatch(
+                  studentRegister(
+                    values.fname,
+                    values.lname,
+                    values.email,
+                    values.password,
+                    values.confirmPassword,
+                    values.gender,
+                    values.dob.toISOString(),
+                    values.course
+                  )
                 )
-              )
-            : dispatch(
-                staffRegister(
-                  values.fname,
-                  values.lname,
-                  values.email,
-                  values.password,
-                  values.confirmPassword,
-                  values.gender,
-                  values.dob.toISOString(),
-                  values.course
-                )
-              );
-          error &&
-            showNotification({
-              autoClose: 4000,
-              title: "Oops, something went wrong",
-              message: "Please check your registration details!",
-              color: "red",
-              icon: <X />,
-            });
-        })}
-      >
-        <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-          <Stepper.Step
-            icon={<MailOpened size={18} />}
-            mb="lg"
-            label="First step"
-            description="Create an account"
-            color={
-              error?.includes("email") ||
-              error?.includes("Password") ||
-              error?.includes("Exist") ||
-              error?.includes("Empty")
-                ? "red"
-                : null
-            }
-            completedIcon={
-              error?.includes("email") ||
-              error?.includes("Password") ||
-              error?.includes("Exist") ? (
-                <CircleX />
-              ) : null
-            }
-          >
-            <AccountDetails
-              type={type}
-              setType={setType}
-              form={form}
-              error={error}
-            />
-          </Stepper.Step>
-          <Stepper.Step
-            icon={<UserCheck size={18} />}
-            mb="lg"
-            label="Second step"
-            description="Personal Details"
-            color={
-              error?.includes("name") ||
-              error?.includes("Gender") ||
-              !form.values.dob
-                ? "red"
-                : null
-            }
-            completedIcon={
-              error?.includes("name") ||
-              error?.includes("Gender") ||
-              !form.values.dob ? (
-                <CircleX />
-              ) : null
-            }
-          >
-            {" "}
-            <PersonalDetails form={form} error={error} />
-          </Stepper.Step>
-          <Stepper.Step
-            icon={<ShieldCheck size={18} />}
-            mb="lg"
-            label="Final step"
-            description="Select Course"
-          >
-            <RegisterForm
-              form={form}
-              type={type}
-              courses={courses}
-              loading={loading}
-            />
-          </Stepper.Step>
-        </Stepper>
-      </form>
+              : dispatch(
+                  staffRegister(
+                    values.fname,
+                    values.lname,
+                    values.email,
+                    values.password,
+                    values.confirmPassword,
+                    values.gender,
+                    values.dob.toISOString(),
+                    values.course
+                  )
+                );
+            error &&
+              showNotification({
+                autoClose: 4000,
+                title: "Oops, something went wrong",
+                message: "Please check your registration details!",
+                color: "red",
+                icon: <X />,
+              });
+          })}
+        >
+          <Stepper active={active} onStepClick={setActive} breakpoint="sm">
+            <Stepper.Step
+              icon={<MailOpened size={18} />}
+              mb="lg"
+              label="First step"
+              description="Create an account"
+              color={
+                error?.includes("email") ||
+                error?.includes("Password") ||
+                error?.includes("Exist") ||
+                error?.includes("Empty")
+                  ? "red"
+                  : null
+              }
+              completedIcon={
+                error?.includes("email") ||
+                error?.includes("Password") ||
+                error?.includes("Exist") ? (
+                  <CircleX />
+                ) : null
+              }
+            >
+              <AccountDetails
+                type={type}
+                setType={setType}
+                form={form}
+                error={error}
+              />
+            </Stepper.Step>
+            <Stepper.Step
+              icon={<UserCheck size={18} />}
+              mb="lg"
+              label="Second step"
+              description="Personal Details"
+              color={
+                error?.includes("name") ||
+                error?.includes("Gender") ||
+                !form.values.dob
+                  ? "red"
+                  : null
+              }
+              completedIcon={
+                error?.includes("name") ||
+                error?.includes("Gender") ||
+                !form.values.dob ? (
+                  <CircleX />
+                ) : null
+              }
+            >
+              {" "}
+              <PersonalDetails form={form} error={error} />
+            </Stepper.Step>
+            <Stepper.Step
+              icon={<ShieldCheck size={18} />}
+              mb="lg"
+              label="Final step"
+              description="Select Course"
+            >
+              <RegisterForm
+                form={form}
+                type={type}
+                courses={courses}
+                loading={loading}
+              />
+            </Stepper.Step>
+          </Stepper>
+        </form>
 
-      <Group position="center">
-        {active === 0 ? null : (
-          <Button type="button" size="md" variant="default" onClick={prevStep}>
-            Back
-          </Button>
-        )}
-        {active === 2 ? (
-          <Button form="register" size="md" type="submit">
-            Register
-          </Button>
-        ) : (
-          <Button size="md" type="button" onClick={nextStep}>
-            Next step
-          </Button>
-        )}
-      </Group>
-    </Container>
+        <Group position="center">
+          {active === 0 ? null : (
+            <Button
+              type="button"
+              size="md"
+              variant="default"
+              onClick={prevStep}
+            >
+              Back
+            </Button>
+          )}
+          {active === 2 ? (
+            <Button form="register" size="md" type="submit">
+              Register
+            </Button>
+          ) : (
+            <Button size="md" type="button" onClick={nextStep}>
+              Next step
+            </Button>
+          )}
+        </Group>
+      </div>
+    </div>
   );
 };
-
-const Container = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-`;
 
 export default Register;
