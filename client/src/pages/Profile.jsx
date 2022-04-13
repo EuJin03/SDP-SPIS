@@ -209,7 +209,6 @@ const Profile = () => {
         window.location.reload();
       }, 1000);
     }
-
     if (updateError) {
       showNotification({
         title: "Invalid Input",

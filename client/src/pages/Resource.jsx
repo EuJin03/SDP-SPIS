@@ -85,10 +85,6 @@ const Resource = () => {
       dispatch(resourceListAction(course));
     }
 
-    if (successEdit) {
-      dispatch(resourceListAction(course));
-    }
-
     error &&
       showNotification({
         autoClose: 4000,
@@ -110,15 +106,13 @@ const Resource = () => {
     if (course.length !== 0 && prevCourse !== course) {
       dispatch(resourceListAction(course));
     }
-  }, [
-    course,
-    dispatch,
-    error,
-    errorRemove,
-    prevCourse,
-    successEdit,
-    successRemove,
-  ]);
+  }, [course, dispatch, error, errorRemove, prevCourse, successRemove]);
+
+  useEffect(() => {
+    if (successEdit) {
+      dispatch(resourceListAction(course));
+    }
+  }, [course, dispatch, successEdit]);
 
   const data = courseInfo.map(v => ({
     value: v.id,

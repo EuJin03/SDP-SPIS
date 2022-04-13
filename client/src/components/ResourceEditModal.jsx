@@ -164,7 +164,8 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
     setTimeout(() => setTopicURL(""), 500);
   };
 
-  const updateResourceHandler = () => {
+  const updateResourceHandler = e => {
+    e.preventDefault();
     if (topicURL !== "" && topicName !== "") {
       dispatch(
         resourceUpdateAction(
@@ -221,7 +222,7 @@ const ResourceEditModal = ({ resourceId, editToggle, setEditToggle }) => {
           </Text>
 
           <Divider className={classes.divide} labelPosition="center" mt="lg" />
-          <form onSubmit={() => updateResourceHandler()}>
+          <form onSubmit={e => updateResourceHandler(e)}>
             <Group direction="column" grow mt="-md">
               <TextInput
                 label="Course Name"

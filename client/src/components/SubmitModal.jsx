@@ -7,10 +7,7 @@ import {
   Paper,
   Box,
   Text,
-  TextInput,
   Textarea,
-  NumberInput,
-  Slider,
   Anchor,
   LoadingOverlay,
   Alert,
@@ -165,6 +162,7 @@ const SubmitModal = ({ submissionId, comment, editToggle, setEditToggle }) => {
   }, [dispatch, setEditToggle, submitError, submitSuccess]);
 
   const updateFileSubmission = e => {
+    e.preventDefault();
     dispatch(assignmentSubmitAction(submissionId, submissionURL));
   };
 

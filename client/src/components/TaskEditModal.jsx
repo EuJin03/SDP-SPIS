@@ -168,7 +168,7 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
     setTimeout(() => setTopicURL(""), 500);
   };
 
-  const updateResourceHandler = e => {
+  const updateTaskHandler = e => {
     e.preventDefault();
     if (topicURL !== "" && topicName !== "" && due !== null && due !== "") {
       dispatch(
@@ -228,7 +228,7 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
           </Text>
 
           <Divider className={classes.divide} labelPosition="center" mt="lg" />
-          <form onSubmit={e => updateResourceHandler(e)}>
+          <form onSubmit={e => updateTaskHandler(e)}>
             <Group direction="column" grow mt="-md">
               <Group position="apart" grow="1">
                 <TextInput
@@ -250,7 +250,7 @@ const TaskEditModal = ({ taskId, editToggle, setEditToggle }) => {
                 value={due}
                 onChange={e => setDue(e)}
                 required
-                excludeDate={date => date <= new Date()}
+                excludeDate={date => date < new Date()}
                 onFocus={false}
               />
               <TextInput
