@@ -51,6 +51,9 @@ const Resource = () => {
   const courseNames = useSelector(state => state.courseNames);
   const { courseInfo } = courseNames;
 
+  const [course, setCourse] = useState(courseInfo[0].id);
+  const prevCourse = usePrevious(course);
+
   useEffect(() => {
     if (!userInfo) {
       navigate("/login", { replace: true });
@@ -59,19 +62,17 @@ const Resource = () => {
     if (userInfo && !courseInfo) {
       navigate("/", { replace: true });
     }
-  }, [courseInfo, navigate, userInfo]);
 
-  const [course, setCourse] = useState(courseInfo[0].id);
-  const prevCourse = usePrevious(course);
+    if (course.length !== 0 && prevCourse !== course) {
+      dispatch(resourceListAction(course));
+    }
+  }, [course, courseInfo, dispatch, navigate, prevCourse, userInfo]);
 
   const resourceList = useSelector(state => state.resourceList);
   const { loading, error, resources } = resourceList;
 
   const resourceDelete = useSelector(state => state.resourceDelete);
   const { success: successRemove, error: errorRemove } = resourceDelete;
-
-  const resourceUpdate = useSelector(state => state.resourceUpdate);
-  const { success: successEdit } = resourceUpdate;
 
   useEffect(() => {
     if (successRemove) {
@@ -102,17 +103,7 @@ const Resource = () => {
         color: "red",
         icon: <X />,
       });
-
-    if (course.length !== 0 && prevCourse !== course) {
-      dispatch(resourceListAction(course));
-    }
-  }, [course, dispatch, error, errorRemove, prevCourse, successRemove]);
-
-  useEffect(() => {
-    if (successEdit) {
-      dispatch(resourceListAction(course));
-    }
-  }, [course, dispatch, successEdit]);
+  }, [course, dispatch, error, errorRemove, successRemove]);
 
   const data = courseInfo.map(v => ({
     value: v.id,
@@ -185,7 +176,7 @@ const Resource = () => {
         {loading ? <LoadingOverlay visible={true} /> : null}
         {createLoading && <LoadingOverlay visible={true} />}
 
-        {resources.length !== 0 && (
+        {resources && resources.length !== 0 && (
           <ResourceList
             key={resources}
             data={resources}

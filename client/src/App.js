@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import SideBar from "./components/SideBar";
 import Meta from "./components/Meta";
@@ -19,7 +19,6 @@ import StaffManagement from "./pages/StaffManagement";
 import Messages from "./pages/Messages";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import Home from "./pages/Home";
 
 import "./App.css";
 import Features from "./pages/Features";
@@ -27,7 +26,21 @@ import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 
 const App = () => {
-  return (
+  const [isLaptop, setIsLaptop] = useState(true);
+
+  const handleResize = () => {
+    if (window.innerWidth < 1024) {
+      setIsLaptop(false);
+    } else {
+      setIsLaptop(true);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+  });
+
+  return isLaptop ? (
     <NotificationsProvider>
       <div className="App">
         <Router>
@@ -68,6 +81,20 @@ const App = () => {
         </Router>
       </div>
     </NotificationsProvider>
+  ) : (
+    <>
+      <div
+        style={{
+          width: "100%",
+          height: "100vh",
+          display: "grid",
+          placeItems: "center",
+          backgroundColor: "#f1f1f1",
+        }}
+      >
+        <h6>Cannot be viewed in mobile/tablet devices</h6>
+      </div>
+    </>
   );
 };
 

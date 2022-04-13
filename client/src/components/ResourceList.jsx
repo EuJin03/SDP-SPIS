@@ -21,7 +21,7 @@ import {
   Search,
   Pencil,
   Trash,
-  ExternalLink,
+  Download,
 } from "tabler-icons-react";
 import { ButtonCopy } from "./Clipboard";
 import { useDispatch, useSelector } from "react-redux";
@@ -145,13 +145,14 @@ export const ResourceList = ({ data, staff }) => {
             textDecoration: "none",
           }}
           rel="noopener noreferrer"
+          download
         >
           <Text size="sm" mr="md">
             {row.topicName.length > 45
               ? row.topicName.substring(0, 45) + "..."
               : row.topicName}
           </Text>
-          <ExternalLink size={16} />
+          <Download size={16} />
         </Anchor>
       </td>
       <td>
@@ -201,14 +202,19 @@ export const ResourceList = ({ data, staff }) => {
   const dispatch = useDispatch();
 
   const resourceDelete = useSelector(state => state.resourceDelete);
-  const { loading, success } = resourceDelete;
+  const { loading, success, error } = resourceDelete;
 
   useEffect(() => {
     if (success) {
       setRemove({ id: "", status: false });
       dispatch({ type: DELETE_RESOURCE_RESET });
     }
-  }, [dispatch, success]);
+
+    if (error) {
+      setRemove({ id: "", status: false });
+      dispatch({ type: DELETE_RESOURCE_RESET });
+    }
+  }, [dispatch, error, success]);
 
   function deleteHandler(id) {
     dispatch(resourceDeleteAction(id));

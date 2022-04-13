@@ -16,8 +16,8 @@ import {
   ChevronDown,
   ChevronUp,
   Search,
-  ExternalLink,
   Checklist,
+  Download,
 } from "tabler-icons-react";
 import dayjs from "dayjs";
 import GradeModal from "./GradeModal";
@@ -157,11 +157,12 @@ export const GradeList = ({ data }) => {
             textDecoration: "none",
           }}
           rel="noopener noreferrer"
+          download
         >
           <Text size="sm" mr="md">
             Submission
           </Text>
-          <ExternalLink size={16} />
+          <Download size={16} />
         </Anchor>
       </td>
       <td style={{ width: "180px" }}>

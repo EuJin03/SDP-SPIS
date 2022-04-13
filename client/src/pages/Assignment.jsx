@@ -185,15 +185,6 @@ const Assignment = () => {
   }, [course, dispatch, errorAssign, loading, successAssign]);
   /** ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN ASSIGN */
 
-  /** UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE */
-  const taskUpdate = useSelector(state => state.taskUpdate);
-  const { success: successEdit } = taskUpdate;
-
-  useEffect(() => {
-    successEdit && dispatch(taskListAction(course));
-  }, [course, dispatch, successEdit]);
-  /** UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE UPDATE */
-
   /** CREATE CREATE CREATE CREATE CREATE CREATE CREATE CREATE */
   const taskCreate = useSelector(state => state.taskCreate);
   const { loading: createLoading, success: createSuccess } = taskCreate;

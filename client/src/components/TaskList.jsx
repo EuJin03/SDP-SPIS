@@ -23,11 +23,11 @@ import {
   Search,
   Pencil,
   Trash,
-  ExternalLink,
   Book2,
   FileUpload,
   UserPlus,
   X,
+  Download,
 } from "tabler-icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -179,13 +179,14 @@ export const TaskList = ({ data, staff }) => {
             textDecoration: "none",
           }}
           rel="noopener noreferrer"
+          download
         >
           <Text size="sm" mr="md">
             {row.topicName.length > 50
               ? row.topicName.substring(0, 50) + "..."
               : row.topicName}
           </Text>
-          <ExternalLink size={16} />
+          <Download size={16} />
         </Anchor>
       </td>
       <td>
