@@ -7,6 +7,10 @@ import {
   CREATE_TASK_REQUEST,
   CREATE_TASK_RESET,
   CREATE_TASK_SUCCESS,
+  DASHBOARD_TASK_FAIL,
+  DASHBOARD_TASK_REQUEST,
+  DASHBOARD_TASK_RESET,
+  DASHBOARD_TASK_SUCCESS,
   DELETE_TASK_FAIL,
   DELETE_TASK_REQUEST,
   DELETE_TASK_RESET,
@@ -52,6 +56,21 @@ export const taskListReducer = (state = { tasks: [] }, action) => {
     case VIEW_TASK_FAIL:
       return { loading: false, error: action.payload };
     case VIEW_TASK_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const dashboardTaskReducer = (state = { tasks: [] }, action) => {
+  switch (action.type) {
+    case DASHBOARD_TASK_REQUEST:
+      return { loading: true, tasks: [] };
+    case DASHBOARD_TASK_SUCCESS:
+      return { loading: false, tasks: action.payload };
+    case DASHBOARD_TASK_FAIL:
+      return { loading: false, error: action.payload };
+    case DASHBOARD_TASK_RESET:
       return {};
     default:
       return state;

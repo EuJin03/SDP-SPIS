@@ -58,7 +58,7 @@ const useStyles = createStyles(theme => ({
   status: {
     width: "40px",
     height: "20px",
-    margin: "4px",
+    margin: "8px 0",
     backgroundColor: "blue",
   },
 }));

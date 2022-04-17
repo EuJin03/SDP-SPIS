@@ -22,6 +22,8 @@ import Reminder from "../components/Reminder";
 import ResultChart from "../components/ResultChart";
 import AssignmentProgress from "../components/AssignmentProgress";
 import CourseCard from "../components/CourseCard";
+import StaffCourseCard from "../components/StaffCourseCard";
+import StaffPieChart from "../components/StaffPieChart";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -172,7 +174,7 @@ const Dashboard = () => {
                   </Text>
                   {userInfo?.studentID ? (
                     <Text color="dimmed" size="sm">
-                      {userInfo.studentID} | {courseInfo[0].courseName}
+                      {userInfo.studentID} | {courseInfo[0]?.courseName}
                     </Text>
                   ) : (
                     <Text color="dimmed" size="sm">
@@ -190,13 +192,17 @@ const Dashboard = () => {
             </Box>
             <Grid grow="true" columns={12} className={classes.container}>
               <Grid.Col md={4} className={classes.col}>
-                {userInfo?.studentID ? <AssignmentProgress /> : <h1>idk</h1>}
+                {userInfo?.studentID ? (
+                  <AssignmentProgress />
+                ) : (
+                  <StaffPieChart />
+                )}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
                 {userInfo?.studentID ? <ResultChart /> : <h1>idk</h1>}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
-                <CourseCard />
+                {userInfo?.studentID ? <CourseCard /> : <StaffCourseCard />}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
                 <Reminder />

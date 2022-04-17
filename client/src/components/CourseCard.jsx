@@ -43,7 +43,7 @@ const CourseCard = () => {
     ...new Map(staffName.map(item => [item[key], item])).values(),
   ];
 
-  const test = labels ? (
+  const item = labels ? (
     labels.map((ass, index) => (
       <Box key={index} className={classes.item}>
         <Text weight={500}>{ass.staffName}</Text>
@@ -65,7 +65,7 @@ const CourseCard = () => {
           </Text>
           <Divider my="sm" style={{ width: "100%" }} />
         </Box>
-        <ScrollArea className={classes.content}>{test}</ScrollArea>
+        <ScrollArea className={classes.content}>{item}</ScrollArea>
       </Box>
     </>
   );

@@ -6,6 +6,9 @@ import {
   CREATE_TASK_FAIL,
   CREATE_TASK_REQUEST,
   CREATE_TASK_SUCCESS,
+  DASHBOARD_TASK_FAIL,
+  DASHBOARD_TASK_REQUEST,
+  DASHBOARD_TASK_SUCCESS,
   DELETE_TASK_FAIL,
   DELETE_TASK_REQUEST,
   DELETE_TASK_SUCCESS,
@@ -63,6 +66,42 @@ export const taskListAction = courseId => async (dispatch, getState) => {
   } catch (err) {
     dispatch({
       type: VIEW_TASK_FAIL,
+      payload:
+        err.response && err.response.data.message
+          ? err.response.data.message
+          : err.response,
+    });
+  }
+};
+
+export const dashboardTaskAction = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: DASHBOARD_TASK_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.get(
+      `/api/v1/assignment/uploaded-task`,
+      config
+    );
+
+    dispatch({
+      type: DASHBOARD_TASK_SUCCESS,
+      payload: data,
+    });
+  } catch (err) {
+    dispatch({
+      type: DASHBOARD_TASK_FAIL,
       payload:
         err.response && err.response.data.message
           ? err.response.data.message

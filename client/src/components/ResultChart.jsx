@@ -78,12 +78,13 @@ const ResultChart = () => {
           let counter = 0;
           let total = 0;
           assignments.forEach(a => {
-            if (a.subjectName === label && a.submission) {
+            if (a.subjectName === label && a.grade !== 0) {
               counter += 1;
               total += a.grade;
             }
           });
-          return Math.round(total / counter);
+          const avg = Math.round(total / counter);
+          return avg ? avg : 0;
         }),
         borderColor: "rgb(53, 162, 235)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
