@@ -21,6 +21,7 @@ import { logout } from "../actions/studentAction";
 import Reminder from "../components/Reminder";
 import ResultChart from "../components/ResultChart";
 import AssignmentProgress from "../components/AssignmentProgress";
+import CourseCard from "../components/CourseCard";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -187,7 +188,7 @@ const Dashboard = () => {
                 <Logout className={classes.logoutIcon} color="red" />
               </UnstyledButton>
             </Box>
-            <Grid grow columns={12} className={classes.container}>
+            <Grid grow="true" columns={12} className={classes.container}>
               <Grid.Col md={4} className={classes.col}>
                 {userInfo?.studentID ? <AssignmentProgress /> : <h1>idk</h1>}
               </Grid.Col>
@@ -195,7 +196,7 @@ const Dashboard = () => {
                 {userInfo?.studentID ? <ResultChart /> : <h1>idk</h1>}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
-                Course
+                <CourseCard />
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
                 <Reminder />
