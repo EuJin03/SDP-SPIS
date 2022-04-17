@@ -24,6 +24,7 @@ import AssignmentProgress from "../components/AssignmentProgress";
 import CourseCard from "../components/CourseCard";
 import StaffCourseCard from "../components/StaffCourseCard";
 import StaffPieChart from "../components/StaffPieChart";
+import StaffBarChart from "../components/StaffBarChart";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -199,7 +200,7 @@ const Dashboard = () => {
                 )}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
-                {userInfo?.studentID ? <ResultChart /> : <h1>idk</h1>}
+                {userInfo?.studentID ? <ResultChart /> : <StaffBarChart />}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
                 {userInfo?.studentID ? <CourseCard /> : <StaffCourseCard />}

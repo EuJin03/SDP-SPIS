@@ -15,7 +15,7 @@ const useStyles = createStyles(theme => ({
     alignItems: "center",
   },
   content: {
-    width: "360px",
+    width: "340px",
     position: "relative",
   },
 }));
