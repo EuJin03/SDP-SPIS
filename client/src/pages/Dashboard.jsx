@@ -18,6 +18,7 @@ import {
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { logout } from "../actions/studentAction";
+import Reminder from "../components/Reminder";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -77,6 +78,10 @@ const useStyles = createStyles(theme => ({
     border: "1px solid #f1f1f1",
     borderRadius: "13px",
     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
+    padding: "26px 40px",
+    minHeight: "37vh",
+    maxHeight: "37vh",
+    overflow: "hidden",
   },
 }));
 
@@ -163,11 +168,11 @@ const Dashboard = () => {
                     {userInfo.lname.concat(" ", userInfo.fname).toUpperCase()}
                   </Text>
                   {userInfo?.studentID ? (
-                    <Text color="gray" size="sm">
+                    <Text color="dimmed" size="sm">
                       {userInfo.studentID} | {courseInfo[0].courseName}
                     </Text>
                   ) : (
-                    <Text color="gray" size="sm">
+                    <Text color="dimmed" size="sm">
                       {userInfo.email}
                     </Text>
                   )}
@@ -191,7 +196,7 @@ const Dashboard = () => {
                 Course
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
-                Reminder
+                <Reminder />
               </Grid.Col>
             </Grid>
           </>

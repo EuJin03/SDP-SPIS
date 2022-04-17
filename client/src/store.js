@@ -42,6 +42,7 @@ import {
   userResetPasswordReducer,
   userUpdateProfileReducer,
 } from "./reducers/userReducer";
+import { reminderReducer } from "./reducers/dashboardReducer";
 
 const reducer = combineReducers({
   userLogin: userLoginReducer,
@@ -75,6 +76,7 @@ const reducer = combineReducers({
   fileUpload: fileUploadReducer,
   allStaff: allStaffReducer,
   adminAssign: adminAssignReducer,
+  reminder: reminderReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userInfo")

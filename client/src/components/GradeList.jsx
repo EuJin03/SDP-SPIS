@@ -256,9 +256,9 @@ export const GradeList = ({ data }) => {
                 Submitted On
               </Th>
               <Th
-                sorted={sortBy === "assignments[0].grade"}
+                sorted={sortBy === "grade"}
                 reversed={reverseSortDirection}
-                onSort={() => setSorting("assignments[0].grade")}
+                onSort={() => setSorting("grade")}
               >
                 Grade
               </Th>
