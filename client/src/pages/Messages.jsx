@@ -79,7 +79,7 @@ export const Messages = () => {
         <div className={classes.inner}>
           <div className={classes.content}>
             <Title className={classes.title}>
-              A <span className={classes.highlight}>modern</span> React App
+              Work in <span className={classes.highlight}>Progress</span>...
             </Title>
             <Text color="dimmed" mt="md">
               Messaging component might not be able to craft within the short

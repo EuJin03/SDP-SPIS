@@ -19,6 +19,8 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { logout } from "../actions/studentAction";
 import Reminder from "../components/Reminder";
+import ResultChart from "../components/ResultChart";
+import AssignmentProgress from "../components/AssignmentProgress";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -78,7 +80,7 @@ const useStyles = createStyles(theme => ({
     border: "1px solid #f1f1f1",
     borderRadius: "13px",
     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-    padding: "26px 40px",
+    padding: "26px 30px",
     minHeight: "37vh",
     maxHeight: "37vh",
     overflow: "hidden",
@@ -187,10 +189,10 @@ const Dashboard = () => {
             </Box>
             <Grid grow columns={12} className={classes.container}>
               <Grid.Col md={4} className={classes.col}>
-                Assignment Progress
+                {userInfo?.studentID ? <AssignmentProgress /> : <h1>idk</h1>}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
-                Average Mark
+                {userInfo?.studentID ? <ResultChart /> : <h1>idk</h1>}
               </Grid.Col>
               <Grid.Col md={4} className={classes.col}>
                 Course
