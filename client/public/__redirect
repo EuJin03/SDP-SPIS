@@ -1,0 +1,2 @@
+/api/v1/_ https://spis-backend.herokuapp.com/:splat 200
+/_ /index.html 200

@@ -1,9 +1,8 @@
-import { Anchor, Button, createStyles, Group, Stepper } from "@mantine/core";
+import { Button, createStyles, Group, Stepper } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   CircleX,
   MailOpened,
@@ -21,16 +20,6 @@ import {
 } from "../components/RegisterForm";
 import { showNotification } from "@mantine/notifications";
 import Header from "../components/Header";
-
-const Container = styled.div`
-  height: 92vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-`;
 
 const useStyles = createStyles(theme => ({
   wrapper: {

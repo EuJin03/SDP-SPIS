@@ -1,10 +1,4 @@
-import {
-  Box,
-  createStyles,
-  Divider,
-  LoadingOverlay,
-  Text,
-} from "@mantine/core";
+import { Box, createStyles, LoadingOverlay, Text } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { viewAllStaffAction } from "../actions/staffAction";
@@ -35,7 +29,7 @@ const StaffManagement = () => {
   const dispatch = useDispatch();
 
   const allStaff = useSelector(state => state.allStaff);
-  const { loading, staffs, error } = allStaff;
+  const { loading, staffs } = allStaff;
 
   useEffect(() => {
     if (staffs) {

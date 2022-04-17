@@ -8,12 +8,23 @@ import {
   UnstyledButton,
   createStyles,
   Box,
+  Avatar,
+  Text,
+  Grid,
+  Modal,
+  Divider,
+  Group,
+  Button,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { logout } from "../actions/studentAction";
 
 const useStyles = createStyles(theme => ({
-  header: {
+  wrapper: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: "30px 40px",
     position: "relative",
     minHeight: "100vh",
@@ -23,17 +34,55 @@ const useStyles = createStyles(theme => ({
   profile: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "flex-start",
-    padding: "30px",
+    alignItems: "center",
+    padding: "20px",
     width: "100%",
-    height: "20vh",
     borderRadius: "13px",
-    backgroundColor: "purple",
+    border: "2px solid #f1f1f1",
+    flex: "0.1",
+  },
+
+  profileCard: {
+    display: "flex",
+    flex: "0.98",
+    alignItems: "center",
+  },
+  profileAvatar: {
+    borderRadius: "50%",
+    border: "4px solid #339AF0",
+    marginRight: "20px",
+  },
+
+  logout: {
+    flex: "0.02",
+    padding: 8,
+    borderRadius: "50%",
+    display: "grid",
+    placeItems: "center",
+    transition: "all 0.3s ease",
+
+    "&:hover": {
+      backgroundColor: "#f1f1f1",
+    },
+  },
+
+  container: {
+    flex: "0.9",
+    marginTop: "18px",
+    width: "100%",
+  },
+
+  col: {
+    margin: "14px",
+    border: "1px solid #f1f1f1",
+    borderRadius: "13px",
+    boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
   },
 }));
 
 const Dashboard = () => {
-  const { classes, cx } = useStyles();
+  const { classes } = useStyles();
+  const [remove, setRemove] = useState(false);
 
   const userRegister = useSelector(state => state.userRegister);
   const { userInfo: regInfo } = userRegister;
@@ -42,7 +91,7 @@ const Dashboard = () => {
   const { userInfo } = userLogin;
 
   const courseNames = useSelector(state => state.courseNames);
-  const { loading, error: courseNameError } = courseNames;
+  const { loading, error: courseNameError, courseInfo } = courseNames;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -79,38 +128,77 @@ const Dashboard = () => {
 
   return (
     <>
-      <Box className={classes.header}>
+      <Modal
+        opened={remove}
+        onClose={() => setRemove(false)}
+        title="Are you sure to logout?"
+        centered
+        size="xs"
+        withCloseButton={false}
+        closeOnClickOutside={false}
+      >
+        <Divider my="lg" />
+        <Group position="right">
+          <Button size="xs" onClick={() => logoutHandler()}>
+            Confirm
+          </Button>
+          <Button onClick={() => setRemove(false)} size="xs" variant="outline">
+            Cancel
+          </Button>
+        </Group>
+      </Modal>
+      <Box className={classes.wrapper}>
         {loading && <LoadingOverlay visible={true} />}
-        <Box className={classes.profile}>
-          <h1>I am dashboard</h1>
-          <UnstyledButton onClick={logoutHandler}>
-            <Logout size={28} color={"#339AF0"} />
-          </UnstyledButton>
-        </Box>
+        {userInfo && courseInfo && (
+          <>
+            <Box className={classes.profile}>
+              <Box className={classes.profileCard}>
+                <Avatar
+                  className={classes.profileAvatar}
+                  src={userInfo.image}
+                  size="xl"
+                />
+                <Box>
+                  <Text size="lg" weight={500} color="#339AF0">
+                    {userInfo.lname.concat(" ", userInfo.fname).toUpperCase()}
+                  </Text>
+                  {userInfo?.studentID ? (
+                    <Text color="gray" size="sm">
+                      {userInfo.studentID} | {courseInfo[0].courseName}
+                    </Text>
+                  ) : (
+                    <Text color="gray" size="sm">
+                      {userInfo.email}
+                    </Text>
+                  )}
+                </Box>
+              </Box>
+              <UnstyledButton
+                className={classes.logout}
+                onClick={() => setRemove(true)}
+              >
+                <Logout className={classes.logoutIcon} color="red" />
+              </UnstyledButton>
+            </Box>
+            <Grid grow columns={12} className={classes.container}>
+              <Grid.Col md={4} className={classes.col}>
+                Assignment Progress
+              </Grid.Col>
+              <Grid.Col md={4} className={classes.col}>
+                Average Mark
+              </Grid.Col>
+              <Grid.Col md={4} className={classes.col}>
+                Course
+              </Grid.Col>
+              <Grid.Col md={4} className={classes.col}>
+                Reminder
+              </Grid.Col>
+            </Grid>
+          </>
+        )}
       </Box>
     </>
   );
 };
 
 export default Dashboard;
-
-//  const dispatch = useDispatch();
-
-//  const userDetails = useSelector(state => state.userDetails);
-//  const { loading, error, user } = userDetails;
-//  useEffect(() => {
-//    if (!user)
-//      userInfo?.studentID
-//        ? dispatch(getStudentDetails())
-//        : dispatch(getStaffDetails());
-
-//    error &&
-//      showNotification({
-//        title: error,
-//        message: "Could not load user details!",
-//        color: "red",
-//      });
-//  }, [user, dispatch, userInfo, error]);
-//  {
-//    loading && <LoadingOverlay visible={true} />;
-//  }
