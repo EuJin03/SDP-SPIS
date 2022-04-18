@@ -34,7 +34,7 @@ const useStyles = createStyles(theme => ({
     alignItems: "center",
     padding: "30px 40px",
     position: "relative",
-    minHeight: "100vh",
+    height: "100vh",
     width: "100%",
   },
 
@@ -42,7 +42,7 @@ const useStyles = createStyles(theme => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "20px",
+    padding: "10px",
     width: "100%",
     borderRadius: "13px",
     border: "2px solid #f1f1f1",
@@ -85,8 +85,8 @@ const useStyles = createStyles(theme => ({
     borderRadius: "13px",
     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
     padding: "26px 30px",
-    minHeight: "37vh",
-    maxHeight: "37vh",
+    minHeight: "35vh",
+    maxHeight: "35vh",
     overflow: "hidden",
   },
 }));

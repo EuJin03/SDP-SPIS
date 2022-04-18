@@ -46,7 +46,7 @@ const StaffCourseCard = () => {
   return (
     <Box>
       <Box>
-        <Text size="xl" weight={600}>
+        <Text size="lg" weight={600}>
           Assigned Courses
         </Text>
         <Divider my="sm" style={{ width: "100%" }} />

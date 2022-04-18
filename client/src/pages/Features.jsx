@@ -34,8 +34,11 @@ const useStyles = createStyles(theme => ({
     height: "100vh",
   },
   container: {
-    paddingTop: theme.spacing.xl,
-    paddingBottom: theme.spacing.xl,
+    marginTop: "40px",
+    display: "grid",
+    placeItems: "center",
+    width: "100%",
+    height: "60vh",
   },
 
   title: {
@@ -62,7 +65,7 @@ const useStyles = createStyles(theme => ({
 const data = [
   {
     icon: Gauge,
-    title: "",
+    title: "Lorem ipsum",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullao.",
   },

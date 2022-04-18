@@ -15,7 +15,7 @@ const useStyles = createStyles(theme => ({
     alignItems: "center",
   },
   content: {
-    width: "340px",
+    width: "52%",
     position: "relative",
   },
 }));
@@ -34,6 +34,7 @@ export const options = {
 const StaffPieChart = () => {
   const { classes } = useStyles();
   const dispatch = useDispatch();
+
   const dashboardTask = useSelector(state => state.dashboardTask);
   const { tasks } = dashboardTask;
 
@@ -41,7 +42,6 @@ const StaffPieChart = () => {
     dispatch(dashboardTaskAction());
   }, [dispatch]);
 
-  console.log(tasks);
   const totalStudentsPerCourse = [];
   const key = "courseName";
   tasks &&

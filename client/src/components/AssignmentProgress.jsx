@@ -92,8 +92,8 @@ const AssignmentProgress = () => {
       </Box>
       <Group mt="xl" ml="xl">
         <RingProgress
-          size={240}
-          thickness={22}
+          size={160}
+          thickness={20}
           sections={[
             { value: Math.round((graded / total) * 100), color: "#339AF0" },
             {
@@ -117,7 +117,7 @@ const AssignmentProgress = () => {
         />
 
         <div>
-          <Text color="dimmed" size="lg" transform="uppercase" weight={600}>
+          <Text color="dimmed" size="md" transform="uppercase" weight={600}>
             Assignments Assigned
           </Text>
           <Box weight={700} size="xl">

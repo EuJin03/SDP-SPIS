@@ -102,7 +102,7 @@ const Reminder = () => {
   return (
     <Box className={classes.wrapper}>
       <Box>
-        <Text size="xl" weight={600}>
+        <Text size="lg" weight={600}>
           Reminders
         </Text>
         <Divider my="sm" style={{ width: "100%" }} />
@@ -128,6 +128,7 @@ const Reminder = () => {
               if (text !== "") {
                 dispatch(addToReminder(text));
                 setText("");
+                setChar(70);
               }
             }
           }}
