@@ -9,6 +9,7 @@ import {
   Text,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -75,6 +76,10 @@ export const Messages = () => {
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Tuition System | Messages"
+        description="Messages feature of SPIS Tuition System"
+      />
       <Container>
         <div className={classes.inner}>
           <div className={classes.content}>

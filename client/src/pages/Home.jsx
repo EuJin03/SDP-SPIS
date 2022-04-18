@@ -9,6 +9,7 @@ import {
   Box,
 } from "@mantine/core";
 import Header from "../components/Header";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   hero: {
@@ -86,6 +87,10 @@ function Home() {
   return (
     <>
       <div>
+        <Meta
+          title="Tuition System | Home"
+          description="Home Page of SPIS Tuition System"
+        />
         <Header />
         <div className={classes.hero}>
           <Overlay

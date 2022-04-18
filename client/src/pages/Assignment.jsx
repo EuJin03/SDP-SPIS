@@ -22,6 +22,7 @@ import {
   ASSIGN_TASK_RESET,
   CREATE_TASK_RESET,
 } from "../constants/assignmentConstant";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -198,6 +199,10 @@ const Assignment = () => {
 
   return (
     <>
+      <Meta
+        title="Tuition System | Assignment"
+        description="Assignment tabs on SPIS Tuition System"
+      />
       <Box className={classes.wrapper}>
         <Box className={classes.header}>
           <Text

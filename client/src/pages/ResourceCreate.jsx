@@ -33,6 +33,7 @@ import { resourceCreateAction } from "../actions/resourceAction";
 import { DropZone } from "../components/DropZone";
 import { usePrevious } from "../hooks/usePrevious";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -153,6 +154,10 @@ const ResourceCreate = () => {
 
   return (
     <>
+      <Meta
+        title="Tuition System | Create Resources"
+        description="Lecturer access only"
+      />
       <Box className={classes.wrapper}>
         {loading && <LoadingOverlay visible={true} />}
         {error && (

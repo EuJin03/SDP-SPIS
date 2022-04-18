@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { Cookie, Gauge, Lock, Message2, User } from "tabler-icons-react";
 import Header from "../components/Header";
+import Meta from "../components/Meta";
 
 export function Feature({ icon: Icon, title, description }) {
   const theme = useMantineTheme();
@@ -109,6 +110,10 @@ export function Features() {
 
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Welcome to SPIS | Features"
+        description="Features in SPIS Tuition System"
+      />
       <Header />
       <Container className={classes.container}>
         <Title className={classes.title}>{title}</Title>

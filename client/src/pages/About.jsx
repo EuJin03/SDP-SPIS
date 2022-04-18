@@ -2,6 +2,7 @@ import { createStyles, Paper, Text, ThemeIcon } from "@mantine/core";
 import React from "react";
 import { Books, ColorSwatch, Users } from "tabler-icons-react";
 import Header from "../components/Header";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -49,8 +50,8 @@ const About = () => {
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
+      <Meta title="Welcome to SPIS | About Us" description="About Us" />
       <Header />
-
       <div className={classes.container}>
         <Text
           style={{ fontSize: "40px", marginBottom: "20px" }}

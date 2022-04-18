@@ -15,6 +15,7 @@ import { ResourceList } from "../components/ResourceList";
 import { usePrevious } from "../hooks/usePrevious";
 import { showNotification } from "@mantine/notifications";
 import { CREATE_RESOURCE_RESET } from "../constants/resourceConstant";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -142,6 +143,10 @@ const Resource = () => {
 
   return (
     <>
+      <Meta
+        title="Tuition System | Resources"
+        description="Resources page of SPIS Tuition System"
+      />
       <Box className={classes.wrapper}>
         <Box className={classes.header}>
           <Text

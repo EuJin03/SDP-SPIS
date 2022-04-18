@@ -20,6 +20,7 @@ import {
 } from "../components/RegisterForm";
 import { showNotification } from "@mantine/notifications";
 import Header from "../components/Header";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -93,6 +94,10 @@ const Register = () => {
 
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Welcome to SPIS | Register"
+        description="Register as student/lecturer in SPIS Tuition System"
+      />
       <Header />
       <div className={classes.container}>
         <form

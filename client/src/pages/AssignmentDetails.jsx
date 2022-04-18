@@ -20,6 +20,7 @@ import dayjs from "dayjs";
 import { showNotification } from "@mantine/notifications";
 import { User, X } from "tabler-icons-react";
 import { GradeList } from "../components/GradeList";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -80,6 +81,10 @@ const AssignmentDetails = () => {
 
   return (
     <>
+      <Meta
+        title="Tuition System | Grade Assignments"
+        description="Lecturer access only"
+      />
       <Box className={classes.wrapper}>
         {loading && <LoadingOverlay visible={true} />}
         {submissions?.topicName && (

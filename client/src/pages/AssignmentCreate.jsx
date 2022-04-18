@@ -36,6 +36,7 @@ import { usePrevious } from "../hooks/usePrevious";
 import { UPLOAD_FILE_RESET } from "../constants/uploadConstant";
 import { DatePicker } from "@mantine/dates";
 import { CREATE_TASK_RESET } from "../constants/assignmentConstant";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -185,6 +186,10 @@ const AssignmentCreate = () => {
 
   return (
     <>
+      <Meta
+        title="Tuition System | Create Assignment"
+        description="Lecturer access only"
+      />
       <Box className={classes.wrapper}>
         {loading && <LoadingOverlay visible={true} />}
         {error && (

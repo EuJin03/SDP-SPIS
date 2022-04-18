@@ -43,6 +43,7 @@ import { courseListAction } from "../actions/courseAction";
 import { updateStaffProfile } from "../actions/staffAction";
 import { logout, updateStudentProfile } from "../actions/studentAction";
 import { DropImage } from "../components/DropImage";
+import Meta from "../components/Meta";
 import { UPLOAD_IMAGE_RESET } from "../constants/uploadConstant";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstant";
 import { usePrevious } from "../hooks/usePrevious";
@@ -281,6 +282,10 @@ const Profile = () => {
 
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Tuition System | User Profile"
+        description="User profile and settings"
+      />
       <Modal
         opened={remove}
         onClose={() => setRemove(false)}

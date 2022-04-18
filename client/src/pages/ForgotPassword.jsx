@@ -21,6 +21,7 @@ import { staffForgotPassword } from "../actions/staffAction";
 import { studentForgotPassword } from "../actions/studentAction";
 import { showNotification } from "@mantine/notifications";
 import { USER_FORGOT_PASSWORD_RESET } from "../constants/userConstant";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -108,6 +109,10 @@ export const ForgotPassword = () => {
 
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Tuition System | Forgot Password"
+        description="Retrieve your password by requesting an email verification"
+      />
       <Container size={460} my={30}>
         <Alert
           mb="xl"

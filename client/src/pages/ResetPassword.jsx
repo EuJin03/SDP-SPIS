@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Check, X } from "tabler-icons-react";
 import { staffResetPassword } from "../actions/staffAction";
 import { studentResetPassword } from "../actions/studentAction";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -100,6 +101,10 @@ const ResetPassword = () => {
   };
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Tuition System | Reset Password"
+        description="Reset password of the account"
+      />
       <Paper
         withBorder
         shadow="md"

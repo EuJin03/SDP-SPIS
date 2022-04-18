@@ -9,6 +9,7 @@ import {
   Title,
 } from "@mantine/core";
 import Header from "../components/Header";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -54,6 +55,10 @@ const FAQ = () => {
   const { classes } = useStyles();
   return (
     <div className={classes.wrapper}>
+      <Meta
+        title="Welcome to SPIS | FAQ"
+        description="Frequently asked questions regarding SPIS Tuition System"
+      />
       <Header />
       <div className={classes.container}>
         <Container size="lg">

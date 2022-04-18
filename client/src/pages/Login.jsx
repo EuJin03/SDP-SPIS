@@ -20,6 +20,7 @@ import { studentLogin } from "../actions/studentAction";
 import { staffLogin } from "../actions/staffAction";
 import { Lock, User } from "tabler-icons-react";
 import { Header } from "../components/Header";
+import Meta from "../components/Meta";
 
 const Login = props => {
   const [type, setType] = useState("student");
@@ -50,6 +51,10 @@ const Login = props => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+      <Meta
+        title="Welcome to SPIS | Login"
+        description="Log into SPIS Tuition System as student/lecturer"
+      />
       <Header />
       <Container>
         {loading && <LoadingOverlay visible={true} />}

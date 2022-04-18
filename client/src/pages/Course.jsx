@@ -34,6 +34,7 @@ import {
   CREATE_COURSE_RESET,
   UPDATE_COURSE_RESET,
 } from "../constants/courseConstant";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -294,6 +295,7 @@ const Course = () => {
 
   return (
     <>
+      <Meta title="Tuition System | Course" description="Admin access only" />
       <Modal
         centered
         opened={toggleCreate}

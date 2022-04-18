@@ -9,6 +9,7 @@ import {
   SimpleGrid,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   root: {
@@ -52,6 +53,10 @@ function Error() {
 
   return (
     <Container className={classes.root}>
+      <Meta
+        title="Tuition System | Error"
+        description="Oops, something went wrong"
+      />
       <SimpleGrid
         spacing={80}
         cols={2}

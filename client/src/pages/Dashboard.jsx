@@ -25,6 +25,7 @@ import CourseCard from "../components/CourseCard";
 import StaffCourseCard from "../components/StaffCourseCard";
 import StaffPieChart from "../components/StaffPieChart";
 import StaffBarChart from "../components/StaffBarChart";
+import Meta from "../components/Meta";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -159,6 +160,10 @@ const Dashboard = () => {
         </Group>
       </Modal>
       <Box className={classes.wrapper}>
+        <Meta
+          title="Tuition System | Dashboard"
+          description="Dashboard of SPIS Tuition System"
+        />
         {loading && <LoadingOverlay visible={true} />}
         {userInfo && courseInfo && (
           <>

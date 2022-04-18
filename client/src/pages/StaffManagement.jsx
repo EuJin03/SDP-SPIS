@@ -2,6 +2,7 @@ import { Box, createStyles, LoadingOverlay, Text } from "@mantine/core";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { viewAllStaffAction } from "../actions/staffAction";
+import Meta from "../components/Meta";
 import { StaffList } from "../components/StaffList";
 
 const useStyles = createStyles(theme => ({
@@ -41,6 +42,10 @@ const StaffManagement = () => {
 
   return (
     <>
+      <Meta
+        title="Tuition System | Staff Management"
+        description="Admin access only"
+      />
       <Box className={classes.wrapper}>
         <Box className={classes.header}>
           <Text
