@@ -21,6 +21,7 @@ import {
 import { showNotification } from "@mantine/notifications";
 import Header from "../components/Header";
 import Meta from "../components/Meta";
+import { USER_REGISTER_RESET } from "../constants/userConstant";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -92,6 +93,19 @@ const Register = () => {
     if (courses?.length === 0) dispatch(courseListAction());
   }, [courses, courseErr, dispatch]);
 
+  useEffect(() => {
+    if (error) {
+      showNotification({
+        autoClose: 4000,
+        title: "Oops, something went wrong",
+        message: "Please check your registration details!",
+        color: "red",
+        icon: <X />,
+      });
+      dispatch({ type: USER_REGISTER_RESET });
+    }
+  }, [dispatch, error]);
+
   return (
     <div className={classes.wrapper}>
       <Meta
@@ -128,14 +142,6 @@ const Register = () => {
                     values.course
                   )
                 );
-            error &&
-              showNotification({
-                autoClose: 4000,
-                title: "Oops, something went wrong",
-                message: "Please check your registration details!",
-                color: "red",
-                icon: <X />,
-              });
           })}
         >
           <Stepper active={active} onStepClick={setActive} breakpoint="sm">

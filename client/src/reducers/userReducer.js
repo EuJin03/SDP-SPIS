@@ -22,6 +22,7 @@ import {
   USER_LOGOUT,
   USER_REGISTER_FAIL,
   USER_REGISTER_REQUEST,
+  USER_REGISTER_RESET,
   USER_REGISTER_SUCCESS,
   USER_RESET_PASSWORD_FAIL,
   USER_RESET_PASSWORD_REQUEST,
@@ -59,6 +60,8 @@ export const userRegisterReducer = (state = {}, action) => {
       return { loading: false, error: action.payload };
     case USER_DETAILS_RESET:
       return { user: {} };
+    case USER_REGISTER_RESET:
+      return { error: false };
     case USER_LOGOUT:
       return {};
     default:
