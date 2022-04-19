@@ -6,8 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <script>
+      var host = "www.URL.com" || "URL.com";
+      var host2 =
+        "www.tuition-system-spis.herokuapp.com" ||
+        "tuition-system-spis.herokuapp.com";
+      if (
+        host == window.location.host &&
+        window.location.protocol != "https:"
+      ) {
+        window.location.protocol = "https";
+      }
+
+      if (
+        host2 == window.location.host &&
+        window.location.protocol != "https:"
+      ) {
+        window.location.protocol = "https";
+      }
+    </script>
     <title>Tuition System</title>
   </head>
   <body>
