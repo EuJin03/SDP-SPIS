@@ -76,10 +76,13 @@ const Reminder = () => {
   const reminder = useSelector(state => state.reminder);
   const { reminder: item, success } = reminder;
 
-  useEffect(() => {
-    if (!item) dispatch(viewReminder());
+  const userLogin = useSelector(state => state.userLogin);
+  const { userInfo } = userLogin;
 
-    if (success) dispatch(viewReminder());
+  useEffect(() => {
+    if (!item) dispatch(viewReminder(userInfo.id));
+
+    if (success) dispatch(viewReminder(userInfo.id));
   });
 
   const todo = item
@@ -92,7 +95,7 @@ const Reminder = () => {
             <Trash
               size="16px"
               color="red"
-              onClick={() => dispatch(removeFromReminder(index))}
+              onClick={() => dispatch(removeFromReminder(userInfo.id, index))}
             />
           </ActionIcon>
         </Box>
@@ -126,7 +129,7 @@ const Reminder = () => {
           onKeyDown={e => {
             if (e.key === "Enter") {
               if (text !== "") {
-                dispatch(addToReminder(text));
+                dispatch(addToReminder(userInfo.id, text));
                 setText("");
                 setChar(70);
               }

@@ -36,6 +36,7 @@ const authStaff = asyncHandler(async (req, res) => {
 
   if (staff && (await staff.matchPassword(password))) {
     res.json({
+      id: staff._id,
       image: staff.image,
       fname: staff.fName,
       lname: staff.lName,

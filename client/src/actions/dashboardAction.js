@@ -5,25 +5,25 @@ import {
   VIEW_REMINDER,
 } from "../constants/dashboardConstant";
 
-export const viewReminder = () => async dispatch => {
+export const viewReminder = id => async dispatch => {
   dispatch({
     type: REQUEST_REMINDER,
   });
 
-  const item = localStorage.getItem("reminder")
-    ? JSON.parse(localStorage.getItem("reminder"))
+  const item = localStorage.getItem("reminder".concat(id))
+    ? JSON.parse(localStorage.getItem("reminder".concat(id)))
     : [];
 
   dispatch({ type: VIEW_REMINDER, payload: item });
 };
 
-export const addToReminder = text => async dispatch => {
+export const addToReminder = (id, text) => async dispatch => {
   dispatch({
     type: REQUEST_REMINDER,
   });
 
-  const item = localStorage.getItem("reminder")
-    ? JSON.parse(localStorage.getItem("reminder"))
+  const item = localStorage.getItem("reminder".concat(id))
+    ? JSON.parse(localStorage.getItem("reminder".concat(id)))
     : [];
 
   item.push(text);
@@ -33,16 +33,16 @@ export const addToReminder = text => async dispatch => {
     payload: item,
   });
 
-  localStorage.setItem("reminder", JSON.stringify(item));
+  localStorage.setItem("reminder".concat(id), JSON.stringify(item));
 };
 
-export const removeFromReminder = id => async dispatch => {
+export const removeFromReminder = (userId, id) => async dispatch => {
   dispatch({
     type: REQUEST_REMINDER,
   });
 
-  const item = localStorage.getItem("reminder")
-    ? JSON.parse(localStorage.getItem("reminder"))
+  const item = localStorage.getItem("reminder".concat(userId))
+    ? JSON.parse(localStorage.getItem("reminder".concat(userId)))
     : [];
 
   item.splice(id, 1);
@@ -52,5 +52,5 @@ export const removeFromReminder = id => async dispatch => {
     payload: item,
   });
 
-  localStorage.setItem("reminder", JSON.stringify(item));
+  localStorage.setItem("reminder".concat(userId), JSON.stringify(item));
 };

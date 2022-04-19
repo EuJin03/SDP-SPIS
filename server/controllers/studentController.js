@@ -35,6 +35,7 @@ const authStudent = asyncHandler(async (req, res) => {
 
   if (student && (await student.matchPassword(password))) {
     res.json({
+      id: student._id,
       studentID: student.studentID,
       image: student.image,
       fname: student.fName,
