@@ -170,7 +170,11 @@ export const StaffList = ({ data, staff }) => {
     <tr key={row._id}>
       <td>
         <Group spacing="sm">
-          <Avatar size={30} src={row.image} radius={30} />
+          <Avatar
+            size={30}
+            src={"https".concat(row.image.substring(4, row.image.length))}
+            radius={30}
+          />
           <Text size="sm" weight={500}>
             {row.lName + " " + row.fName}
           </Text>

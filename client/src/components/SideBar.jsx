@@ -195,7 +195,13 @@ const SideBar = () => {
 
       <Navbar.Section className={classes.footer}>
         <UserButton
-          image={userInfo?.image !== "" ? userInfo?.image : null}
+          image={
+            userInfo?.image !== ""
+              ? "https".concat(
+                  userInfo.image.substring(4, userInfo.image.length)
+                )
+              : null
+          }
           name={userInfo?.lname + " " + userInfo?.fname}
           email={userInfo?.email || ""}
         />
