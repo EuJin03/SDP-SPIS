@@ -15,6 +15,7 @@ import {
   removeFromReminder,
   viewReminder,
 } from "../actions/dashboardAction";
+import { usePrevious } from "../hooks/usePrevious";
 
 const useStyles = createStyles(theme => ({
   wrapper: {
@@ -79,11 +80,15 @@ const Reminder = () => {
   const userLogin = useSelector(state => state.userLogin);
   const { userInfo } = userLogin;
 
+  const prevId = usePrevious(userInfo.id);
+
   useEffect(() => {
     if (!item) dispatch(viewReminder(userInfo.id));
 
+    if (userInfo.id !== prevId) dispatch(viewReminder(userInfo.id));
+
     if (success) dispatch(viewReminder(userInfo.id));
-  });
+  }, [dispatch, item, prevId, success, userInfo.id]);
 
   const todo = item
     ? item.map((i, index) => (

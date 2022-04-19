@@ -157,6 +157,7 @@ export const GradeList = ({ data }) => {
             textDecoration: "none",
           }}
           rel="noopener noreferrer"
+          download
         >
           <Text size="sm" mr="md">
             Submission

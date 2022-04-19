@@ -7,10 +7,6 @@ const Meta = ({ title, description, keywords }) => {
       <title>{title}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta
-        http-equiv="Content-Security-Policy"
-        content="upgrade-insecure-requests"
-      />
     </Helmet>
   );
 };

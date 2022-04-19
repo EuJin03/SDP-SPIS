@@ -179,6 +179,7 @@ export const TaskList = ({ data, staff }) => {
             textDecoration: "none",
           }}
           rel="noopener noreferrer"
+          download
         >
           <Text size="sm" mr="md">
             {row.topicName.length > 50
