@@ -149,7 +149,12 @@ export const GradeList = ({ data }) => {
       <td style={{ width: 140 }}>
         <Anchor
           size="sm"
-          href={row.assignments[0].submissionFile}
+          href={"https".concat(
+            row.assignments[0].submissionFile.substring(
+              4,
+              row.assignments[0].submissionFile.length
+            )
+          )}
           style={{
             display: "flex",
             justifyContent: "space-between",

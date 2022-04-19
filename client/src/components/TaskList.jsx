@@ -171,7 +171,7 @@ export const TaskList = ({ data, staff }) => {
       <td>
         <Anchor
           size="sm"
-          href={row.topicURL}
+          href={"https".concat(row.topicURL.substring(4, row.topicURL.length))}
           style={{
             display: "flex",
             justifyContent: "space-between",
