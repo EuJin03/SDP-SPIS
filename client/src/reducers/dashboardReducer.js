@@ -2,6 +2,7 @@ import {
   ADD_REMINDER,
   REMOVE_REMINDER,
   REQUEST_REMINDER,
+  RESET_REMINDER,
   VIEW_REMINDER,
 } from "../constants/dashboardConstant";
 
@@ -15,6 +16,8 @@ export const reminderReducer = (state = {}, action) => {
       return { loading: false, success: true, reminder: action.payload };
     case REMOVE_REMINDER:
       return { loading: false, success: true, reminder: action.payload };
+    case RESET_REMINDER:
+      return { reminder: [] };
     default:
       return state;
   }

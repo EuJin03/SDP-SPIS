@@ -2,10 +2,14 @@ import {
   ADD_REMINDER,
   REMOVE_REMINDER,
   REQUEST_REMINDER,
+  RESET_REMINDER,
   VIEW_REMINDER,
 } from "../constants/dashboardConstant";
 
 export const viewReminder = id => async dispatch => {
+  dispatch({
+    type: RESET_REMINDER,
+  });
   dispatch({
     type: REQUEST_REMINDER,
   });
