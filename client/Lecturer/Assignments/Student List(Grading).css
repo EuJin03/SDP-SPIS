@@ -1,0 +1,122 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: #eee;
+}
+
+a {
+    text-decoration: none;
+    color: #eee;
+}
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* Return button styles */
+.return__button {
+    position: relative;
+}
+
+.return__button .icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Students Styles */
+
+.header__assignments {
+    color: #eee;
+    font-size: 48px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin: 24px;
+}
+
+.students__header, .students__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #eee;
+    background-color: #393E46;
+    margin: 24px;
+    padding: 16px;
+    font-size: 24px;
+    font-weight: 450;
+    border-radius: 15px;
+}
+
+.header__actions, .students__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 125px;
+}
+
+.header__grades {
+    padding-right: 100px; /* To make the Grade header line up with the actual grades */
+}
+
+.students__header {
+    text-decoration: underline;
+}
+
+.students__list {
+    height: 600px;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+.actions__grade:hover {
+    color: #FFD369;
+    font-weight: 600;
+}

@@ -1,0 +1,134 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* User info styles */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin: 36px 80px;
+}
+
+.user-info__avatar i {
+    font-size: 80px;
+}
+
+.user-info__text {
+    color: white
+}
+
+.user-info__username a {
+    font-size: 40px;
+    color: #eee;
+    text-decoration: none;
+}
+
+.user-info__username a:visited {
+    color: #eee;
+}
+
+.user-info__staff-info--staff-id, .user-info__staff-info--position {
+    font-size: 24px;
+}
+
+/* Profile styles */
+
+.profile {
+    width: 1000px;
+    height: 650px;
+    background-color: #393E46;
+    border-radius: 15px;
+
+    /* Centering the message to the middle of the page */
+    margin: auto;
+    position: absolute;
+    top: 62.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.profile__group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 800px;
+}
+
+.profile__group--inner {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 16px;
+    padding: 16px;
+}
+
+.group__title {
+    font-size: 28px;
+    color: #FFD369;
+    font-weight: 450;
+}
+
+.group__txt, .list__item {
+    font-size: 24px;
+    color: #eee;
+    font-weight: 300;
+}
+
+.group__gender {
+    padding-right: 228px;
+}

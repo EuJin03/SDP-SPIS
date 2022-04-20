@@ -1,0 +1,108 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: #eee;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* a:visited {
+    color: #eee;
+} */
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* Assigned Successful message Styles */
+.message {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    height: 500px;
+    width: 800px;
+
+    /* Centering the message to the middle of the page */
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #393E46;
+}
+
+.message__logo i {
+    color: green;
+    margin: 32px;
+}
+
+.message__text {
+    font-size: 28px;
+    margin: 24px;
+}
+
+.message__btn {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 64px;
+    width: 800px;
+    margin: 24px;
+}
+
+.btn__text {
+    font-size: 28px;
+    font-weight: 600;
+    padding: 24px;
+    color: #393E46;
+    background-color: #FFD369;
+    border-radius: 25px;
+}

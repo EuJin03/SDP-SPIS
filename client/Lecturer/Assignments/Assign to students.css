@@ -1,0 +1,153 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: #eee;
+}
+
+a {
+    text-decoration: none;
+    color: #eee;
+}
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* Button Styles */
+
+.btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 48px;
+}
+
+.btn__container {
+    width: 200px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: #FFD369;
+    padding: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn__text {
+    font-size: 24px;
+    color: #393E46;
+    text-decoration: none;
+}
+
+/* Return button styles */
+.return__button {
+    position: relative;
+}
+
+.return__button .icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Student Styles */
+
+.students__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 91px;
+    /* position: sticky;
+    top: 128px; */
+}
+
+.header__assignments {
+    color: #eee;
+    font-size: 60px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.students__list {
+    height: 700px;
+    overflow: auto;
+}
+
+.students__item {
+    background-color: #393E46;
+    margin: 24px 91px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    border-radius: 15px;
+}
+
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+.students__name {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.students__actions {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+}
+
+.actions__items:hover {
+    color: #FFD369;
+    font-weight: bold;
+}
+
+.actions__items {
+    transform: scale(1.5);
+}

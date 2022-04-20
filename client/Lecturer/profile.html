@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="./profile.css">
+    <script src="https://kit.fontawesome.com/000bc13f31.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <!-- Header: Logo/System Name -->
+        <div class="header__logo">
+            <div class="header__logo header__logo--medium">Student Performance Improvement System</div>
+        </div>
+
+        <!-- Header: Navigation bar -->
+        <div class="header__nav">
+            <a class="header__nav__item" href="./Assignments/Assignments.html">Assignment</a>
+            <a class="header__nav__item" href="./Resources/resources.html">Resources</a>
+            <a class="header__nav__item" href="./dashboard.html">Dashboard</a>
+            <a class="header__nav__item">Messages</a>
+        </div>
+    </div>
+
+    <!-- Main body: User information -->
+    <div class="user-info">
+        
+        <!-- User Avatar -->
+        <div class="user-info__avatar">
+            <a href="./profile.html"><i class="fa-solid fa-user-tie fa-inverse"></i></a>
+        </div>
+        
+        <!-- Text beside User Avatar -->
+        <div class="user-info__text">
+            <!-- Username -->
+            <div class="user-info__username">
+                <a href="./profile.html">Username</a>
+            </div>
+            <!-- Staff information (ID and Position) -->
+            <div class="user-info__staff-info">
+                <span class="user-info__staff-info--staff-id">Staff ID |</span>  
+                <span class="user-info__staff-info--position">Position</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="profile">
+        <div class="profile__group">
+            <div class="profile__group--inner">
+                <div class="group__title">Name</div>
+                <div class="group__txt">Liew Chern Hong</div>
+            </div>
+            <div class="profile__group--inner">
+                <div class="group__title">Email</div>
+                <div class="group__txt">chliew@staffemail.apu.edu.my</div>
+            </div>
+        </div>
+        <div class="profile__group">
+            <div class="profile__group--inner">
+                <div class="group__title">Date of Birth</div>
+                <div class="group__txt">01/01/1991</div>
+            </div>
+            <div class="profile__group--inner group__gender">
+                <div class="group__title">Gender</div>
+                <div class="group__txt">Male</div>
+            </div>
+        </div>
+        <div class="profile__group--inner">
+            <div class="group__title">Nationality</div>
+            <div class="group__txt">Malaysian</div>
+        </div>
+        <div class="profile__group--inner">
+            <div class="group__title">Courses in charge</div>
+            <div class="courses__list">
+                <ol>
+                    <li class="list__item">Data Analysis</li>
+                    <li class="list__item">Cybersecurity</li>
+                    <li class="list__item">Information Systems</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

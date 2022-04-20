@@ -1,0 +1,150 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* User info styles */
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin: 36px 80px;
+}
+
+.user-info__avatar i {
+    font-size: 80px;
+}
+
+.user-info__text {
+    color: white
+}
+
+.user-info__username a {
+    font-size: 40px;
+    color: #eee;
+    text-decoration: none;
+}
+
+.user-info__username a:visited {
+    color: #eee;
+}
+
+.user-info__staff-info--staff-id, .user-info__staff-info--position {
+    font-size: 24px;
+}
+
+/* Main body styles */
+.main {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+}
+
+.main__courses, .main__assignments {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 25px;
+    height: 500px;
+    width: 350px;
+    border: 2px solid #eee;
+}
+
+.main__courses {
+    background-color: #4D3F47;
+}
+
+.main__assignments {
+    background-color: #2F343E;
+}
+
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
+.courses__title, .assignments__title {
+    font-size: 48px;
+    text-decoration: underline;
+}
+
+.assignments__title a:visited {
+    color: #eee;
+}
+
+.courses__links, .assignments__links {
+    flex: 1 1 auto;
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 16px;
+    font-size: 24px;
+    height: 350px;
+    overflow: auto;
+}
+
+.courses__link:visited, .assignments__link:visited {
+    color: #eee;
+}
+
+.courses__link:hover, .assignments__link:hover {
+    color: #FFD369;
+    font-weight: 550;
+}
+

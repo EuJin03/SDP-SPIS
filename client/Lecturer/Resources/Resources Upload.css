@@ -1,0 +1,154 @@
+/* Global styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #000;
+    color: #eee;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* Header styles */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #393E46;
+    height: 102px;
+    position: sticky;
+    top: 0;
+}
+
+.header__logo {
+    flex: 1 1 auto;
+    color: #eee;
+    margin-left: 23px;
+}
+
+.header__logo--medium {
+    font-size: 30px;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+}
+
+.header__nav__item {
+    flex: 1 1 auto;
+    font-size: 24;
+    color: #eee;
+    padding: 35px 42px;
+}
+
+.header__nav__item:hover {
+    color: #FFD369;
+    font-weight: 500;
+}
+
+/* Return button styles */
+.return__button {
+    position: relative;
+}
+
+.return__button .icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+/* Resource Header styles */
+
+.resource__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: auto;
+    margin: 24px;
+    padding: 16px;
+}
+
+.header__assignments {
+    color: #eee;
+    font-size: 60px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.btn__container {
+    background-color: #FFD369;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 128px;
+}
+
+.btn__text {
+    color: #393E46;
+    font-size: 24px;
+    padding: 16px;
+}
+
+.btn__text:hover {
+    font-weight: bolder;
+}
+
+/* Resource box styles */
+
+.resource__new {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 36px;
+    background-color: #393E46;
+    padding: 16px;
+    height: 600px;
+    width: 800px;
+    border-radius: 15px;
+
+    /* Centering the message to the middle of the page */
+    margin: 24px;
+    position: absolute;
+    top: 58%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.name__section, .file__section, .description__section {
+    padding: 8px;
+}
+
+.section__title {
+    color: #FFD369;
+    font-size: 36px;
+    padding-bottom: 8px;
+}
+
+.section__text, .comments__text {
+    width: 715px;
+    height: 40px;
+    background-color: #eee;
+    border-radius: 10px;
+}
+
+.comments__text {
+    height: 120px;
+}
+
+::placeholder {
+    padding: 8px;
+    font-size: 16px;
+    color: #393E46;
+}
