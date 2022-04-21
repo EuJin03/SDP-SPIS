@@ -8,7 +8,13 @@ import {
   useMantineTheme,
   createStyles,
 } from "@mantine/core";
-import { Cookie, Gauge, Lock, Message2, User } from "tabler-icons-react";
+import {
+  Book2,
+  Books,
+  ChartInfographic,
+  Notes,
+  User,
+} from "tabler-icons-react";
 import Header from "../components/Header";
 import Meta from "../components/Meta";
 
@@ -33,13 +39,13 @@ const useStyles = createStyles(theme => ({
   wrapper: {
     width: "100%",
     height: "100vh",
+    overflowY: "hidden",
   },
   container: {
-    marginTop: "40px",
     display: "grid",
     placeItems: "center",
     width: "100%",
-    height: "60vh",
+    height: "86vh",
   },
 
   title: {
@@ -65,34 +71,34 @@ const useStyles = createStyles(theme => ({
 
 const data = [
   {
-    icon: Gauge,
-    title: "Lorem ipsum",
+    icon: ChartInfographic,
+    title: "Detailed Graphs",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullao.",
+      "Help users in their academic with the detailed graphs that are available in the website. With detailed information on their academic performance, students and lecturers can analyze their academic performance.",
+  },
+  {
+    icon: Book2,
+    title: "Assignments",
+    description:
+      "SPIS allows lecturer to assign tasks for students and specify due date.Improve the lecture process as the tasks can hand out virtually and grade upon submissions. Students are able to benefit as they able to hand in softcopy and view grades online.",
+  },
+  {
+    icon: Books,
+    title: "Resources",
+    description:
+      "SPIS allow lecturer to archieve their lecture notes and study material on the library that SPIS are prepared for everyone. Lecturers are able to upload materials accordingly. Meanwhile, students are able to access either for revision or additional knowledge.",
   },
   {
     icon: User,
-    title: "Lorem ipsum ",
+    title: "Profile customization",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi utr.",
+      "SPIS allow users to customize their profile on a certain extends. Such as profile images, account activity, course changes, edit password, and more in the future.",
   },
   {
-    icon: Cookie,
-    title: "Lorem ipsum ",
+    icon: Notes,
+    title: "Reminder",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamcoe.",
-  },
-  {
-    icon: Lock,
-    title: "Lorem ipsum ",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamc.",
-  },
-  {
-    icon: Message2,
-    title: "Lorem ipsum ",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco r .",
+      "Help users to remember the tasks that already assigned by using Reminder. Reminder can be used to mark down due dates. It help students and lecturer to manage their activity and time.",
   },
 ];
 
@@ -115,27 +121,29 @@ export function Features() {
         description="Features in SPIS Tuition System"
       />
       <Header />
-      <Container className={classes.container}>
-        <Title className={classes.title}>{title}</Title>
+      <div className={classes.container}>
+        <Container>
+          <Title className={classes.title}>{title}</Title>
 
-        <Container size={560} p={0}>
-          <Text size="sm" className={classes.description}>
-            {description}
-          </Text>
+          <Container size={560} p={0}>
+            <Text size="sm" className={classes.description}>
+              {description}
+            </Text>
+          </Container>
+
+          <SimpleGrid
+            mt={60}
+            cols={3}
+            spacing={theme.spacing.xl * 2}
+            breakpoints={[
+              { maxWidth: 980, cols: 2, spacing: "xl" },
+              { maxWidth: 755, cols: 1, spacing: "xl" },
+            ]}
+          >
+            {features}
+          </SimpleGrid>
         </Container>
-
-        <SimpleGrid
-          mt={60}
-          cols={3}
-          spacing={theme.spacing.xl * 2}
-          breakpoints={[
-            { maxWidth: 980, cols: 2, spacing: "xl" },
-            { maxWidth: 755, cols: 1, spacing: "xl" },
-          ]}
-        >
-          {features}
-        </SimpleGrid>
-      </Container>
+      </div>
     </div>
   );
 }

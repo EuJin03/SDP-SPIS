@@ -321,7 +321,13 @@ export const TaskList = ({ data, staff }) => {
                 }}
               >
                 <FileUpload
-                  color={row.submission ? "green" : "#1C7ED6"}
+                  color={
+                    row.submission
+                      ? "green"
+                      : row.submission && dayjs(row.due).diff(new Date()) > 0
+                      ? "red"
+                      : "#1C7ED6"
+                  }
                   size={20}
                 />
               </ActionIcon>
