@@ -16,6 +16,7 @@ import {
   __jwt_secret,
   __mailgun_api_key,
   __mailgun_domain,
+  __proxy,
   __url,
 } from "../constant.js";
 import mongoose from "mongoose";
@@ -171,9 +172,10 @@ const forgotPassword = asyncHandler(async (req, res) => {
       to: email,
       subject: "Reset Password Link",
       html: `<h2>Please click on given link to reset your password</h2>
-                <p><a href="${__url}/reset-password/staff/${token}">Reset Password</a></p>
+                <p><a href="${__url}/reset-password/student/${token}">Reset Password</a></p>
                 <hr>
                 <p><b>The link will expire in 30m!</b></p>
+                <p>Please replace the [${__url}] to [${__proxy}] for the url to work</p>
               `,
     };
 
