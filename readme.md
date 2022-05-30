@@ -30,7 +30,7 @@ This program is built for the UCDF2005ICT(DI) SDP assignment. This system that i
    2. Assignments tab
       1. By clicking into this tab, students can access all the assignments that are assigned to them by their lecturers.
       2. By clicking on one of the assignments, students will be brought to Assignment Details page (uploadedBy, due date, topic, etc.) as well as a place for the students to upload their completed assignment.
-   3. Messages tab
+   3. Messages tab (pending)
       1. The messages tab will open a page where students can access a list of contacts at the left and after choosing a contact, they can chat with them at the right (something like WhatsApp)
    4. Dashboard
       1. Clicking on this would just bring them back to the Dashboard
@@ -48,7 +48,7 @@ The flow for Lecturers will be similar to Students. Just that some functionaliti
       1. Lecturers can add new assignments that will be later assigned to students
       2. By clicking into the specific assignment that was previously uploaded, lecturers can choose to either edit the assignment or assign it to students enrolled in the course
       3. Lecturers also have a list view of which student submitted the assignment and grade them accordingly.
-   3. Messages tab
+   3. Messages tab (pending)
       1. Lecturers will use this tab to respond or initiate conversations with their students.
       2. Layout is similar to WhatsApp.
 
